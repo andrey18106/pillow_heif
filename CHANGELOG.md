@@ -2,6 +2,18 @@ _# Changelog
 
 All notable changes to this project will be documented in this file.
 
+## [0.9.0 - 2023-01-xx]
+
+### Added
+
+### Changed
+
+- The `HeifImage.scale` method was removed. Use `PIL.Image.resize()`
+- The `pillow_heif.getxmp` function was removed. Use `PIL.Image.getxmp()` or `Image.info["xmp"]`
+- Minimum required `Pillow` version increased from `6.2.0` to `8.3.0`
+
+### Fixed
+
 ## [0.8.1 - 2022-1x-xx]
 
 ### Added

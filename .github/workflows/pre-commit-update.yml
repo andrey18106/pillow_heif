@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: |
-          python3 -m pip install pre-commit pylint
+          python3 -m pip install pre-commit pylint wheel
           python3 -m pip install .
 
       - run: pre-commit autoupdate

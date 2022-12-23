@@ -2,7 +2,7 @@
 Functions and classes for heif images to read and write.
 """
 
-from typing import Any, Dict, Iterator, List, Union
+from typing import Any, Dict, Iterator, List, Optional, Union
 from weakref import ref
 
 from _pillow_heif_cffi import ffi, lib
@@ -278,7 +278,7 @@ class HeifImageBase:
 class HeifThumbnail(HeifImageBase):
     """Class represents a single thumbnail for a HeifImage."""
 
-    def __init__(self, original_img, reference, thumb_id: int = None):
+    def __init__(self, original_img, reference, thumb_id: Optional[int] = None):
         if isinstance(original_img, HeifImage):
             p_handle = ffi.new("struct heif_image_handle **")
             check_libheif_error(lib.heif_image_handle_get_thumbnail(original_img._handle, thumb_id, p_handle))
@@ -389,7 +389,10 @@ class HeifFile:
     .. note:: To get an empty container to fill up later, create a class with no parameters."""
 
     def __init__(
-        self, heif_ctx: Union[LibHeifCtx, HeifCtxAsDict] = None, img_ids: List[int] = None, main_id: int = None
+        self,
+        heif_ctx: Union[LibHeifCtx, HeifCtxAsDict, None] = None,
+        img_ids: Optional[List[int]] = None,
+        main_id: Optional[int] = None,
     ):
         if heif_ctx is None:
             heif_ctx = HeifCtxAsDict("", (0, 0), None)

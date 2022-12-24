@@ -10,7 +10,7 @@ class WheelsABI3(bdist_wheel):
         if python.startswith("cp"):
             python = "cp37"
             abi = "abi3"
-            if plat.startswith("macosx") and plat.find("x86_64") != -1:
+            if plat.startswith("macosx") and plat.find("x86_64") == -1:
                 python = "cp38"
         return python, abi, plat
 

@@ -43,7 +43,7 @@ jobs:
           python3 -m pip install cibuildwheel
           python3 -m cibuildwheel
         env:
-          CIBW_BUILD: "cp37-* cp38-* cp39-* cp310-*"
+          CIBW_BUILD: "cp37-* cp38-* cp39-* cp310-* cp311-*"
           CIBW_ARCHS_WINDOWS: "AMD64"
           CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: "delvewheel repair -vv -w {dest_dir} {wheel} --add-path ${{ env.MSYS2_PREFIX }}/bin"
           CIBW_ENVIRONMENT_WINDOWS: PH_LIGHT_ACTION=1
@@ -78,7 +78,6 @@ jobs:
           python3 -m cibuildwheel
         env:
           CIBW_BUILD: "*-macosx_x86_64"
-          CIBW_SKIP: "cp36-* pp39-*"
           CIBW_TEST_SKIP: "cp311-*"
           CIBW_ENVIRONMENT_MACOS: PH_LIGHT_ACTION=1 TEST_DECODE_THREADS=0
 
@@ -296,24 +295,24 @@ jobs:
           name: wheels
           path: wheelhouse/*.tar.gz
 
-  publish_release:
-    needs: [wheels_windows, wheels_macos, wheels_linux_cpython, wheels_linux_pypy, sdist, wheels_armv7l]
-    name: Publish release
-    runs-on: ubuntu-20.04
-    env:
-      TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-      TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-
-    steps:
-      - name: Collect sdist and wheels
-        uses: actions/download-artifact@v3
-        with:
-          name: wheels
-          path: wheelhouse
-
-      - name: Publish wheels to PyPI
-        run: |
-            python3 -m pip install twine
-            ls -la wheelhouse/
-            python3 -m twine upload --repository testpypi --skip-existing wheelhouse/*.whl
-            python3 -m twine upload --repository testpypi wheelhouse/*tar.gz
+#  publish_release:
+#    needs: [wheels_windows, wheels_macos, wheels_linux_cpython, wheels_linux_pypy, sdist, wheels_armv7l]
+#    name: Publish release
+#    runs-on: ubuntu-20.04
+#    env:
+#      TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+#      TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+#
+#    steps:
+#      - name: Collect sdist and wheels
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: wheels
+#          path: wheelhouse
+#
+#      - name: Publish wheels to PyPI
+#        run: |
+#            python3 -m pip install twine
+#            ls -la wheelhouse/
+#            python3 -m twine upload --repository testpypi --skip-existing wheelhouse/*.whl
+#            python3 -m twine upload --repository testpypi wheelhouse/*tar.gz

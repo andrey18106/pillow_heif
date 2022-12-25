@@ -6,7 +6,7 @@ on:
 
 jobs:
   wheels_armv7l:
-    name: ${{ matrix.i['name'] }} • ARMv7l • CPython3.7+
+    name: ${{ matrix.i['name'] }} • ARMv7l • CPython
     runs-on: ubuntu-20.04
     strategy:
       matrix:

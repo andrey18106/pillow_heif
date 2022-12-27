@@ -114,7 +114,7 @@ MODE_INFO = {
 }
 
 
-NCLX_FIELDS = ("version", "color_primaries", "transfer_characteristics", "matrix_coefficients", "full_range_flag")
+NCLX_FIELDS = ("color_primaries", "transfer_characteristics", "matrix_coefficients", "full_range_flag")
 NCLX_DECODE_ONLY_FIELDS = (
     "color_primary_red_x",
     "color_primary_red_y",

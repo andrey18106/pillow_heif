@@ -71,8 +71,6 @@ MODE_CONVERT = {
         "BGRa": lib.convert_bgra_rgba,
         "RGBa;16": lib.convert_rgba_to_rgba16,
         "BGRa;16": lib.convert_rgba_to_bgra16,
-        "RGB": lib.convert_rgba_premultiplied_to_rgb,
-        "BGR": lib.convert_rgba_premultiplied_to_bgr,
     },
     "RGB": {"BGR": lib.convert_bgr_rgb, "RGB;16": lib.convert_rgb_to_rgb16, "BGR;16": lib.convert_rgb_to_bgr16},
 }
@@ -109,6 +107,7 @@ MODE_INFO = {
     "BGRA": (4, 8, HeifColorspace.RGB, HeifChroma.INTERLEAVED_RGBA, "RGBA", "|u1"),
     "BGRa": (4, 8, HeifColorspace.RGB, HeifChroma.INTERLEAVED_RGBA, "RGBa", "|u1"),
     "BGR": (3, 8, HeifColorspace.RGB, HeifChroma.INTERLEAVED_RGB, "RGB", "|u1"),
+    "LA": (2, 8, HeifColorspace.MONOCHROME, HeifChroma.MONOCHROME, None, "|u1"),
     "L": (1, 8, HeifColorspace.MONOCHROME, HeifChroma.MONOCHROME, None, "|u1"),
     "": (0, 0, HeifColorspace.UNDEFINED, HeifChroma.UNDEFINED, None, ""),
 }

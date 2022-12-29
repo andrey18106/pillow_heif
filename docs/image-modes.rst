@@ -56,26 +56,15 @@ Mode conversion
 
 For ``HeifImage`` some of these modes can be converted to each other using :py:meth:`~pillow_heif.HeifImage.convert_to` method:
 
-    * ``BGRA;16``  -->  ``RGBA;10`` or ``RGBA;12``
-    * ``BGR;16``  -->  ``RGB;10`` or ``RGB;12``
-    * ``RGBA;16``  -->  ``RGBA;10``, ``RGBA;12`` or ``RGBA``
-    * ``RGB;16``  -->  ``RGB;10`` or ``RGB;12``
+    * ``BGRA;16``  <-->  ``RGBA;10`` or ``RGBA;12``
+    * ``BGRa;16``  <-->  ``RGBa;10`` or ``RGBa;12``
+    * ``BGR;16``  <-->  ``RGB;10`` or ``RGB;12``
+    * ``RGBA;16``  <-->  ``RGBA;10`` or ``RGBA;12``
+    * ``RGBa;16``  <-->  ``RGBa;10`` or ``RGBa;12``
+    * ``RGB;16``  <-->  ``RGB;10`` or ``RGB;12``
     * ``L;16``  -->  ``L;10`` or ``L;12``
     * ``I;16``  -->  ``L;10`` or ``L;12``
     * ``I;16L``  -->  ``L;10`` or ``L;12``
-    * ``RGBA;12``  -->  ``RGBA;16`` or ``BGRA;16``
-    * ``RGB;12``  -->  ``RGB;16`` or ``BGR;16``
-    * ``RGBA;10``  -->  ``RGBA;16`` or ``BGRA;16``
-    * ``RGB;10``  -->  ``RGB;16`` or ``BGR;16``
-    * ``BGRA``  -->  ``RGBA``
-    * ``BGR``  -->  ``RGB``
-    * ``RGBA``  -->  ``BGRA``, ``RGBA;16`` or ``BGRA;16``
-    * ``RGB``  -->  ``BGR``, ``RGB;16`` or ``BGR;16``
-
-Modes with premultiplied Alpha:
-    * ``BGRa;16``  -->  ``RGBa;10`` or ``RGBa;12``
-    * ``RGBa;16``  -->  ``RGBa;10``, ``RGBa;12`` or ``RGBa``
-    * ``RGBa;12``  -->  ``RGBa;16`` or ``BGRa;16``
-    * ``RGBa;10``  -->  ``RGBa;16`` or ``BGRa;16``
-    * ``BGRa``  -->  ``RGBa``
-    * ``RGBa`` --> ``BGRa``, ``RGBa;16`` or ``BGRa;16``
+    * ``BGRA``  <-->  ``RGBA``
+    * ``BGRa``  <-->  ``RGBa``
+    * ``BGR``  <-->  ``RGB``

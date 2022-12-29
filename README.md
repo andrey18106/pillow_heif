@@ -62,14 +62,14 @@ heif_file = pillow_heif.from_bytes(
 heif_file.save("RGBA_10bit.heic", quality=-1)
 ```
 
-### 8/10/12 bit HEIF to 16 bit PNG using OpenCV
+### 10/12 bit HEIF to 16 bit PNG using OpenCV
 ```python3
 import numpy as np
 import cv2
 import pillow_heif
 
 heif_file = pillow_heif.open_heif("images/rgb12.heif", convert_hdr_to_8bit=False)
-heif_file.convert_to("BGRA;16" if heif_file.has_alpha else "BGR;16")
+heif_file.convert_to("BGRA;16" if heif_file.has_alpha else "BGR;16")    # you also should check if image is not 8 bit
 np_array = np.asarray(heif_file)
 cv2.imwrite("rgb16.png", np_array)
 ```

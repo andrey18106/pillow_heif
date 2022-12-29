@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 
 - Drop support for Python 3.6
 - info["nclx_profile"] changed type from bytes(format of which was not described) to dict.
+- extra modes of the `convert_to` method have been removed, now only the modes necessary for decoding-encoding are present.
 
 ### Fixed
 

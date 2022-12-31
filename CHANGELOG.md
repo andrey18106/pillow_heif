@@ -2,15 +2,13 @@ _# Changelog
 
 All notable changes to this project will be documented in this file.
 
-## [0.9.1 - 2023-01-xx]
-
-### Added
+## [0.9.1 - 2023-01-04]
 
 ### Changed
 
-- Drop support for Python 3.6
 - info["nclx_profile"] changed type from bytes(format of which was not described) to dict.
-- extra modes of the `convert_to` method have been removed, now only the modes necessary for decoding-encoding are present.
+- Drop support for Python 3.6
+- `convert_to` method: `RGBa` to `RGB` mode support was removed(last Pillow supports it). #67
 
 ### Fixed
 

@@ -14,7 +14,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-
       - name: Transform to Pi-Heif
         run: |
           cp -r -v -force ./pi-heif/* .
@@ -66,7 +65,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-
       - name: Transform to Pi-Heif
         run: |
           cp -r -v ./pi-heif/* .
@@ -106,7 +104,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-
       - name: Transform to Pi-Heif
         run: |
           cp -r -v ./pi-heif/* .
@@ -118,8 +115,8 @@ jobs:
         with:
           platforms: arm64
 
-      - name: 32-bit musllinux preparations
-        if: matrix.cibw_buildlinux == 'musllinux' && matrix.cibw_arch == 'i686'
+      - name: musllinux preparations
+        if: matrix.cibw_buildlinux == 'musllinux'
         run: echo INSTALL_OS_PACKAGES="apk update && apk --no-cache add $OS_PACKAGES" >> $GITHUB_ENV
         env:
           OS_PACKAGES: "fribidi-dev harfbuzz-dev jpeg-dev lcms2-dev openjpeg-dev"
@@ -161,7 +158,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-
       - name: Transform to Pi-Heif
         run: |
           cp -r -v ./pi-heif/* .
@@ -180,6 +176,7 @@ jobs:
         env:
           CIBW_BUILD: ${{ format('{0}-{1}_{2}', matrix.cibw_build , matrix.cibw_buildlinux, matrix.cibw_arch) }}
           CIBW_ARCHS: ${{ matrix.cibw_arch }}
+          CIBW_BEFORE_ALL_LINUX: "yum makecache && yum install -y libjpeg-turbo-devel lcms2-devel"
           CIBW_ENVIRONMENT_LINUX: BUILD_DIR_PREFIX=/host${{ env.BUILD_DIR_PREFIX }} PH_LIGHT_ACTION=1
 
       - name: Checking built wheels
@@ -206,7 +203,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-
       - name: Transform to Pi-Heif
         run: |
           cp -r -v ./pi-heif/* .
@@ -243,7 +239,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-
       - name: Transform to Pi-Heif
         run: |
           cp -r -v ./pi-heif/* .

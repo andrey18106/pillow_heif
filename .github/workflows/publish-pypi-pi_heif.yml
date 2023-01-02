@@ -278,7 +278,7 @@ jobs:
 
       - name: Test sdist
         run: |
-          export PH_LIGHT_ACTION=1
+          export PH_LIGHT_ACTION=1 TEST_DECODE_THREADS=0
           python3 -m pytest -rs
 
       - name: Upload sdist

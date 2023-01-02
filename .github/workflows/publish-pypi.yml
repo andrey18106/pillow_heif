@@ -17,7 +17,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
 
@@ -51,7 +50,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-
       - uses: msys2/setup-msys2@v2
         with:
           location: C:/temp
@@ -138,18 +136,6 @@ jobs:
         with:
           platforms: arm64
 
-      - name: manylinux preparations
-        if: matrix.cibw_buildlinux == 'manylinux'
-        run: echo INSTALL_OS_PACKAGES="yum makecache && yum install -y $OS_PACKAGES" >> $GITHUB_ENV
-        env:
-          OS_PACKAGES: "git-all libjpeg-turbo-devel lcms2-devel libffi-devel"
-
-      - name: musllinux preparations
-        if: matrix.cibw_buildlinux == 'musllinux'
-        run: echo INSTALL_OS_PACKAGES="apk update && apk --no-cache add $OS_PACKAGES" >> $GITHUB_ENV
-        env:
-          OS_PACKAGES: "sudo py3-pip python3-dev fribidi-dev harfbuzz-dev jpeg-dev lcms2-dev openjpeg-dev"
-
       - name: Only minimal testing on aarch64
         if: matrix.cibw_arch == 'aarch64'
         run: echo CIBW_TEST_EXTRAS="tests-min" >> $GITHUB_ENV
@@ -169,7 +155,6 @@ jobs:
         env:
           CIBW_BUILD: ${{ format('cp3*-{0}_{1}', matrix.cibw_buildlinux, matrix.cibw_arch) }}
           CIBW_ARCHS: ${{ matrix.cibw_arch }}
-          CIBW_BEFORE_ALL_LINUX: ${{ env.INSTALL_OS_PACKAGES }}
           CIBW_ENVIRONMENT_LINUX: BUILD_DIR_PREFIX=/host${{ env.BUILD_DIR_PREFIX }} PH_FULL_ACTION=1
 
       - name: Checking built wheels
@@ -207,17 +192,11 @@ jobs:
         with:
           platforms: arm64
 
-      - name: manylinux preparations
-        if: matrix.cibw_buildlinux == 'manylinux'
-        run: echo INSTALL_OS_PACKAGES="yum makecache && yum install -y $OS_PACKAGES" >> $GITHUB_ENV
-        env:
-          OS_PACKAGES: "git-all libjpeg-turbo-devel lcms2-devel libffi-devel"
-
       - name: musllinux preparations
         if: matrix.cibw_buildlinux == 'musllinux'
         run: echo INSTALL_OS_PACKAGES="apk update && apk --no-cache add $OS_PACKAGES" >> $GITHUB_ENV
         env:
-          OS_PACKAGES: "sudo py3-pip python3-dev fribidi-dev harfbuzz-dev jpeg-dev lcms2-dev openjpeg-dev"
+          OS_PACKAGES: "fribidi-dev harfbuzz-dev jpeg-dev lcms2-dev openjpeg-dev"
 
       - name: Only minimal testing on aarch64
         if: matrix.cibw_arch == 'aarch64'
@@ -262,7 +241,7 @@ jobs:
       matrix:
         cibw_buildlinux: [ manylinux ]
         cibw_arch: [ "aarch64", "x86_64" ]
-        cibw_build: [ "pp37", "pp38" ]
+        cibw_build: [ "pp38", "pp39" ]
     name: ${{ matrix.cibw_buildlinux }} • ${{ matrix.cibw_arch }} • ${{ matrix.cibw_build }}
     runs-on: ubuntu-20.04
     env:
@@ -296,7 +275,6 @@ jobs:
         env:
           CIBW_BUILD: ${{ format('{0}-{1}_{2}', matrix.cibw_build , matrix.cibw_buildlinux, matrix.cibw_arch) }}
           CIBW_ARCHS: ${{ matrix.cibw_arch }}
-          CIBW_BEFORE_ALL_LINUX: "yum makecache && yum install -y git-all libjpeg-turbo-devel lcms2-devel libffi-devel"
           CIBW_ENVIRONMENT_LINUX: BUILD_DIR_PREFIX=/host${{ env.BUILD_DIR_PREFIX }} PH_FULL_ACTION=1
 
       - name: Checking built wheels
@@ -320,7 +298,7 @@ jobs:
       matrix:
         cibw_buildlinux: [ manylinux ]
         cibw_arch: [ "i686" ]
-        cibw_build: [ "pp37", "pp38" ]
+        cibw_build: [ "pp38", "pp39" ]
     name: ${{ matrix.cibw_buildlinux }} • ${{ matrix.cibw_arch }} • ${{ matrix.cibw_build }}
     runs-on: ubuntu-20.04
     env:
@@ -354,7 +332,6 @@ jobs:
         env:
           CIBW_BUILD: ${{ format('{0}-{1}_{2}', matrix.cibw_build , matrix.cibw_buildlinux, matrix.cibw_arch) }}
           CIBW_ARCHS: ${{ matrix.cibw_arch }}
-          CIBW_BEFORE_ALL_LINUX: "yum makecache && yum install -y git-all libjpeg-turbo-devel lcms2-devel libffi-devel"
           CIBW_ENVIRONMENT_LINUX: BUILD_DIR_PREFIX=/host${{ env.BUILD_DIR_PREFIX }} PH_LIGHT_ACTION=1
 
       - name: Checking built wheels
@@ -378,7 +355,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-
       - uses: actions/setup-python@v4
         with:
           python-version: '3.10'
@@ -418,66 +394,66 @@ jobs:
           name: wheels
           path: wheelhouse/*.tar.gz
 
-#  create_release:
-#    needs: [sdist, wheels_macos, wheels_windows, wheels_linux_cpython,
-#            wheels_linux_pypy, wheels_linux_pypy_32bit, wheels_linux_cpython_32bit,
-#            wheels_armv7l]
-#    runs-on: ubuntu-20.04
-#    name: Create GitHub release
-#
-#    steps:
-#      - uses: actions/checkout@v3
-#      - name: Get release info
-#        id: get_release_info
-#        run: |
-#          RELEASE_VERSION=$(sed -n "s/^__version__.*\"\(.*\)\"$/\\1/p" ./pillow_heif/_version.py)
-#          echo RELEASE_TAG="v$RELEASE_VERSION" >> $GITHUB_ENV
-#          CHANGELOG=$(grep -oPz "(?s)##\s\[$RELEASE_VERSION.+?(?=##\s\[|$)" ./CHANGELOG.md | tr -d '\0' | sed /^$/d | sed '1d')
-#          CHANGELOG=$(echo "$CHANGELOG" | sed '$!N;s/^###.*\n#/#/;P;D' | sed '$!N;s/^###.*\n#/#/;P;D' | sed '${/^###/d;}')
-#          if [ "$CHANGELOG" == "" ]; then
-#            echo "changelog is empty!"
-#            exit 1
-#          fi
-#          echo "CHANGELOG<<EOF" >> $GITHUB_ENV
-#          echo "$CHANGELOG" >> $GITHUB_ENV
-#          echo "EOF" >> $GITHUB_ENV
-#
-#      - name: Collect sdist and wheels
-#        uses: actions/download-artifact@v3
-#        with:
-#          name: wheels
-#          path: wheelhouse
-#
-#      - name: Create release draft
-#        uses: ncipollo/release-action@v1.12.0
-#        with:
-#          name: ${{ env.RELEASE_TAG }}
-#          tag: ${{ env.RELEASE_TAG }}
-#          commit: ${{ github.ref }}
-#          draft: false
-#          body: ${{ env.CHANGELOG }}
-#          artifacts: wheelhouse/*
-#          token: ${{ secrets.GITHUB_TOKEN }}
-#          artifactErrorsFailBuild: true
-#
-#  publish_release:
-#    needs: [create_release]
-#    name: Publish release
-#    runs-on: ubuntu-20.04
-#    env:
-#      TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-#      TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-#
-#    steps:
-#      - name: Collect sdist and wheels
-#        uses: actions/download-artifact@v3
-#        with:
-#          name: wheels
-#          path: wheelhouse
-#
-#      - name: Publish wheels to PyPI
-#        run: |
-#            python3 -m pip install twine
-#            ls -la wheelhouse/
-#            python3 -m twine upload --repository testpypi --skip-existing wheelhouse/*.whl
-#            python3 -m twine upload --repository testpypi wheelhouse/*tar.gz
+  create_release:
+    needs: [sdist, wheels_macos, wheels_windows, wheels_linux_cpython,
+            wheels_linux_pypy, wheels_linux_pypy_32bit, wheels_linux_cpython_32bit,
+            wheels_armv7l]
+    runs-on: ubuntu-20.04
+    name: Create GitHub release
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Get release info
+        id: get_release_info
+        run: |
+          RELEASE_VERSION=$(sed -n "s/^__version__.*\"\(.*\)\"$/\\1/p" ./pillow_heif/_version.py)
+          echo RELEASE_TAG="v$RELEASE_VERSION" >> $GITHUB_ENV
+          CHANGELOG=$(grep -oPz "(?s)##\s\[$RELEASE_VERSION.+?(?=##\s\[|$)" ./CHANGELOG.md | tr -d '\0' | sed /^$/d | sed '1d')
+          CHANGELOG=$(echo "$CHANGELOG" | sed '$!N;s/^###.*\n#/#/;P;D' | sed '$!N;s/^###.*\n#/#/;P;D' | sed '${/^###/d;}')
+          if [ "$CHANGELOG" == "" ]; then
+            echo "changelog is empty!"
+            exit 1
+          fi
+          echo "CHANGELOG<<EOF" >> $GITHUB_ENV
+          echo "$CHANGELOG" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Collect sdist and wheels
+        uses: actions/download-artifact@v3
+        with:
+          name: wheels
+          path: wheelhouse
+
+      - name: Create release draft
+        uses: ncipollo/release-action@v1.12.0
+        with:
+          name: ${{ env.RELEASE_TAG }}
+          tag: ${{ env.RELEASE_TAG }}
+          commit: ${{ github.ref }}
+          draft: false
+          body: ${{ env.CHANGELOG }}
+          artifacts: wheelhouse/*
+          token: ${{ secrets.GITHUB_TOKEN }}
+          artifactErrorsFailBuild: true
+
+  publish_release:
+    needs: [create_release]
+    name: Publish release
+    runs-on: ubuntu-20.04
+    env:
+      TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+      TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+
+    steps:
+      - name: Collect sdist and wheels
+        uses: actions/download-artifact@v3
+        with:
+          name: wheels
+          path: wheelhouse
+
+      - name: Publish wheels to PyPI
+        run: |
+            python3 -m pip install twine
+            ls -la wheelhouse/
+            python3 -m twine upload --repository testpypi --skip-existing wheelhouse/*.whl
+            python3 -m twine upload --repository testpypi wheelhouse/*tar.gz

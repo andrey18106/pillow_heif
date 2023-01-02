@@ -2,12 +2,12 @@ _# Changelog
 
 All notable changes to this project will be documented in this file.
 
-## [0.9.1 - 2023-01-04]
+## [0.9.1 - 2023-01-02]
 
 ### Changed
 
 - info["nclx_profile"] changed type from bytes(format of which was not described) to dict.
-- Drop support for Python 3.6
+- Drop support for Python 3.6, PyPy 3.7. Added PyPy 3.9 wheels.
 - `convert_to` method: `RGBa` to `RGB` mode support was removed(last Pillow supports it). #67
 
 ### Fixed

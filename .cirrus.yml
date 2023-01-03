@@ -1,5 +1,10 @@
-test-src-build-macos:
+test_src_build_macos:
   only_if: "changesInclude('pyproject.toml')"
+
+  name: macOS:12-arm64
+  macos_instance:
+    image: ghcr.io/cirruslabs/macos-monterey-xcode
+
   script:
     - brew uninstall --force --ignore-dependencies imagemagick
     - brew install --formula ./libheif/macos/libheif.rb

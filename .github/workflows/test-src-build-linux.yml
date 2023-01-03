@@ -1,41 +1,41 @@
-#name: Build from source(Linux)
-#
-#on:
-#  workflow_dispatch:
-#  workflow_call:
-#  pull_request:
-#    paths:
-#      - 'libheif/linux/**'
-#      - 'libheif/linux_*.py'
-#      - 'libheif/build.py'
-#      - 'libheif/public_api.h'
-#      - 'setup.*'
-#      - 'pyproject.toml'
-#  push:
-#    paths:
-#      - 'libheif/linux/**'
-#      - 'libheif/linux_*.py'
-#      - 'libheif/build.py'
-#      - 'libheif/public_api.h'
-#      - 'setup.*'
-#      - 'pyproject.toml'
-#
-#concurrency:
-#  group: src_linux-${{ github.ref }}
-#  cancel-in-progress: true
-#
-#jobs:
-#  test_src_build:
-#    name: ${{ matrix.docker_file }}-${{ matrix.arch }}
-#    runs-on: ubuntu-latest
-#    if: "!contains(github.event.head_commit.message, '[docs]')"
-#    strategy:
-#      matrix:
-#        arch: ["amd64", "arm64", "arm/v7"]
-#        docker_file: ["Alpine_3_15", "Alpine_3_17", "Debian_11", "Ubuntu_22_04"]
-#
-#    steps:
-#      - uses: actions/checkout@v3
+name: Build from source(Linux)
+
+on:
+  workflow_dispatch:
+  workflow_call:
+  pull_request:
+    paths:
+      - 'libheif/linux/**'
+      - 'libheif/linux_*.py'
+      - 'libheif/build.py'
+      - 'libheif/public_api.h'
+      - 'setup.*'
+      - 'pyproject.toml'
+  push:
+    paths:
+      - 'libheif/linux/**'
+      - 'libheif/linux_*.py'
+      - 'libheif/build.py'
+      - 'libheif/public_api.h'
+      - 'setup.*'
+      - 'pyproject.toml'
+
+concurrency:
+  group: src_linux-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test_src_build:
+    name: ${{ matrix.docker_file }}-${{ matrix.arch }}
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[docs]')"
+    strategy:
+      matrix:
+        arch: ["amd64", "arm64", "arm/v7"]
+        docker_file: ["Alpine_3_15", "Alpine_3_17", "Debian_11", "Ubuntu_22_04"]
+
+    steps:
+      - uses: actions/checkout@v3
 #      - name: Set up QEMU
 #        uses: docker/setup-qemu-action@v2
 #

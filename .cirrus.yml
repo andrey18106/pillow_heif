@@ -1,5 +1,4 @@
-test_src_build_macos:
-#  only_if: "changesInclude('pyproject.toml')"
+macos_task:
 
   name: macOS:12-arm64
   macos_instance:

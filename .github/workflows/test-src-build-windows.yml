@@ -1,37 +1,36 @@
-#name: Build from source(Windows)
-#
-#on:
-#  workflow_dispatch:
-#  workflow_call:
-#  pull_request:
-#    paths:
-#      - 'libheif/windows/**'
-#      - 'libheif/build.py'
-#      - 'libheif/public_api.h'
-#      - 'setup.*'
-#      - 'pyproject.toml'
-#  push:
-#    paths:
-#      - 'libheif/windows/**'
-#      - 'libheif/build.py'
-#      - 'libheif/public_api.h'
-#      - 'setup.*'
-#      - 'pyproject.toml'
-#
-#concurrency:
-#  group: src_windows-${{ github.ref }}
-#  cancel-in-progress: true
-#
-#jobs:
-#  windows_2019:
-#    name: Windows:2019-x86_64
-#    runs-on: windows-2019
-#    env:
-#      MSYS2_PREFIX: "C:/temp/msys64/mingw64"
-#
-#    steps:
-#      - uses: actions/checkout@v3
-#
+name: Build from source(Windows)
+
+on:
+  workflow_dispatch:
+  workflow_call:
+  pull_request:
+    paths:
+      - 'libheif/windows/**'
+      - 'libheif/build.py'
+      - 'libheif/public_api.h'
+      - 'setup.*'
+      - 'pyproject.toml'
+  push:
+    paths:
+      - 'libheif/windows/**'
+      - 'libheif/build.py'
+      - 'libheif/public_api.h'
+      - 'setup.*'
+      - 'pyproject.toml'
+
+concurrency:
+  group: src_windows-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  windows_2019:
+    name: Windows:2019-x86_64
+    runs-on: windows-2019
+    env:
+      MSYS2_PREFIX: "C:/temp/msys64/mingw64"
+
+    steps:
+      - uses: actions/checkout@v3
 #      - uses: msys2/setup-msys2@v2
 #        with:
 #          location: C:/temp

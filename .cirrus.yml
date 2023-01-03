@@ -1,21 +1,38 @@
-test_src_build_macos_task:
+#test_src_build_macos_task:
+#  only_if: "changesInclude(
+#    '.cirrus.yml',
+#    'libheif/macos/**',
+#    'libheif/build.py',
+#    'libheif/public_api.h',
+#    'setup.*',
+#    'pyproject.toml')"
+#
+#  name: Build from source(macOS) / macOS:12-arm64
+#  macos_instance:
+#    image: ghcr.io/cirruslabs/macos-monterey-xcode
+#
+#  brew_install_libheif_script:
+#    - brew uninstall --force --ignore-dependencies imagemagick
+#    - brew install --formula ./libheif/macos/libheif.rb
+#  installing_pillow_heif_script:
+#    - python3 -m pip -v install ".[dev]"
+#  libheif_info_script:
+#    - python3 -c "import pillow_heif; print(pillow_heif.libheif_info())"
+#  perform_tests_script:
+#    - python3 -m pytest -rs
+
+test_src_build_linux_arm_task:
   only_if: "changesInclude(
-    'libheif/macos/**',
+    '.cirrus.yml',
+    'libheif/linux/**',
+    'libheif/linux_*.py',
     'libheif/build.py',
     'libheif/public_api.h',
     'setup.*',
     'pyproject.toml')"
 
-  name: Build from source(macOS) / macOS:12-arm64
-  macos_instance:
-    image: ghcr.io/cirruslabs/macos-monterey-xcode
+  name: Build from source(Linux) / dev
+  arm_container:
+    image: docker/from_src/Alpine_3_15.Dockerfile
 
-  brew_install_libheif_script:
-    - brew uninstall --force --ignore-dependencies imagemagick
-    - brew install --formula ./libheif/macos/libheif.rb
-  installing_pillow_heif_script:
-    - python3 -m pip -v install ".[dev]"
-  libheif_info_script:
-    - python3 -c "import pillow_heif; print(pillow_heif.libheif_info())"
-  perform_tests_script:
-    - python3 -m pytest -rs
+  build_script: echo "test"

@@ -1,4 +1,4 @@
-# https://github.com/Homebrew/homebrew-core/blob/master/Formula/libheif.rb 1
+# https://github.com/Homebrew/homebrew-core/blob/master/Formula/libheif.rb
 
 class Libheif < Formula
   desc "ISO/IEC 23008-12:2017 HEIF file format decoder and encoder"

@@ -63,15 +63,16 @@
 #      Ubuntu_22_build_script:
 #        - docker buildx build -f docker/from_src/Ubuntu_22_04.Dockerfile .
 
-wheels_macos_arm_task:
+wheel_macos_arm_task:
   only_if: $CIRRUS_BRANCH == 'master'
   name: macosx • Apple Silicon
+  alias: wheel_macos_arm
   macos_instance:
     image: ghcr.io/cirruslabs/macos-monterey-xcode
 
   env:
     PATH: /opt/homebrew/opt/python@3.10/bin:$PATH
-    CIBW_BUILD: '*-macosx_arm64'
+    CIBW_BUILD: 'cp38-macosx_arm64'
     CIBW_ARCHS: arm64
     CIBW_PLATFORM: macos
     CIBW_ENVIRONMENT: 'MACOSX_DEPLOYMENT_TARGET=12.0'

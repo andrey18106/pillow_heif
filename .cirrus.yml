@@ -35,4 +35,6 @@ test_src_build_linux_arm_task:
   arm_container:
     image: docker/from_src/Alpine_3_15.Dockerfile
 
-  build_script: echo "test"
+  build_script:
+    - echo "test"
+    - lscpu

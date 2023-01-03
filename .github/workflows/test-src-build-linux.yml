@@ -5,6 +5,7 @@ on:
   workflow_call:
   pull_request:
     paths:
+      - '.github/workflows/test-src-build-linux.yml'
       - 'libheif/linux/**'
       - 'libheif/linux_*.py'
       - 'libheif/build.py'
@@ -12,7 +13,9 @@ on:
       - 'setup.*'
       - 'pyproject.toml'
   push:
+    branches: [master]
     paths:
+      - '.github/workflows/test-src-build-linux.yml'
       - 'libheif/linux/**'
       - 'libheif/linux_*.py'
       - 'libheif/build.py'

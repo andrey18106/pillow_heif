@@ -5,13 +5,16 @@ on:
   workflow_call:
   pull_request:
     paths:
+      - '.github/workflows/test-src-build-windows.yml'
       - 'libheif/windows/**'
       - 'libheif/build.py'
       - 'libheif/public_api.h'
       - 'setup.*'
       - 'pyproject.toml'
   push:
+    branches: [master]
     paths:
+      - '.github/workflows/test-src-build-windows.yml'
       - 'libheif/windows/**'
       - 'libheif/build.py'
       - 'libheif/public_api.h'

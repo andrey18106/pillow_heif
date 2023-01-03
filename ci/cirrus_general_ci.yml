@@ -1,0 +1,64 @@
+test_src_build_macos_arm_task:
+  only_if: "changesInclude(
+    '.cirrus.yml',
+    'libheif/macos/**',
+    'libheif/build.py',
+    'libheif/public_api.h',
+    'setup.*',
+    'pyproject.toml')"
+
+  name: Build from source(macOS) / macOS:12-arm64
+  macos_instance:
+    image: ghcr.io/cirruslabs/macos-monterey-xcode
+
+  brew_install_libheif_script:
+    - brew uninstall --force --ignore-dependencies imagemagick
+    - brew install --formula ./libheif/macos/libheif.rb
+  installing_pillow_heif_script:
+    - python3 -m pip -v install ".[dev]"
+  libheif_info_script:
+    - python3 -c "import pillow_heif; print(pillow_heif.libheif_info())"
+  perform_tests_script:
+    - python3 -m pytest -rs
+
+test_src_build_linux_arm_task:
+  only_if: "changesInclude(
+    '.cirrus.yml',
+    'docker/from_src/*.Dockerfile',
+    'libheif/linux/**',
+    'libheif/linux_*.py',
+    'libheif/build.py',
+    'libheif/public_api.h',
+    'setup.*',
+    'pyproject.toml')"
+
+  matrix:
+    - name: Build from source(Linux) / Alpine
+      compute_engine_instance:
+        image_project: cirrus-images
+        image: family/docker-builder-arm64
+        architecture: arm64
+        platform: linux
+        cpu: 4
+        memory: 4G
+
+      Alpine_3_15_build_script:
+        - docker buildx build -f docker/from_src/Alpine_3_15.Dockerfile .
+
+      Alpine_3_17_build_script:
+        - docker buildx build -f docker/from_src/Alpine_3_17.Dockerfile .
+
+    - name: Build from source(Linux) / Debian
+      compute_engine_instance:
+        image_project: cirrus-images
+        image: family/docker-builder-arm64
+        architecture: arm64
+        platform: linux
+        cpu: 4
+        memory: 4G
+
+      Debian_11_build_script:
+        - docker buildx build -f docker/from_src/Debian_11.Dockerfile .
+
+      Ubuntu_22_build_script:
+        - docker buildx build -f docker/from_src/Ubuntu_22_04.Dockerfile .

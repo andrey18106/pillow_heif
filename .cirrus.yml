@@ -32,8 +32,12 @@ test_src_build_linux_arm_task:
     'pyproject.toml')"
 
   name: Build from source(Linux) / dev
-  arm_container:
-    image: docker/from_src/Alpine_3_15.Dockerfile
+  compute_engine_instance:
+    image: alpine:3.15
+    architecture: arm64
+    platform: linux
+    cpu: 4
+    memory: 4G
 
   build_script:
     - echo "test"

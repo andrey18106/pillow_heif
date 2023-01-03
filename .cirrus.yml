@@ -1,4 +1,10 @@
 test_src_build_macos_task:
+  only_if: "changesInclude(
+    'libheif/macos/**',
+    'libheif/build.py',
+    'libheif/public_api.h',
+    'setup.*',
+    'pyproject.toml')"
 
   name: Build from source(macOS) / macOS:12-arm64
   macos_instance:

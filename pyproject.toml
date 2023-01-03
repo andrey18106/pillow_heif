@@ -80,6 +80,7 @@ repair-wheel-command = [
 ]
 test-extras = "tests"
 test-command = "pytest -rs {project}"
+test-skip = "cp38-macosx_arm64"
 
 [tool.cibuildwheel.windows]
 before-build = "pip install delvewheel"

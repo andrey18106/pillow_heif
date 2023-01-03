@@ -20,7 +20,6 @@ jobs:
   analysis:
     runs-on: macos-12
     name: Analysis
-    if: "!contains(github.event.head_commit.message, '[docs]')"
 
     steps:
       - uses: actions/checkout@v3
@@ -48,7 +47,6 @@ jobs:
   coverage-linux:
     runs-on: ubuntu-22.04
     name: Coverage(Linux)
-    if: "!contains(github.event.head_commit.message, '[docs]')"
 
     steps:
       - uses: actions/checkout@v3
@@ -94,7 +92,6 @@ jobs:
     name: Coverage(macOS)
     env:
       TEST_DECODE_THREADS: 0    # Till `brew` update to `1.14.1`
-    if: "!contains(github.event.head_commit.message, '[docs]')"
 
     steps:
       - uses: actions/checkout@v3
@@ -134,7 +131,6 @@ jobs:
     env:
       MSYS2_PREFIX: "C:/temp/msys64/mingw64"
       TEST_DECODE_THREADS: 0    # Till `MSYS2` update to `1.14.1`
-    if: "!contains(github.event.head_commit.message, '[docs]')"
 
     steps:
       - uses: actions/checkout@v3
@@ -196,7 +192,6 @@ jobs:
     name: Pi-Heif Coverage(macOS)
     env:
       TEST_DECODE_THREADS: 0    # Till `brew` update to `1.14.1`
-    if: "!contains(github.event.head_commit.message, '[docs]')"
 
     steps:
       - uses: actions/checkout@v3
@@ -246,7 +241,6 @@ jobs:
       EXP_PH_LIBHEIF_VERSION: ""
       PH_LIGHT_ACTION: 1
       TEST_DECODE_THREADS: 0    # Till `brew` update to `1.14.1`
-    if: "!contains(github.event.head_commit.message, '[docs]')"
 
     steps:
       - uses: actions/checkout@v3

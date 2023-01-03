@@ -6,6 +6,7 @@ on:
   pull_request:
     paths:
       - '.github/workflows/test-src-build-linux.yml'
+      - 'docker/from_src/*.Dockerfile'
       - 'libheif/linux/**'
       - 'libheif/linux_*.py'
       - 'libheif/build.py'
@@ -16,6 +17,7 @@ on:
     branches: [master]
     paths:
       - '.github/workflows/test-src-build-linux.yml'
+      - 'docker/from_src/*.Dockerfile'
       - 'libheif/linux/**'
       - 'libheif/linux_*.py'
       - 'libheif/build.py'
@@ -31,7 +33,7 @@ jobs:
   test_src_build:
     name: ${{ matrix.docker_file }}-${{ matrix.arch }}
     runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, '[docs]')"
+
     strategy:
       matrix:
         arch: ["amd64", "arm/v7"]

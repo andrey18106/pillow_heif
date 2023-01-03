@@ -32,42 +32,32 @@ test_src_build_linux_arm_task:
     'pyproject.toml')"
 
   matrix:
-    - name: Build from source(Linux) / Alpine_3_15
+    - name: Build from source(Linux) / Alpine
       compute_engine_instance:
         image_project: cirrus-images
         image: family/docker-builder-arm64
         architecture: arm64
         platform: linux
+        cpu: 4
+        memory: 4G
 
-      build_script:
+      Alpine_3_15_build_script:
         - docker buildx build -f docker/from_src/Alpine_3_15.Dockerfile .
 
-    - name: Build from source(Linux) / Alpine_3_17
-      compute_engine_instance:
-        image_project: cirrus-images
-        image: family/docker-builder-arm64
-        architecture: arm64
-        platform: linux
-
-      build_script:
+      Alpine_3_17_build_script:
         - docker buildx build -f docker/from_src/Alpine_3_17.Dockerfile .
 
-    - name: Build from source(Linux) / Debian_11
+    - name: Build from source(Linux) / Debian
       compute_engine_instance:
         image_project: cirrus-images
         image: family/docker-builder-arm64
         architecture: arm64
         platform: linux
+        cpu: 4
+        memory: 4G
 
-      build_script:
+      Debian_11_build_script:
         - docker buildx build -f docker/from_src/Debian_11.Dockerfile .
 
-    - name: Build from source(Linux) / Ubuntu_22_04
-      compute_engine_instance:
-        image_project: cirrus-images
-        image: family/docker-builder-arm64
-        architecture: arm64
-        platform: linux
-
-      build_script:
+      Ubuntu_22_build_script:
         - docker buildx build -f docker/from_src/Ubuntu_22_04.Dockerfile .

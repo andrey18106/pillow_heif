@@ -32,20 +32,20 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-#      - uses: actions/setup-python@v4
-#        with:
-#          python-version: '3.8'
-#
-#      - name: Install libheif from formula
-#        run: |
-#          brew uninstall --force --ignore-dependencies imagemagick
-#          brew install --formula ./libheif/macos/libheif.rb
-#
-#      - name: Installing Pillow-Heif
-#        run: python3 -m pip -v install ".[dev]"
-#
-#      - name: LibHeif info
-#        run: python3 -c "import pillow_heif; print(pillow_heif.libheif_info())"
-#
-#      - name: Perform tests
-#        run: python3 -m pytest -rs
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.8'
+
+      - name: Install libheif from formula
+        run: |
+          brew uninstall --force --ignore-dependencies imagemagick
+          brew install --formula ./libheif/macos/libheif.rb
+
+      - name: Installing Pillow-Heif
+        run: python3 -m pip -v install ".[dev]"
+
+      - name: LibHeif info
+        run: python3 -c "import pillow_heif; print(pillow_heif.libheif_info())"
+
+      - name: Perform tests
+        run: python3 -m pytest -rs

@@ -4,7 +4,7 @@ requires = [
     "wheel",
     "cffi>=1.14.6",
 ]
-# build-backend = "setuptools.build_meta" 1 1
+# build-backend = "setuptools.build_meta" 1
 
 [tool.coverage.run]
 cover_pylib = true

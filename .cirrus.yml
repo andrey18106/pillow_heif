@@ -10,9 +10,12 @@ test_src_build_macos_task:
   macos_instance:
     image: ghcr.io/cirruslabs/macos-monterey-xcode
 
-  script:
+  brew_install_libheif:
     - brew uninstall --force --ignore-dependencies imagemagick
     - brew install --formula ./libheif/macos/libheif.rb
+  installing_pillow_heif:
     - python3 -m pip -v install ".[dev]"
+  libheif_info:
     - python3 -c "import pillow_heif; print(pillow_heif.libheif_info())"
+  perform_tests:
     - python3 -m pytest -rs

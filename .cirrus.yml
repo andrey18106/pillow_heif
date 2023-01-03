@@ -1,4 +1,4 @@
-macos_task:
+macos_task_build_from_src:
 
   name: Build from source(macOS) / macOS:12-arm64
   macos_instance:

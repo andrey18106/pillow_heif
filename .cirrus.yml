@@ -1,6 +1,6 @@
-macos_task:
+test_src_build_macos:
 
-  name: macOS:12-arm64
+  name: Build from source(macOS) / macOS:12-arm64
   macos_instance:
     image: ghcr.io/cirruslabs/macos-monterey-xcode
 

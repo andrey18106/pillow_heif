@@ -1,10 +1,5 @@
 test-src-build-macos:
-  only_if: "changesInclude(
-    'libheif/macos/**',
-    'libheif/build.py',
-    'libheif/public_api.h',
-    'setup.*',
-    'pyproject.toml')"
+  only_if: "changesInclude('pyproject.toml')"
   brew_prepare:
     brew uninstall --force --ignore-dependencies imagemagick
   brew_install_libheif:

@@ -6,7 +6,7 @@ on:
       - '.github/workflows/analysis-coverage.yml'
       - 'pillow_heif/*.*'
       - 'tests/**'
-      - 'setup.*'
+      - 'setup.py'
       - 'pyproject.toml'
   push:
     branches: [master]
@@ -14,7 +14,7 @@ on:
       - '.github/workflows/analysis-coverage.yml'
       - 'pillow_heif/*.*'
       - 'tests/**'
-      - 'setup.*'
+      - 'setup.py'
       - 'pyproject.toml'
   workflow_dispatch:
 
@@ -80,7 +80,7 @@ jobs:
     runs-on: macos-12
     name: Coverage(macOS)
     env:
-      TEST_DECODE_THREADS: 0    # Till `brew` update to `1.14.1`
+      TEST_DECODE_THREADS: 0    # This test fails on GitHub on macOS. We have such enabled test on Cirrus.
 
     steps:
       - uses: actions/checkout@v3
@@ -179,8 +179,8 @@ jobs:
   coverage-pi-heif:
     runs-on: macos-12
     name: Pi-Heif Coverage(macOS)
-#    env:
-#      TEST_DECODE_THREADS: 0    # Till `brew` update to `1.14.1`
+    env:
+      TEST_DECODE_THREADS: 0    # This test fails on GitHub on macOS. We have such enabled test on Cirrus.
 
     steps:
       - uses: actions/checkout@v3
@@ -193,8 +193,7 @@ jobs:
 
       - name: Prepare system
         run: |
-          brew uninstall --force --ignore-dependencies imagemagick
-          brew uninstall --force --ignore-dependencies libheif x265 aom
+          brew uninstall --force --ignore-dependencies imagemagick x265 aom
           brew install --formula ./libheif/macos/libheif.rb
 
       - name: Install from source
@@ -227,9 +226,8 @@ jobs:
     runs-on: macos-12
     name: Pi-Heif Test(macOS)
     env:
-      EXP_PH_LIBHEIF_VERSION: ""
       PH_LIGHT_ACTION: 1
-#      TEST_DECODE_THREADS: 0    # Till `brew` update to `1.14.1`
+      TEST_DECODE_THREADS: 0    # This test fails on GitHub on macOS. We have such enabled test on Cirrus.
 
     steps:
       - uses: actions/checkout@v3
@@ -244,8 +242,7 @@ jobs:
 
       - name: Prepare system
         run: |
-          brew uninstall --force --ignore-dependencies imagemagick
-          brew uninstall --force --ignore-dependencies libheif x265 aom
+          brew uninstall --force --ignore-dependencies imagemagick x265 aom
           brew install --formula ./libheif/macos/libheif.rb
 
       - name: Install from source
@@ -257,14 +254,4 @@ jobs:
         run: python3 -c "import pi_heif; print(pi_heif.libheif_info())"
 
       - name: Perform tests
-        run: |
-          python3 -m pytest -rs
-          python3 -m pytest -rs
-          python3 -m pytest -rs
-          python3 -m pytest -rs
-          python3 -m pytest -rs
-          python3 -m pytest -rs
-          python3 -m pytest -rs
-          python3 -m pytest -rs
-          python3 -m pytest -rs
-          python3 -m pytest -rs
+        run: python3 -m pytest -rs

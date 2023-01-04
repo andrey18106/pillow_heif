@@ -3,6 +3,7 @@ name: Analysis & Coverage
 on:
   pull_request:
     paths:
+      - '.github/workflows/analysis-coverage.yml'
       - 'pillow_heif/*.*'
       - 'tests/**'
       - 'setup.*'
@@ -10,6 +11,7 @@ on:
   push:
     branches: [master]
     paths:
+      - '.github/workflows/analysis-coverage.yml'
       - 'pillow_heif/*.*'
       - 'tests/**'
       - 'setup.*'
@@ -177,8 +179,8 @@ jobs:
   coverage-pi-heif:
     runs-on: macos-12
     name: Pi-Heif Coverage(macOS)
-    env:
-      TEST_DECODE_THREADS: 0    # Till `brew` update to `1.14.1`
+#    env:
+#      TEST_DECODE_THREADS: 0    # Till `brew` update to `1.14.1`
 
     steps:
       - uses: actions/checkout@v3
@@ -227,7 +229,7 @@ jobs:
     env:
       EXP_PH_LIBHEIF_VERSION: ""
       PH_LIGHT_ACTION: 1
-      TEST_DECODE_THREADS: 0    # Till `brew` update to `1.14.1`
+#      TEST_DECODE_THREADS: 0    # Till `brew` update to `1.14.1`
 
     steps:
       - uses: actions/checkout@v3
@@ -255,4 +257,14 @@ jobs:
         run: python3 -c "import pi_heif; print(pi_heif.libheif_info())"
 
       - name: Perform tests
-        run: python3 -m pytest -rs
+        run: |
+          python3 -m pytest -rs
+          python3 -m pytest -rs
+          python3 -m pytest -rs
+          python3 -m pytest -rs
+          python3 -m pytest -rs
+          python3 -m pytest -rs
+          python3 -m pytest -rs
+          python3 -m pytest -rs
+          python3 -m pytest -rs
+          python3 -m pytest -rs

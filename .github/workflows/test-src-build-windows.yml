@@ -36,6 +36,7 @@ jobs:
     env:
       MSYS2_PREFIX: "C:/temp/msys64/mingw64"
       PH_FULL_ACTION: 1
+      EXP_PH_LIBHEIF_VERSION: ""
 
     steps:
       - uses: actions/checkout@v3
@@ -78,6 +79,7 @@ jobs:
     env:
       MSYS2_PREFIX: "C:/temp/msys64/mingw64"
       PH_LIGHT_ACTION: 1
+      EXP_PH_LIBHEIF_VERSION: ""
 
     steps:
       - uses: actions/checkout@v3

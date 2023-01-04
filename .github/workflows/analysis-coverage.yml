@@ -194,9 +194,6 @@ jobs:
         run: |
           sudo apt -y purge libheif1 libaom-dev libx265-dev
           sudo apt -y install libde265-dev nasm
-          sudo add-apt-repository ppa:strukturag/libheif
-          sudo apt update
-          sudo apt -y install --no-install-recommends libheif-dev
 
       - name: Install from source
         run: |
@@ -246,9 +243,6 @@ jobs:
         run: |
           sudo apt -y purge libheif1 libaom-dev libx265-dev
           sudo apt -y install libde265-dev nasm
-          sudo add-apt-repository ppa:strukturag/libheif
-          sudo apt update
-          sudo apt -y install --no-install-recommends libheif-dev
 
       - name: Install from source
         run: |

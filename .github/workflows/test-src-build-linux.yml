@@ -13,6 +13,7 @@ on:
       - 'libheif/public_api.h'
       - 'setup.*'
       - 'pyproject.toml'
+      - 'pi-heif/setup.cfg'
   push:
     branches: [master]
     paths:
@@ -24,13 +25,14 @@ on:
       - 'libheif/public_api.h'
       - 'setup.*'
       - 'pyproject.toml'
+      - 'pi-heif/setup.cfg'
 
 concurrency:
   group: src_linux-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  test_src_build:
+  full_linux:
     name: ${{ matrix.docker_file }}-${{ matrix.arch }}
     runs-on: ubuntu-latest
 
@@ -59,6 +61,49 @@ jobs:
           target: base
 
       - name: Build & Test Pillow-Heif
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: docker/from_src/${{ matrix.docker_file }}.Dockerfile
+          platforms: linux/${{ matrix.arch }}
+          push: false
+          cache-from: type=gha,scope=${{ matrix.docker_file }}-${{ matrix.arch }}
+          target: build_test
+
+  lite_linux:
+    name: ${{ matrix.docker_file }}-${{ matrix.arch }}(Pi-Heif)
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        arch: ["amd64", "arm/v7"]
+        docker_file: ["Alpine_3_15", "Alpine_3_17", "Debian_11", "Ubuntu_22_04"]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Transform to Pi-Heif
+        run: |
+          cp -r -v ./pi-heif/* .
+          python3 .github/transform_to-pi_heif.py
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build Requirements
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: docker/from_src/${{ matrix.docker_file }}.Dockerfile
+          platforms: linux/${{ matrix.arch }}
+          push: false
+          cache-from: type=gha,scope=${{ matrix.docker_file }}-${{ matrix.arch }}
+          cache-to: type=gha,mode=min,scope=${{ matrix.docker_file }}-${{ matrix.arch }}
+          target: base
+
+      - name: Build & Test Pi-Heif
         uses: docker/build-push-action@v3
         with:
           context: .

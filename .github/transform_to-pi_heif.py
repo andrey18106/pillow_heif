@@ -14,6 +14,10 @@ if __name__ == "__main__":
         "docker/manylinux_armv7l_wheel.Dockerfile",
         "docker/musllinux_armv7l_wheel.Dockerfile",
         "docker/test_wheels.Dockerfile",
+        "docker/from_src/Alpine_3_15.Dockerfile",
+        "docker/from_src/Alpine_3_17.Dockerfile",
+        "docker/from_src/Debian_11.Dockerfile",
+        "docker/from_src/Ubuntu_22_04.Dockerfile",
         "MANIFEST.in",
     ]
     for dir_name in ("pillow_heif", "tests"):

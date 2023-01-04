@@ -78,16 +78,10 @@ test_src_build_full_linux_arm_task:
         memory: 4G
 
       Alpine_3_15_build_script:
-        - docker buildx build \
-          -e PH_FULL_ACTION='1' \
-          -e EXP_PH_LIBHEIF_VERSION='' \
-          -f docker/from_src/Alpine_3_15.Dockerfile .
+        - docker buildx build --build-arg BUILD_TYPE=PH_FULL_ACTION=1 -f docker/from_src/Alpine_3_15.Dockerfile .
 
       Alpine_3_17_build_script:
-        - docker buildx build \
-          -e PH_FULL_ACTION='1' \
-          -e EXP_PH_LIBHEIF_VERSION='' \
-          -f docker/from_src/Alpine_3_17.Dockerfile .
+        - docker buildx build --build-arg BUILD_TYPE=PH_FULL_ACTION=1 -f docker/from_src/Alpine_3_17.Dockerfile .
 
     - name: Build from source(Linux) / Debian
       compute_engine_instance:
@@ -99,16 +93,10 @@ test_src_build_full_linux_arm_task:
         memory: 4G
 
       Debian_11_build_script:
-        - docker buildx build \
-          -e PH_FULL_ACTION='1' \
-          -e EXP_PH_LIBHEIF_VERSION='' \
-          -f docker/from_src/Debian_11.Dockerfile .
+        - docker buildx build --build-arg BUILD_TYPE=PH_FULL_ACTION=1 -f docker/from_src/Debian_11.Dockerfile .
 
       Ubuntu_22_build_script:
-        - docker buildx build \
-          -e PH_FULL_ACTION='1' \
-          -e EXP_PH_LIBHEIF_VERSION='' \
-          -f docker/from_src/Ubuntu_22_04.Dockerfile .
+        - docker buildx build --build-arg BUILD_TYPE=PH_FULL_ACTION=1 -f docker/from_src/Ubuntu_22_04.Dockerfile .
 
 test_src_build_lite_linux_arm_task:
   only_if: "changesInclude(
@@ -137,16 +125,10 @@ test_src_build_lite_linux_arm_task:
         - python3 .github/transform_to-pi_heif.py
 
       Alpine_3_15_build_script:
-        - docker buildx build \
-          -e PH_LIGHT_ACTION='1' \
-          -e EXP_PH_LIBHEIF_VERSION='' \
-          -f docker/from_src/Alpine_3_15.Dockerfile .
+        - docker buildx build --build-arg BUILD_TYPE=PH_LIGHT_ACTION=1 -f docker/from_src/Alpine_3_15.Dockerfile .
 
       Alpine_3_17_build_script:
-        - docker buildx build \
-          -e PH_LIGHT_ACTION='1' \
-          -e EXP_PH_LIBHEIF_VERSION='' \
-          -f docker/from_src/Alpine_3_17.Dockerfile .
+        - docker buildx build --build-arg BUILD_TYPE=PH_LIGHT_ACTION=1 -f docker/from_src/Alpine_3_17.Dockerfile .
 
     - name: Build from source(Linux) / Debian(Pi-Heif)
       compute_engine_instance:
@@ -162,13 +144,7 @@ test_src_build_lite_linux_arm_task:
         - python3 .github/transform_to-pi_heif.py
 
       Debian_11_build_script:
-        - docker buildx build \
-          -e PH_LIGHT_ACTION='1' \
-          -e EXP_PH_LIBHEIF_VERSION='' \
-          -f docker/from_src/Debian_11.Dockerfile .
+        - docker buildx build --build-arg BUILD_TYPE=PH_LIGHT_ACTION=1 -f docker/from_src/Debian_11.Dockerfile .
 
       Ubuntu_22_build_script:
-        - docker buildx build \
-          -e PH_LIGHT_ACTION='1' \
-          -e EXP_PH_LIBHEIF_VERSION='' \
-          -f docker/from_src/Ubuntu_22_04.Dockerfile .
+        - docker buildx build --build-arg BUILD_TYPE=PH_LIGHT_ACTION=1 -f docker/from_src/Ubuntu_22_04.Dockerfile .

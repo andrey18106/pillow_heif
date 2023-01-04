@@ -13,7 +13,6 @@ on:
       - 'libheif/public_api.h'
       - 'setup.*'
       - 'pyproject.toml'
-      - 'pi-heif/setup.cfg'
   push:
     branches: [master]
     paths:
@@ -25,7 +24,6 @@ on:
       - 'libheif/public_api.h'
       - 'setup.*'
       - 'pyproject.toml'
-      - 'pi-heif/setup.cfg'
 
 concurrency:
   group: src_linux-${{ github.ref }}

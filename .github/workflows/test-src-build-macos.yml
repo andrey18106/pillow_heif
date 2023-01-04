@@ -59,7 +59,7 @@ jobs:
     runs-on: macos-11
     env:
       TEST_DECODE_THREADS: 0
-      PH_FULL_ACTION: 1
+      PH_LIGHT_ACTION: 1
       EXP_PH_LIBHEIF_VERSION: ""
 
     steps:
@@ -75,7 +75,7 @@ jobs:
           brew install --formula ./libheif/macos/libheif.rb
 
       - name: Installing Pi-Heif
-        run: python3 -m pip -v install ".[dev]"
+        run: python3 -m pip -v install ".[tests]"
 
       - name: LibHeif info
         run: python3 -c "import pi_heif; print(pi_heif.libheif_info())"

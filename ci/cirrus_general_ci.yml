@@ -1,6 +1,6 @@
-test_src_build_macos_arm_task:
+test_src_build_full_macos_arm_task:
   only_if: "changesInclude(
-    '.cirrus.yml',
+    'ci/cirrus_general_ci.yml',
     'libheif/macos/**',
     'libheif/build.py',
     'libheif/public_api.h',
@@ -11,6 +11,10 @@ test_src_build_macos_arm_task:
   macos_instance:
     image: ghcr.io/cirruslabs/macos-monterey-xcode
 
+  env:
+    PH_FULL_ACTION: 1
+    EXP_PH_LIBHEIF_VERSION: ""
+
   brew_install_libheif_script:
     - brew uninstall --force --ignore-dependencies imagemagick
     - brew install --formula ./libheif/macos/libheif.rb
@@ -18,6 +22,37 @@ test_src_build_macos_arm_task:
     - python3 -m pip -v install ".[dev]"
   libheif_info_script:
     - python3 -c "import pillow_heif; print(pillow_heif.libheif_info())"
+  perform_tests_script:
+    - python3 -m pytest -rs
+
+test_src_build_lite_macos_arm_task:
+  only_if: "changesInclude(
+    'ci/cirrus_general_ci.yml',
+    'pi-heif/libheif/macos/**',
+    'pi-heif/setup.cfg',
+    'libheif/build.py',
+    'libheif/public_api.h',
+    'setup.py',
+    'pyproject.toml')"
+
+  name: Build from source(macOS) / macOS:12-arm64(Pi-Heif)
+  macos_instance:
+    image: ghcr.io/cirruslabs/macos-monterey-xcode
+
+  env:
+    PH_LIGHT_ACTION: 1
+    EXP_PH_LIBHEIF_VERSION: ""
+
+  transform_to_pi_heif:
+    - cp -r -v ./pi-heif/* .
+    - python3 .github/transform_to-pi_heif.py
+  brew_install_libheif_script:
+    - brew uninstall --force --ignore-dependencies imagemagick x265 aom
+    - brew install --formula ./libheif/macos/libheif.rb
+  installing_pillow_heif_script:
+    - python3 -m pip -v install ".[tests]"
+  libheif_info_script:
+    - python3 -c "import pi_heif; print(pi_heif.libheif_info())"
   perform_tests_script:
     - python3 -m pytest -rs
 

@@ -29,7 +29,5 @@ RUN \
   fi && \
   echo "**** Build Done ****" && \
   python3 -c "import pillow_heif; print(pillow_heif.libheif_info())" && \
-  export EXP_PH_LIBHEIF_VERSION="" && \
-  export $BUILD_TYPE && \
   pytest -s pillow_heif && \
   echo "**** Test Done ****"

@@ -7,7 +7,7 @@ test_src_build_full_macos_arm_task:
     'setup.*',
     'pyproject.toml')"
 
-  name: Build from source(macOS) / macOS:12-arm64
+  name: From source(macOS) / macOS:12-arm64
   macos_instance:
     image: ghcr.io/cirruslabs/macos-monterey-xcode
 
@@ -35,7 +35,7 @@ test_src_build_lite_macos_arm_task:
     'setup.py',
     'pyproject.toml')"
 
-  name: Build from source(macOS) / macOS:12-arm64(Pi-Heif)
+  name: From source(macOS) / macOS:12-arm64(Pi-Heif)
   macos_instance:
     image: ghcr.io/cirruslabs/macos-monterey-xcode
 
@@ -68,7 +68,7 @@ test_src_build_full_linux_arm_task:
     'pyproject.toml')"
 
   matrix:
-    - name: Build from source(Linux) / Alpine
+    - name: From source(Linux) / Alpine-arm64
       compute_engine_instance:
         image_project: cirrus-images
         image: family/docker-builder-arm64
@@ -78,12 +78,12 @@ test_src_build_full_linux_arm_task:
         memory: 4G
 
       Alpine_3_15_build_script:
-        - docker buildx build --build-arg BUILD_TYPE=PH_FULL_ACTION=1 -f docker/from_src/Alpine_3_15.Dockerfile .
+        - docker buildx build -f docker/from_src/Alpine_3_15.Dockerfile .
 
       Alpine_3_17_build_script:
-        - docker buildx build --build-arg BUILD_TYPE=PH_FULL_ACTION=1 -f docker/from_src/Alpine_3_17.Dockerfile .
+        - docker buildx build -f docker/from_src/Alpine_3_17.Dockerfile .
 
-    - name: Build from source(Linux) / Debian
+    - name: From source(Linux) / Debian-arm64
       compute_engine_instance:
         image_project: cirrus-images
         image: family/docker-builder-arm64
@@ -93,58 +93,7 @@ test_src_build_full_linux_arm_task:
         memory: 4G
 
       Debian_11_build_script:
-        - docker buildx build --build-arg BUILD_TYPE=PH_FULL_ACTION=1 -f docker/from_src/Debian_11.Dockerfile .
+        - docker buildx build -f docker/from_src/Debian_11.Dockerfile .
 
       Ubuntu_22_build_script:
-        - docker buildx build --build-arg BUILD_TYPE=PH_FULL_ACTION=1 -f docker/from_src/Ubuntu_22_04.Dockerfile .
-
-test_src_build_lite_linux_arm_task:
-  only_if: "changesInclude(
-    'ci/cirrus_general_ci.yml',
-    'docker/from_src/*.Dockerfile',
-    'libheif/linux/**',
-    'libheif/linux_*.py',
-    'pi-heif/setup.cfg',
-    'libheif/build.py',
-    'libheif/public_api.h',
-    'setup.py',
-    'pyproject.toml')"
-
-  matrix:
-    - name: Build from source(Linux) / Alpine(Pi-Heif)
-      compute_engine_instance:
-        image_project: cirrus-images
-        image: family/docker-builder-arm64
-        architecture: arm64
-        platform: linux
-        cpu: 2
-        memory: 4G
-
-      transform_to_pi_heif_script:
-        - cp -r -v ./pi-heif/* .
-        - python3 .github/transform_to-pi_heif.py
-
-      Alpine_3_15_build_script:
-        - docker buildx build --build-arg BUILD_TYPE=PH_LIGHT_ACTION=1 -f docker/from_src/Alpine_3_15.Dockerfile .
-
-      Alpine_3_17_build_script:
-        - docker buildx build --build-arg BUILD_TYPE=PH_LIGHT_ACTION=1 -f docker/from_src/Alpine_3_17.Dockerfile .
-
-    - name: Build from source(Linux) / Debian(Pi-Heif)
-      compute_engine_instance:
-        image_project: cirrus-images
-        image: family/docker-builder-arm64
-        architecture: arm64
-        platform: linux
-        cpu: 2
-        memory: 4G
-
-      transform_to_pi_heif_script:
-        - cp -r -v ./pi-heif/* .
-        - python3 .github/transform_to-pi_heif.py
-
-      Debian_11_build_script:
-        - docker buildx build --build-arg BUILD_TYPE=PH_LIGHT_ACTION=1 -f docker/from_src/Debian_11.Dockerfile .
-
-      Ubuntu_22_build_script:
-        - docker buildx build --build-arg BUILD_TYPE=PH_LIGHT_ACTION=1 -f docker/from_src/Ubuntu_22_04.Dockerfile .
+        - docker buildx build -f docker/from_src/Ubuntu_22_04.Dockerfile .

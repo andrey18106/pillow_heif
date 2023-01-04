@@ -1,4 +1,4 @@
-name: Build from source(macOS)
+name: From source(macOS)
 
 on:
   workflow_dispatch:

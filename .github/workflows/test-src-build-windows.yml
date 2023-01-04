@@ -25,10 +25,6 @@ on:
       - 'pi-heif/libheif/windows/**'
       - 'pi-heif/setup.cfg'
 
-concurrency:
-  group: src_windows-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
   full_windows_2019:
     name: Windows:2019-x86_64

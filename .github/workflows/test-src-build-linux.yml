@@ -25,10 +25,6 @@ on:
       - 'setup.*'
       - 'pyproject.toml'
 
-concurrency:
-  group: src_linux-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
   full_linux:
     name: ${{ matrix.docker_file }}-${{ matrix.arch }}

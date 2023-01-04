@@ -16,12 +16,10 @@ def main(ctx):
     SHA = env.get("CIRRUS_CHANGE_IN_REPO")
     url = "https://api.github.com/repos/andrey18106/pillow_heif/git/commits/" + SHA
     dct = http.get(url).json()
-    if "[wheel build]" in dct["message"]:
+    if "[wheel publish]" in dct["message"]:
         return fs.read("ci/cirrus_wheels.yml")
 
     # this configuration runs linux_aarch64 + macosx_arm64 builds from source.
-    # there's no need to do this during a wheel run as they automatically build
-    # and test over a wider range of Pythons.
     if "[skip cirrus]" in dct["message"] or "[skip ci]" in dct["message"]:
         return []
 

@@ -246,13 +246,13 @@ jobs:
 
       - name: Install from source
         run: |
-          sudo python3 -m pip install pillow==9.1.1
+          python3 -m pip install pillow==9.1.1
           sudo python3 setup.py bdist_wheel
-          ls -la
-#          sudo python3 -m pip -v install --no-build-isolation ".[tests]"
-#
-#      - name: LibHeif info
-#        run: sudo python3 -c "import pi_heif; print(pi_heif.libheif_info())"
-#
-#      - name: Perform tests
-#        run: sudo python3 -m pytest -rs
+          python3 -m pip -v install dist/*.whl
+          python3 -m pip show Pillow
+
+      - name: LibHeif info
+        run: python3 -c "import pi_heif; print(pi_heif.libheif_info())"
+
+      - name: Perform tests
+        run: python3 -m pytest -rs

@@ -102,7 +102,7 @@ jobs:
           pacman -U mingw-w64-x86_64-libheif-*-any.pkg.tar.zst --noconfirm
 
       - name: Installing Pi-Heif
-        run: python -m pip -v install ".[dev]"
+        run: python -m pip -v install ".[tests]"
 
       - name: Copy DLLs from MSYS2
         run: |

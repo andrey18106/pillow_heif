@@ -386,8 +386,7 @@ jobs:
 
       - name: Install and check sdist
         run: |
-          python3 -m pip install --user cffi==1.15.1
-          python3 -m pip install --user wheelhouse/*.tar.gz
+          python3 -m pip install --user --no-build-isolation wheelhouse/*.tar.gz
           python3 -m twine check wheelhouse/*
 
       - name: LibHeif info

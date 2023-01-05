@@ -359,29 +359,20 @@ jobs:
 
   sdist:
     name: Source distribution
-    runs-on: ubuntu-22.04
-    env:
-      PH_FULL_ACTION: 1
+    runs-on: macos-12
 
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-
-      - name: Prepare system
-        run: |
-          sudo apt -y purge libheif1
-          sudo apt -y install libaom-dev libx265-dev libde265-dev nasm
-          sudo add-apt-repository ppa:strukturag/libheif
-          sudo apt update
-          sudo apt -y install libheif-dev
-
       - name: Install requirements
         run: python3 -m pip install check-manifest twine wheel
 
       - name: Run check-manifest
         run: python3 -m check_manifest
+
+      - name: Install libheif from formula
+        run: |
+          brew uninstall --force --ignore-dependencies imagemagick
+          brew install --formula ./libheif/macos/libheif.rb
 
       - name: Build sdist
         run: |
@@ -397,7 +388,9 @@ jobs:
         run: python3 -c "import pillow_heif; print(pillow_heif.libheif_info())"
 
       - name: Test sdist
-        run: python3 -m pytest -rs
+        run: |
+          export PH_FULL_ACTION=1 TEST_DECODE_THREADS=0
+          python3 -m pytest -rs
 
       - name: Upload sdist
         uses: actions/upload-artifact@v3

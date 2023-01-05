@@ -25,7 +25,6 @@ FROM base as build_test
 
 COPY . /pillow_heif
 
-ARG BUILD_TYPE
 RUN \
   if [ `getconf LONG_BIT` = 64 ]; then \
     python3 -m pip install -v "pillow_heif/.[tests]"; \

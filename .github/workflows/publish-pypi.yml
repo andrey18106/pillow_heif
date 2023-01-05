@@ -365,6 +365,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
       - name: Prepare system
         run: |
           sudo apt -y purge libheif1
@@ -386,7 +390,7 @@ jobs:
 
       - name: Install and check sdist
         run: |
-          python3 -m pip install --user --no-build-isolation wheelhouse/*.tar.gz
+          python3 -m pip install --user wheelhouse/*.tar.gz
           python3 -m twine check wheelhouse/*
 
       - name: LibHeif info

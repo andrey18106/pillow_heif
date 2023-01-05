@@ -20,7 +20,6 @@ Please send a pull request to the `master` branch.  Feel free to ask questions [
 - Separate code commits from reformatting commits.
 - Provide tests for any newly added code.
 - Follow PEP 8.
-- When committing only documentation changes please include `[ci skip]` in the commit message to avoid running tests.
 - Update CHANGELOG.md as needed or appropriate with your bug fixes, feature additions and tests.
 
 ## Security vulnerabilities

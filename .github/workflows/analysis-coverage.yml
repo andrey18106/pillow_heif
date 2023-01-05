@@ -243,9 +243,9 @@ jobs:
 
       - name: Install from source
         run: |
-          sudo export PH_LIGHT_ACTION=1 EXP_PH_LIBHEIF_VERSION=""
+          export PH_LIGHT_ACTION=1 EXP_PH_LIBHEIF_VERSION=""
           sudo python3 -m pip install pillow==9.1.1 cffi==1.15.1
-          sudo python3 -m pip -v install --no-build-isolation ".[tests]"
+          sudo python3 -m pip -v install --no-build-isolation .
           sudo python3 -m pip show Pillow
           sudo python3 -m pip show pi_heif
           sudo python3 -c "import pi_heif; print(pi_heif.libheif_info())"

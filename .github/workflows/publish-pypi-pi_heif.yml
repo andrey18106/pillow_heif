@@ -3,7 +3,7 @@ name: Publish • Pi-Heif
 
 on:
   workflow_run:
-    workflows: [Publish]
+    workflows: [Publish • Pillow-Heif]
     types:
       - completed
 
@@ -313,14 +313,6 @@ jobs:
       TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
 
     steps:
-      - name: Waiting till full version publish finish
-        uses: lewagon/wait-on-check-action@v1.2.0
-        with:
-          ref: ${{ github.ref }}
-          check-name: 'Create GitHub release'
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          wait-interval: 60
-
       - name: Collect sdist and wheels
         uses: actions/download-artifact@v3
         with:

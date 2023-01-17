@@ -24,11 +24,11 @@ jobs:
               RUN="1"
           fi
           echo "message=$RUN" >> $GITHUB_OUTPUT
-          echo github.ref ${{ github.ref }}
 
   wheels_macos_arm:
-    name: macOS • Apple Silicon
+    name: macosx • aarch64
     needs: get_commit_message
+    if: contains(needs.get_commit_message.outputs.message, '1')
     runs-on: ubuntu-20.04
 
     steps:
@@ -36,7 +36,7 @@ jobs:
       uses: lewagon/wait-on-check-action@v1.2.0
       with:
         ref: ${{ github.ref }}
-        check-name: 'macosx • Apple Silicon'
+        check-name: 'macosx • aarch64 • Cirrus'
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         wait-interval: 10
 
@@ -45,6 +45,7 @@ jobs:
 
 #  wheels_armv7l:
 #    name: ${{ matrix.i['name'] }} • ARMv7l • CPython
+#    needs: get_commit_message
 #    runs-on: ubuntu-20.04
 #    strategy:
 #      matrix:
@@ -82,6 +83,7 @@ jobs:
 #
 #  wheels_windows:
 #    name: windows • x86_64
+#    needs: get_commit_message
 #    runs-on: windows-2019
 #    env:
 #      MSYS2_PREFIX: "C:/temp/msys64/mingw64"
@@ -130,6 +132,7 @@ jobs:
 #
 #  wheels_macos:
 #    name: macosx • x86_64
+#    needs: get_commit_message
 #    runs-on: macos-11
 #
 #    steps:
@@ -161,6 +164,7 @@ jobs:
 #        cibw_buildlinux: [ manylinux, musllinux ]
 #        cibw_arch: [ "aarch64", "x86_64" ]
 #    name: ${{ matrix.cibw_buildlinux }} • ${{ matrix.cibw_arch }} • CPython
+#    needs: get_commit_message
 #    runs-on: ubuntu-20.04
 #    env:
 #      BUILD_DIR_PREFIX: "/tmp/pillow_heif"
@@ -224,6 +228,7 @@ jobs:
 #        cibw_buildlinux: [ manylinux, musllinux ]
 #        cibw_arch: [ "i686" ]
 #    name: ${{ matrix.cibw_buildlinux }} • ${{ matrix.cibw_arch }} • CPython
+#    needs: get_commit_message
 #    runs-on: ubuntu-20.04
 #    env:
 #      BUILD_DIR_PREFIX: "/tmp/pillow_heif"
@@ -288,6 +293,7 @@ jobs:
 #        cibw_arch: [ "aarch64", "x86_64" ]
 #        cibw_build: [ "pp38", "pp39" ]
 #    name: ${{ matrix.cibw_buildlinux }} • ${{ matrix.cibw_arch }} • ${{ matrix.cibw_build }}
+#    needs: get_commit_message
 #    runs-on: ubuntu-20.04
 #    env:
 #      BUILD_DIR_PREFIX: "/tmp/pillow_heif"
@@ -346,6 +352,7 @@ jobs:
 #        cibw_arch: [ "i686" ]
 #        cibw_build: [ "pp38", "pp39" ]
 #    name: ${{ matrix.cibw_buildlinux }} • ${{ matrix.cibw_arch }} • ${{ matrix.cibw_build }}
+#    needs: get_commit_message
 #    runs-on: ubuntu-20.04
 #    env:
 #      BUILD_DIR_PREFIX: "/tmp/pillow_heif"
@@ -398,6 +405,7 @@ jobs:
   sdist:
     name: Source distribution
     needs: get_commit_message
+    if: contains(needs.get_commit_message.outputs.message, '1')
     runs-on: macos-12
 
     steps:

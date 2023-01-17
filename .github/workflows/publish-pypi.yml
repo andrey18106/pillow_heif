@@ -470,15 +470,16 @@ jobs:
 #          token: ${{ secrets.GITHUB_TOKEN }}
 #          artifactErrorsFailBuild: true
 
-#  publish_release:
-#    needs: [create_release]
-#    name: Publish release
-#    runs-on: ubuntu-20.04
-#    env:
-#      TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-#      TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-#
-#    steps:
+  publish_release:
+    needs: [create_release]
+    name: Publish release
+    runs-on: ubuntu-20.04
+    env:
+      TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+      TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+
+    steps:
+      - run: echo "1"
 #      - name: Collect sdist and wheels
 #        uses: actions/download-artifact@v3
 #        with:

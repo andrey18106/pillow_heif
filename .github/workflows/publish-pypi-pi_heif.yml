@@ -316,7 +316,7 @@ jobs:
       - name: Waiting till full version publish finish
         uses: lewagon/wait-on-check-action@v1.2.0
         with:
-          ref: ${{ github.ref }}
+          ref: master
           check-name: 'Publish • Pillow-Heif'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 60

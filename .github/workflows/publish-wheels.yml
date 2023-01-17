@@ -4,6 +4,7 @@ on:
   push:
     branches: [ master ]
 
+jobs:
   get_commit_message:
     name: Get commit message
     runs-on: ubuntu-latest

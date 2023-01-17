@@ -41,7 +41,9 @@ jobs:
         wait-interval: 10
 
     - name: Download artifacts
-      run: echo "1"
+      run: |
+        curl -L https://api.cirrus-ci.com/v1/artifact/github/andrey18106/pillow_heif/wheel_macos_arm/wheels.zip
+        ls -la
 
 #  wheels_armv7l:
 #    name: ${{ matrix.i['name'] }} • ARMv7l • CPython

@@ -61,7 +61,7 @@ def _get_mem_usage():
     return mem * getpagesize() / 1024 / 1024
 
 
-@pytest.mark.skipif(sys.platform.lower() == "win32", reason="requires Unix or macOS")
+@pytest.mark.skipif(sys.platform.lower() in ("win32", "darwin"), reason="run only on Linux")
 @pytest.mark.skipif(machine().find("x86_64") == -1, reason="run only on x86_64")
 def test_open_to_numpy_mem_leaks():
     import numpy as np
@@ -80,7 +80,7 @@ def test_open_to_numpy_mem_leaks():
         assert mem <= mem_limit, f"memory usage limit exceeded after {i + 1} iterations"
 
 
-@pytest.mark.skipif(sys.platform.lower() == "win32", reason="requires Unix or macOS")
+@pytest.mark.skipif(sys.platform.lower() in ("win32", "darwin"), reason="run only on Linux")
 @pytest.mark.skipif(machine().find("x86_64") == -1, reason="run only on x86_64")
 def test_nclx_profile_leaks():
     mem_limit = None

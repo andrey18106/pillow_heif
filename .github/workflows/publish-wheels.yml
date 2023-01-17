@@ -1,0 +1,35 @@
+name: Build & Publish
+
+on:
+  push:
+    branches: [ master ]
+
+  get_commit_message:
+    name: Get commit message
+    runs-on: ubuntu-latest
+    outputs:
+      message: ${{ steps.commit_message.outputs.message }}
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Get commit message
+        id: commit_message
+        run: |
+          set -xe
+          COMMIT_MSG=$(git log --no-merges -1)
+          RUN="0"
+          if [[ "$COMMIT_MSG" == *"[wheels publish]"* ]]; then
+              RUN="1"
+          fi
+          echo "message=$RUN" >> $GITHUB_OUTPUT
+
+  publish_wheels:
+    name: Publish wheels
+    needs: get_commit_message
+    if: contains(needs.get_commit_message.outputs.message, '1')
+    runs-on: ubuntu-20.04
+
+    steps:
+      - run: echo "Publish!"

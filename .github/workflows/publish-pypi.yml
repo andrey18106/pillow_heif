@@ -1,8 +1,14 @@
-name: Build & Publish
+name: Build & Publish2
+
+#on:
+#  push:
+#    branches: [ master ]
 
 on:
-  push:
-    branches: [ master ]
+  workflow_run:
+    workflows: [Build & Publish]
+    types:
+      - completed
 
 jobs:
   get_commit_message:
@@ -42,7 +48,7 @@ jobs:
 
     - name: Download artifacts
       run: |
-        curl -L https://api.cirrus-ci.com/v1/artifact/github/${{ github.actor }}/${{ github.repository }}/wheel_macos_arm/wheels.zip -O wheels.zip
+        curl -L https://api.cirrus-ci.com/v1/artifact/github/${{ github.repository }}/wheel_macos_arm/wheels.zip -O wheels.zip
         ls -la
         unzip wheels.zip
         ls -la wheelhouse

@@ -33,4 +33,10 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-      - run: echo "Publish!"
+      - name: Wait for tests to succeed
+        uses: lewagon/wait-on-check-action@v1.2.0
+        with:
+          ref: ${{ github.ref }}
+          check-name: 'Build & Publish3'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 30

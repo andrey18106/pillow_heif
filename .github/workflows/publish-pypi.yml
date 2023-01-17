@@ -428,7 +428,7 @@ jobs:
   create_release:
     needs: [sdist, wheels_macos, wheels_macos_arm, wheels_windows, wheels_linux_cpython,
             wheels_linux_pypy, wheels_linux_pypy_32bit, wheels_linux_cpython_32bit,
-            wheels_armv7l, ]
+            wheels_armv7l]
     runs-on: ubuntu-20.04
     name: Create GitHub release
 

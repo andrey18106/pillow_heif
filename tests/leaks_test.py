@@ -87,7 +87,7 @@ def test_nclx_profile_leaks():
     mem_limit = None
     im_path = Path("images/heif_other/cat.hif")
     heif_file = pillow_heif.open_heif(im_path, convert_hdr_to_8bit=False)
-    for i in range(800):
+    for i in range(1000):
         _nclx = pillow_heif.private.read_color_profile(heif_file[0]._handle)  # noqa
         _nclx = None  # noqa
         gc.collect()

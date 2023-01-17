@@ -1,40 +1,14 @@
-name: Build & Publish3
-
-#on:
-#  push:
-#    branches: [ master ]
+name: Publish • Pillow-Heif
 
 on:
   workflow_run:
-    workflows: [Build & Publish]
+    workflows: [Publish]
     types:
       - completed
 
 jobs:
-  get_commit_message:
-    name: Get commit message
-    runs-on: ubuntu-latest
-    outputs:
-      message: ${{ steps.commit_message.outputs.message }}
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-      - name: Get commit message
-        id: commit_message
-        run: |
-          set -xe
-          COMMIT_MSG=$(git log --no-merges -1)
-          RUN="0"
-          if [[ "$COMMIT_MSG" == *"[wheels publish]"* ]]; then
-              RUN="1"
-          fi
-          echo "message=$RUN" >> $GITHUB_OUTPUT
-
   wheels_macos_arm:
     name: macosx • aarch64
-    needs: get_commit_message
-    if: contains(needs.get_commit_message.outputs.message, '1')
     runs-on: ubuntu-20.04
 
     steps:
@@ -421,8 +395,6 @@ jobs:
 
   sdist:
     name: Source distribution
-    needs: get_commit_message
-    if: contains(needs.get_commit_message.outputs.message, '1')
     runs-on: macos-12
 
     steps:

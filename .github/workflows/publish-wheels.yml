@@ -1,42 +1,14 @@
-name: Build & Publish
+name: Publish
 
 on:
   push:
     branches: [ master ]
 
 jobs:
-  get_commit_message:
-    name: Get commit message
-    runs-on: ubuntu-latest
-    outputs:
-      message: ${{ steps.commit_message.outputs.message }}
-
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-      - name: Get commit message
-        id: commit_message
-        run: |
-          set -xe
-          COMMIT_MSG=$(git log --no-merges -1)
-          RUN="0"
-          if [[ "$COMMIT_MSG" == *"[wheels publish]"* ]]; then
-              RUN="1"
-          fi
-          echo "message=$RUN" >> $GITHUB_OUTPUT
-
   publish_wheels:
-    name: Publish wheels
-    needs: get_commit_message
-    if: contains(needs.get_commit_message.outputs.message, '1')
+    name: Publish triggered
+    if: "contains(github.event.head_commit.message, '[publish]')"
     runs-on: ubuntu-20.04
 
     steps:
-      - name: Wait for tests to succeed
-        uses: lewagon/wait-on-check-action@v1.2.0
-        with:
-          ref: ${{ github.ref }}
-          check-name: 'Build & Publish3'
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          wait-interval: 30
+      - run: echo "Publish triggered"

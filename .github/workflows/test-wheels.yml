@@ -2,15 +2,12 @@ name: Wheels test
 
 on:
   workflow_dispatch:
-  workflow_run:
-    workflows: [Publish]
-    types:
-      - completed
+  workflow_call:
 
 jobs:
   docker-tests:
     if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
-    name: 🐍 • ${{ matrix.i['os'] }} • ${{ matrix.i['ver'] }} • ${{ matrix.i['arch'] }}
+    name: ${{ matrix.i['os'] }} • ${{ matrix.i['ver'] }} • ${{ matrix.i['arch'] }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -81,7 +78,7 @@ jobs:
 
   windows-wheels:
     if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
-    name: 🐍 • Windows • 2019 • ${{ matrix.python-version }}
+    name: Windows • 2019 • ${{ matrix.python-version }}
     runs-on: windows-2019
     strategy:
       matrix:
@@ -111,7 +108,7 @@ jobs:
 
   macos-wheels:
     if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
-    name: 🐍 • macOS • 11 • ${{ matrix.python-version }}
+    name: macOS • 11 • ${{ matrix.python-version }}
     runs-on: macos-11
     strategy:
       matrix:
@@ -146,7 +143,7 @@ jobs:
 
   manylinux-wheels:
     if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
-    name: 🐍 • Ubuntu-Focal • ${{ matrix.python-version }}
+    name: Ubuntu-Focal • ${{ matrix.python-version }}
     runs-on: ubuntu-20.04
     strategy:
       matrix:

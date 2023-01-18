@@ -5,7 +5,13 @@ on:
     branches: [ master ]
 
 jobs:
-  trigger_build:
+  trigger_pillow_heif_build:
     if: "contains(github.event.head_commit.message, '[publish]')"
-    name: Publish triggered
+    name: Pillow-Heif
     uses: ./.github/workflows/publish-pypi.yml
+
+  trigger_pi_heif_build:
+    needs: [trigger_pillow_heif_build]
+    if: "contains(github.event.head_commit.message, '[publish]')"
+    name: Pi-Heif
+    uses: ./.github/workflows/publish-pypi-pi_heif.yml

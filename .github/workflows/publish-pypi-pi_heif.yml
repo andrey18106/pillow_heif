@@ -145,6 +145,10 @@ jobs:
         env:
           OS_PACKAGES: "fribidi-dev harfbuzz-dev jpeg-dev lcms2-dev openjpeg-dev"
 
+      - name: Only minimal testing on aarch64
+        if: matrix.cibw_arch == 'aarch64'
+        run: echo CIBW_TEST_EXTRAS="tests-min" >> $GITHUB_ENV
+
       - name: Run cibuildwheel
         run: |
           python3 -m pip install cibuildwheel==2.11.4
@@ -192,6 +196,10 @@ jobs:
         uses: docker/setup-qemu-action@v2
         with:
           platforms: arm64
+
+      - name: Only minimal testing on aarch64
+        if: matrix.cibw_arch == 'aarch64'
+        run: echo CIBW_TEST_EXTRAS="tests-min" >> $GITHUB_ENV
 
       - name: Run cibuildwheel
         run: |

@@ -8,4 +8,4 @@ jobs:
   trigger_build:
     if: "contains(github.event.head_commit.message, '[publish]')"
     name: Publish triggered
-    uses: ./.github/workflows/publish-pypi.yml@main
+    uses: ./.github/workflows/publish-pypi.yml

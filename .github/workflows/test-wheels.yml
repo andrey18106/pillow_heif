@@ -2,7 +2,10 @@ name: Wheels test
 
 on:
   workflow_dispatch:
-  workflow_call:
+  workflow_run:
+    workflows: [Publish • Pillow-Heif]
+    types:
+      - completed
 
 jobs:
   docker-tests:

@@ -16,14 +16,14 @@ jobs:
     name: Pi-Heif
     uses: ./.github/workflows/publish-pypi-pi_heif.yml
 
-  wheels_pillow_heif_test:
-    needs: [trigger_pillow_heif_build]
-    if: "contains(github.event.head_commit.message, '[publish]')"
-    name: Wheels test
-    uses: ./.github/workflows/test-wheels.yml
-
-  wheels_pi_heif_test:
-    needs: [trigger_pi_heif_build]
-    if: "contains(github.event.head_commit.message, '[publish]')"
-    name: Wheels test • Pi-Heif
-    uses: ./.github/workflows/test-wheels-pi_heif.yml
+#  wheels_pillow_heif_test:
+#    needs: [trigger_pillow_heif_build]
+#    if: "contains(github.event.head_commit.message, '[publish]')"
+#    name: Wheels test
+#    uses: ./.github/workflows/test-wheels.yml
+#
+#  wheels_pi_heif_test:
+#    needs: [trigger_pi_heif_build]
+#    if: "contains(github.event.head_commit.message, '[publish]')"
+#    name: Wheels test • Pi-Heif
+#    uses: ./.github/workflows/test-wheels-pi_heif.yml

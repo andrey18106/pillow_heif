@@ -175,7 +175,6 @@ jobs:
           if-no-files-found: error
 
   wheels_linux_pypy:
-    if: ${{ github.event.workflow_run.conclusion == 'success'}}
     strategy:
       fail-fast: true
       matrix:
@@ -187,6 +186,7 @@ jobs:
     env:
       BUILD_DIR_PREFIX: "/tmp/pillow_heif"
       KEY_HEAD: ${{ matrix.cibw_arch }}-${{ matrix.cibw_buildlinux }}
+    if: ${{ github.event.workflow_run.conclusion == 'success'}}
 
     steps:
       - uses: actions/checkout@v3
@@ -224,7 +224,6 @@ jobs:
           if-no-files-found: error
 
   wheels_armv7l:
-    if: ${{ github.event.workflow_run.conclusion == 'success'}}
     name: ${{ matrix.i['name'] }} • ARMv7l • CPython
     runs-on: ubuntu-20.04
     strategy:
@@ -233,6 +232,7 @@ jobs:
           { "docker_file": "manylinux_armv7l_wheel", "name": "manylinux" },
           { "docker_file": "musllinux_armv7l_wheel", "name": "musllinux" },
         ]
+    if: ${{ github.event.workflow_run.conclusion == 'success'}}
 
     steps:
       - uses: actions/checkout@v3

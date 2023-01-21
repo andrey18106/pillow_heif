@@ -2,6 +2,16 @@ _# Changelog
 
 All notable changes to this project will be documented in this file.
 
+## [0.9.3 - 2023-01-22]
+
+### Fixed
+
+Two bugs with handling XMP metadata that caused exceptions. All versions were affected.
+Thanks to @eeyrw for pointing out such a problem.
+
+- Handling XMP data with `zero` byte at the end.
+- Handling XMP data with `latin1` encoding.
+
 ## [0.9.2 - 2023-01-18]
 
 ### Changed

@@ -326,6 +326,6 @@ jobs:
       - name: Publish wheels to PyPI
         run: |
           ls -la wheelhouse/
-#          python3 -m pip install twine
-#          python3 -m twine upload --repository testpypi --skip-existing wheelhouse/*.whl
-#          python3 -m twine upload --repository testpypi wheelhouse/*tar.gz
+          python3 -m pip install twine
+          python3 -m twine upload --repository testpypi --skip-existing wheelhouse/*.whl
+          python3 -m twine upload --repository testpypi wheelhouse/*tar.gz

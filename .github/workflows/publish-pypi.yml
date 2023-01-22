@@ -2,9 +2,6 @@ name: Publish • Pillow-Heif
 
 on:
   workflow_call:
-    secrets:
-      PYPI_TOKEN:
-        required: true
 
 jobs:
   wheels_macos_arm:

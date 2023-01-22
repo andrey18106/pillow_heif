@@ -114,32 +114,32 @@ jobs:
 #          path: wheelhouse/*.whl
 #          if-no-files-found: error
 #
-#  wheels_macos:
-#    name: macosx • x86_64
-#    runs-on: macos-11
-#
-#    steps:
-#      - uses: actions/checkout@v3
-#      - name: Run cibuildwheel
-#        run: |
-#          python3 -m pip install cibuildwheel==2.11.4
-#          python3 -m cibuildwheel
-#        env:
-#          CIBW_BUILD: "*-macosx_x86_64"
-#          CIBW_ENVIRONMENT_MACOS: PH_FULL_ACTION=1 TEST_DECODE_THREADS=0
-#
-#      - name: Check built wheels
-#        run: |
-#          python3 -m pip install twine
-#          python3 -m twine check wheelhouse/*
-#
-#      - name: Upload built wheels
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: wheels
-#          path: wheelhouse/*.whl
-#          if-no-files-found: error
-#
+  wheels_macos:
+    name: macosx • x86_64
+    runs-on: macos-11
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run cibuildwheel
+        run: |
+          python3 -m pip install cibuildwheel==2.11.4
+          python3 -m cibuildwheel
+        env:
+          CIBW_BUILD: "*-macosx_x86_64"
+          CIBW_ENVIRONMENT_MACOS: PH_FULL_ACTION=1 TEST_DECODE_THREADS=0
+
+      - name: Check built wheels
+        run: |
+          python3 -m pip install twine
+          python3 -m twine check wheelhouse/*
+
+      - name: Upload built wheels
+        uses: actions/upload-artifact@v3
+        with:
+          name: wheels
+          path: wheelhouse/*.whl
+          if-no-files-found: error
+
 #  wheels_linux_cpython:
 #    strategy:
 #      fail-fast: true
@@ -418,7 +418,7 @@ jobs:
 #    needs: [sdist, wheels_macos, wheels_macos_arm, wheels_windows, wheels_linux_cpython,
 #            wheels_linux_pypy, wheels_linux_pypy_32bit, wheels_linux_cpython_32bit,
 #            wheels_armv7l]
-    needs: [ sdist]
+    needs: [ sdist, wheels_macos]
     runs-on: ubuntu-20.04
     name: Create GitHub release
 

@@ -5,17 +5,101 @@ on:
     branches: [ master ]
 
 jobs:
-  trigger_pillow_heif_build:
+  pillow_heif_build:
     if: "contains(github.event.head_commit.message, '[publish]')"
     name: Pillow-Heif
     uses: ./.github/workflows/publish-pypi.yml
-    secrets:
-      PYPI_TOKEN: ${{ secrets.PYPI_TOKEN_PILLOW_HEIF }}
 
-  trigger_pi_heif_build:
-    needs: [trigger_pillow_heif_build]
+  pi_heif_build:
+    needs: [pillow_heif_build]
     if: "contains(github.event.head_commit.message, '[publish]')"
     name: Pi-Heif
     uses: ./.github/workflows/publish-pypi-pi_heif.yml
-    secrets:
-      PYPI_TOKEN: ${{ secrets.PYPI_TOKEN_PI_HEIF }}
+
+  publish_pypi:
+    needs: [pi_heif_build]
+    if: "contains(github.event.head_commit.message, '[publish]')"
+    name: PyPi
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Pillow-Heif sdist and wheels
+        uses: actions/download-artifact@v3
+        with:
+          name: wheels_pillow_heif
+          path: wheelhouse_pillow_heif
+
+      - name: Pi-Heif sdist and wheels
+        uses: actions/download-artifact@v3
+        with:
+          name: wheels_pi_heif
+          path: wheelhouse_pi_heif
+
+      - name: Publish Pillow-Heif
+        run: |
+          ls -la wheelhouse_pillow_heif
+          python3 -m pip install twine
+          python3 -m twine upload --skip-existing wheelhouse_pillow_heif/*.whl
+          python3 -m twine upload --skip-existing wheelhouse_pillow_heif/*tar.gz
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN_PILLOW_HEIF }}
+          TWINE_REPOSITORY: testpypi
+
+      - name: Publish Pi-Heif
+        run: |
+          ls -la wheelhouse_pi_heif
+          python3 -m pip install twine
+          python3 -m twine upload --skip-existing wheelhouse_pi_heif/*.whl
+          python3 -m twine upload --skip-existing wheelhouse_pi_heif/*tar.gz
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN_PI_HEIF }}
+          TWINE_REPOSITORY: testpypi
+
+  publish_gh:
+    needs: [publish_pypi]
+    if: "contains(github.event.head_commit.message, '[publish]')"
+    name: GitHub
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Get release info
+        id: get_release_info
+        run: |
+          RELEASE_VERSION=$(sed -n "s/^__version__.*\"\(.*\)\"$/\\1/p" ./pillow_heif/_version.py)
+          echo RELEASE_TAG="v$RELEASE_VERSION" >> $GITHUB_ENV
+          CHANGELOG=$(grep -oPz "(?s)##\s\[$RELEASE_VERSION.+?(?=##\s\[|$)" ./CHANGELOG.md | tr -d '\0' | sed /^$/d | sed '1d')
+          CHANGELOG=$(echo "$CHANGELOG" | sed '$!N;s/^###.*\n#/#/;P;D' | sed '$!N;s/^###.*\n#/#/;P;D' | sed '${/^###/d;}')
+          if [ "$CHANGELOG" == "" ]; then
+            echo "changelog is empty!"
+            exit 1
+          fi
+          echo "CHANGELOG<<EOF" >> $GITHUB_ENV
+          echo "$CHANGELOG" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Collect sdist and wheels
+        uses: actions/download-artifact@v3
+        with:
+          name: wheels_pillow_heif
+          path: wheelhouse_pillow_heif
+
+      - name: Collect sdist and wheels
+        uses: actions/download-artifact@v3
+        with:
+          name: wheels_pi_heif
+          path: wheelhouse_pi_heif
+
+      - name: Create release draft
+        uses: ncipollo/release-action@v1.12.0
+        with:
+          name: ${{ env.RELEASE_TAG }}
+          tag: ${{ env.RELEASE_TAG }}
+          commit: ${{ github.ref }}
+          draft: false
+          body: ${{ env.CHANGELOG }}
+          artifacts: wheelhouse_pillow_heif/*, wheelhouse_pi_heif/*
+          token: ${{ secrets.GITHUB_TOKEN }}
+          artifactErrorsFailBuild: true

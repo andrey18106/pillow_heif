@@ -1,4 +1,4 @@
-name: Publish • Pi-Heif
+name: Wheels • Pi-Heif
 # This action build `pi-heif` which is `pillow-heif` but without `aom` and `x265` libraries.
 
 on:

@@ -1,4 +1,4 @@
-name: Publish • Pillow-Heif
+name: Wheels • Pillow-Heif
 
 on:
   workflow_call:

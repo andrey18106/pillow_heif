@@ -2,6 +2,9 @@ name: Publish • Pillow-Heif
 
 on:
   workflow_call:
+    secrets:
+      PYPI_TOKEN:
+        required: true
 
 jobs:
 #  wheels_macos_arm:
@@ -477,4 +480,4 @@ jobs:
         env:
           TWINE_REPOSITORY: testpypi
           TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}

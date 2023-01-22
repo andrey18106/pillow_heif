@@ -9,6 +9,8 @@ jobs:
     if: "contains(github.event.head_commit.message, '[publish]')"
     name: Pillow-Heif
     uses: ./.github/workflows/publish-pypi.yml
+    secrets:
+      PYPI_TOKEN: ${{ secrets.PYPI_PASSWORD }}
 
 #  trigger_pi_heif_build:
 #    needs: [trigger_pillow_heif_build]

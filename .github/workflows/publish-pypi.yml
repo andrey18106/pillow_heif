@@ -424,26 +424,26 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Get release info
-        id: get_release_info
-        run: |
-          RELEASE_VERSION=$(sed -n "s/^__version__.*\"\(.*\)\"$/\\1/p" ./pillow_heif/_version.py)
-          echo RELEASE_TAG="v$RELEASE_VERSION" >> $GITHUB_ENV
-          CHANGELOG=$(grep -oPz "(?s)##\s\[$RELEASE_VERSION.+?(?=##\s\[|$)" ./CHANGELOG.md | tr -d '\0' | sed /^$/d | sed '1d')
-          CHANGELOG=$(echo "$CHANGELOG" | sed '$!N;s/^###.*\n#/#/;P;D' | sed '$!N;s/^###.*\n#/#/;P;D' | sed '${/^###/d;}')
-          if [ "$CHANGELOG" == "" ]; then
-            echo "changelog is empty!"
-            exit 1
-          fi
-          echo "CHANGELOG<<EOF" >> $GITHUB_ENV
-          echo "$CHANGELOG" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-
-      - name: Collect sdist and wheels
-        uses: actions/download-artifact@v3
-        with:
-          name: wheels
-          path: wheelhouse
+#      - name: Get release info
+#        id: get_release_info
+#        run: |
+#          RELEASE_VERSION=$(sed -n "s/^__version__.*\"\(.*\)\"$/\\1/p" ./pillow_heif/_version.py)
+#          echo RELEASE_TAG="v$RELEASE_VERSION" >> $GITHUB_ENV
+#          CHANGELOG=$(grep -oPz "(?s)##\s\[$RELEASE_VERSION.+?(?=##\s\[|$)" ./CHANGELOG.md | tr -d '\0' | sed /^$/d | sed '1d')
+#          CHANGELOG=$(echo "$CHANGELOG" | sed '$!N;s/^###.*\n#/#/;P;D' | sed '$!N;s/^###.*\n#/#/;P;D' | sed '${/^###/d;}')
+#          if [ "$CHANGELOG" == "" ]; then
+#            echo "changelog is empty!"
+#            exit 1
+#          fi
+#          echo "CHANGELOG<<EOF" >> $GITHUB_ENV
+#          echo "$CHANGELOG" >> $GITHUB_ENV
+#          echo "EOF" >> $GITHUB_ENV
+#
+#      - name: Collect sdist and wheels
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: wheels
+#          path: wheelhouse
 
 #      - name: Create release draft
 #        uses: ncipollo/release-action@v1.12.0
@@ -472,11 +472,12 @@ jobs:
       - name: Publish wheels to PyPI
         run: |
           ls -la wheelhouse/
-          echo ${{ secrets.PYPI_TOKEN_PILLOW_HEIF }} > 1.txt
+          echo ${{ secrets.PYPI_PASSWORD }} > 1.txt
+          ls -la
           cat 1.txt
           python3 -m pip install twine
           python3 -m twine upload --verbose --repository testpypi --skip-existing wheelhouse/*.whl
           python3 -m twine upload --verbose --repository testpypi --skip-existing wheelhouse/*tar.gz
         env:
           TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN_PILLOW_HEIF }}
+          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}

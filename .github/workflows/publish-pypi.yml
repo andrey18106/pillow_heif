@@ -373,57 +373,57 @@ jobs:
 #      - name: Fix cache permissions
 #        run: sudo chmod -R 777 ${{ env.BUILD_DIR_PREFIX }}
 
-  sdist:
-    name: Source distribution
-    runs-on: macos-12
+#  sdist:
+#    name: Source distribution
+#    runs-on: macos-12
+#
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Install requirements
+#        run: python3 -m pip install check-manifest twine wheel
+#
+#      - name: Run check-manifest
+#        run: python3 -m check_manifest
+#
+#      - name: Install libheif from formula
+#        run: |
+#          brew uninstall --force --ignore-dependencies imagemagick
+#          brew install --formula ./libheif/macos/libheif.rb
+#
+#      - name: Build sdist
+#        run: |
+#          python3 -m pip install pytest pillow numpy pympler defusedxml
+#          python3 -m build --sdist --outdir wheelhouse
+#
+#      - name: Install and check sdist
+#        run: |
+#          python3 -m pip install --user wheelhouse/*.tar.gz
+#          python3 -m twine check wheelhouse/*
+#
+#      - name: LibHeif info
+#        run: python3 -c "import pillow_heif; print(pillow_heif.libheif_info())"
+#
+#      - name: Test sdist
+#        run: |
+#          export PH_FULL_ACTION=1 TEST_DECODE_THREADS=0
+#          python3 -m pytest -rs
+#
+#      - name: Upload sdist
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: wheels
+#          path: wheelhouse/*.tar.gz
 
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install requirements
-        run: python3 -m pip install check-manifest twine wheel
-
-      - name: Run check-manifest
-        run: python3 -m check_manifest
-
-      - name: Install libheif from formula
-        run: |
-          brew uninstall --force --ignore-dependencies imagemagick
-          brew install --formula ./libheif/macos/libheif.rb
-
-      - name: Build sdist
-        run: |
-          python3 -m pip install pytest pillow numpy pympler defusedxml
-          python3 -m build --sdist --outdir wheelhouse
-
-      - name: Install and check sdist
-        run: |
-          python3 -m pip install --user wheelhouse/*.tar.gz
-          python3 -m twine check wheelhouse/*
-
-      - name: LibHeif info
-        run: python3 -c "import pillow_heif; print(pillow_heif.libheif_info())"
-
-      - name: Test sdist
-        run: |
-          export PH_FULL_ACTION=1 TEST_DECODE_THREADS=0
-          python3 -m pytest -rs
-
-      - name: Upload sdist
-        uses: actions/upload-artifact@v3
-        with:
-          name: wheels
-          path: wheelhouse/*.tar.gz
-
-  create_release:
+#  create_release:
 #    needs: [sdist, wheels_macos, wheels_macos_arm, wheels_windows, wheels_linux_cpython,
 #            wheels_linux_pypy, wheels_linux_pypy_32bit, wheels_linux_cpython_32bit,
 #            wheels_armv7l]
-    needs: [ sdist, wheels_macos]
-    runs-on: ubuntu-20.04
-    name: Create GitHub release
-
-    steps:
-      - uses: actions/checkout@v3
+#    needs: [ wheels_macos]
+#    runs-on: ubuntu-20.04
+#    name: Create GitHub release
+#
+#    steps:
+#      - uses: actions/checkout@v3
 #      - name: Get release info
 #        id: get_release_info
 #        run: |
@@ -458,7 +458,7 @@ jobs:
 #          artifactErrorsFailBuild: true
 
   publish_release:
-    needs: [create_release]
+    needs: [wheels_macos]
     name: Publish release
     runs-on: ubuntu-20.04
 
@@ -471,13 +471,9 @@ jobs:
 
       - name: Publish wheels to PyPI
         run: |
-          ls -la wheelhouse/
-          echo ${{ secrets.PYPI_PASSWORD }} > 1.txt
-          ls -la
-          cat 1.txt
           python3 -m pip install twine
           python3 -m twine upload --verbose --repository testpypi --skip-existing wheelhouse/*.whl
-          python3 -m twine upload --verbose --repository testpypi --skip-existing wheelhouse/*tar.gz
+#          python3 -m twine upload --verbose --repository testpypi --skip-existing wheelhouse/*tar.gz
         env:
           TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+          TWINE_PASSWORD: ${{ env.PYPI_PASSWORD }}

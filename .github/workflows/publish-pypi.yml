@@ -125,7 +125,7 @@ jobs:
           python3 -m pip install cibuildwheel==2.11.4
           python3 -m cibuildwheel
         env:
-          CIBW_BUILD: "*-macosx_x86_64"
+          CIBW_BUILD: "cp37-macosx_x86_64"
           CIBW_ENVIRONMENT_MACOS: PH_FULL_ACTION=1 TEST_DECODE_THREADS=0
 
       - name: Check built wheels
@@ -476,5 +476,5 @@ jobs:
         run: |
           ls -la wheelhouse/
           python3 -m pip install twine
-          python3 -m twine upload --repository testpypi --skip-existing wheelhouse/*.whl
-          python3 -m twine upload --repository testpypi --skip-existing wheelhouse/*tar.gz
+          python3 -m twine upload --verbose --repository testpypi --skip-existing wheelhouse/*.whl
+          python3 -m twine upload --verbose --repository testpypi --skip-existing wheelhouse/*tar.gz

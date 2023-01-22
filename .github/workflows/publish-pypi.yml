@@ -29,91 +29,91 @@ jobs:
         path: wheelhouse/*.whl
         if-no-files-found: error
 
-  wheels_armv7l:
-    name: ${{ matrix.i['name'] }} • ARMv7l • CPython
-    runs-on: ubuntu-20.04
-    strategy:
-      matrix:
-        i: [
-          { "docker_file": "manylinux_armv7l_wheel", "name": "manylinux" },
-          { "docker_file": "musllinux_armv7l_wheel", "name": "musllinux" },
-        ]
-
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-
-      - name: Build Pillow-Heif
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          file: docker/${{ matrix.i['docker_file'] }}.Dockerfile
-          platforms: linux/arm/v7
-          push: false
-          outputs: type=local,dest=./
-
-      - name: Checking built wheels
-        run: |
-          ls -la ./pillow_heif/repaired_dist
-          python3 -m pip install twine
-          python3 -m twine check ./pillow_heif/repaired_dist/*
-
-      - name: Uploading wheels
-        uses: actions/upload-artifact@v3
-        with:
-          name: wheels_pillow_heif
-          path: ./pillow_heif/repaired_dist/*.whl
-          if-no-files-found: error
-
-  wheels_windows:
-    name: windows • x86_64
-    runs-on: windows-2019
-    env:
-      MSYS2_PREFIX: "C:/temp/msys64/mingw64"
-
-    steps:
-      - uses: actions/checkout@v3
-      - uses: msys2/setup-msys2@v2
-        with:
-          location: C:/temp
-          update: true
-          install: >-
-            patch
-            mingw-w64-x86_64-binutils
-
-      - name: Build libheif and dependencies
-        shell: msys2 {0}
-        run: |
-            cd libheif/windows/mingw-w64-libheif
-            makepkg-mingw --syncdeps --noconfirm -f
-            pacman -U mingw-w64-x86_64-libheif-*-any.pkg.tar.zst --noconfirm
-
-      - name: Remove DLL trailing data
-        run: ${{ env.MSYS2_PREFIX }}/bin/strip -s ${{ env.MSYS2_PREFIX }}/bin/*.dll
-
-      - name: Run cibuildwheel
-        run: |
-          python3 -m pip install cibuildwheel==2.11.4
-          python3 -m cibuildwheel
-        env:
-          CIBW_BUILD: "cp37-* cp38-* cp39-* cp310-* cp311-*"
-          CIBW_ARCHS_WINDOWS: "AMD64"
-          CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: "delvewheel repair -vv -w {dest_dir} {wheel} --add-path ${{ env.MSYS2_PREFIX }}/bin"
-          CIBW_ENVIRONMENT_WINDOWS: PH_FULL_ACTION=1
-
-      - name: Check built wheels
-        run: |
-          python3 -m pip install twine
-          python3 -m twine check wheelhouse/*
-
-      - name: Upload built wheels
-        uses: actions/upload-artifact@v3
-        with:
-          name: wheels_pillow_heif
-          path: wheelhouse/*.whl
-          if-no-files-found: error
-
+#  wheels_armv7l:
+#    name: ${{ matrix.i['name'] }} • ARMv7l • CPython
+#    runs-on: ubuntu-20.04
+#    strategy:
+#      matrix:
+#        i: [
+#          { "docker_file": "manylinux_armv7l_wheel", "name": "manylinux" },
+#          { "docker_file": "musllinux_armv7l_wheel", "name": "musllinux" },
+#        ]
+#
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Set up QEMU
+#        uses: docker/setup-qemu-action@v2
+#
+#      - name: Build Pillow-Heif
+#        uses: docker/build-push-action@v3
+#        with:
+#          context: .
+#          file: docker/${{ matrix.i['docker_file'] }}.Dockerfile
+#          platforms: linux/arm/v7
+#          push: false
+#          outputs: type=local,dest=./
+#
+#      - name: Checking built wheels
+#        run: |
+#          ls -la ./pillow_heif/repaired_dist
+#          python3 -m pip install twine
+#          python3 -m twine check ./pillow_heif/repaired_dist/*
+#
+#      - name: Uploading wheels
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: wheels_pillow_heif
+#          path: ./pillow_heif/repaired_dist/*.whl
+#          if-no-files-found: error
+#
+#  wheels_windows:
+#    name: windows • x86_64
+#    runs-on: windows-2019
+#    env:
+#      MSYS2_PREFIX: "C:/temp/msys64/mingw64"
+#
+#    steps:
+#      - uses: actions/checkout@v3
+#      - uses: msys2/setup-msys2@v2
+#        with:
+#          location: C:/temp
+#          update: true
+#          install: >-
+#            patch
+#            mingw-w64-x86_64-binutils
+#
+#      - name: Build libheif and dependencies
+#        shell: msys2 {0}
+#        run: |
+#            cd libheif/windows/mingw-w64-libheif
+#            makepkg-mingw --syncdeps --noconfirm -f
+#            pacman -U mingw-w64-x86_64-libheif-*-any.pkg.tar.zst --noconfirm
+#
+#      - name: Remove DLL trailing data
+#        run: ${{ env.MSYS2_PREFIX }}/bin/strip -s ${{ env.MSYS2_PREFIX }}/bin/*.dll
+#
+#      - name: Run cibuildwheel
+#        run: |
+#          python3 -m pip install cibuildwheel==2.11.4
+#          python3 -m cibuildwheel
+#        env:
+#          CIBW_BUILD: "cp37-* cp38-* cp39-* cp310-* cp311-*"
+#          CIBW_ARCHS_WINDOWS: "AMD64"
+#          CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: "delvewheel repair -vv -w {dest_dir} {wheel} --add-path ${{ env.MSYS2_PREFIX }}/bin"
+#          CIBW_ENVIRONMENT_WINDOWS: PH_FULL_ACTION=1
+#
+#      - name: Check built wheels
+#        run: |
+#          python3 -m pip install twine
+#          python3 -m twine check wheelhouse/*
+#
+#      - name: Upload built wheels
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: wheels_pillow_heif
+#          path: wheelhouse/*.whl
+#          if-no-files-found: error
+#
 #  wheels_macos:
 #    name: macosx • x86_64
 #    runs-on: macos-11

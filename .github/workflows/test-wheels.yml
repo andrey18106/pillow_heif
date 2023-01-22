@@ -2,10 +2,10 @@ name: Wheels test
 
 on:
   workflow_dispatch:
-  workflow_run:
-    workflows: [Publish]
-    types:
-      - completed
+#  workflow_run:
+#    workflows: [Publish]
+#    types:
+#      - completed
 
 jobs:
   docker-tests:

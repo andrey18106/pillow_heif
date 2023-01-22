@@ -6,11 +6,11 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
-Two bugs with handling XMP metadata that caused exceptions. All versions were affected.
+Two bugs in XMP metadata handling that were causing exceptions. All versions were affected.
 Thanks to @eeyrw for pointing out such a problem.
 
-- Handling XMP data with `zero` byte at the end.
-- Handling XMP data with `latin1` encoding.
+- Handling XMP data with `zero` byte at the end. #69
+- Handling XMP data in `latin1` encoding. #69
 
 ## [0.9.2 - 2023-01-18]
 

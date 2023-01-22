@@ -472,6 +472,8 @@ jobs:
       - name: Publish wheels to PyPI
         run: |
           ls -la wheelhouse/
+          echo ${{ secrets.PYPI_TOKEN_PILLOW_HEIF }} > 1.txt
+          cat 1.txt
           python3 -m pip install twine
           python3 -m twine upload --verbose --repository testpypi --skip-existing wheelhouse/*.whl
           python3 -m twine upload --verbose --repository testpypi --skip-existing wheelhouse/*tar.gz

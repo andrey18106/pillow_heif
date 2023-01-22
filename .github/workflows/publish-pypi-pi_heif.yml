@@ -3,6 +3,9 @@ name: Publish • Pi-Heif
 
 on:
   workflow_call:
+    secrets:
+      PYPI_TOKEN:
+        required: true
 
 jobs:
   wheels_macos_arm:
@@ -312,9 +315,6 @@ jobs:
     needs: [wheels_windows, wheels_macos, wheels_macos_arm, wheels_linux_cpython, wheels_linux_pypy, sdist, wheels_armv7l]
     name: Publish release
     runs-on: ubuntu-20.04
-    env:
-      TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-      TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
 
     steps:
       - name: Collect sdist and wheels
@@ -325,7 +325,10 @@ jobs:
 
       - name: Publish wheels to PyPI
         run: |
-          ls -la wheelhouse/
           python3 -m pip install twine
-          python3 -m twine upload --repository testpypi --skip-existing wheelhouse/*.whl
-          python3 -m twine upload --repository testpypi --skip-existing wheelhouse/*tar.gz
+          python3 -m twine upload --verbose --skip-existing wheelhouse/*.whl
+          python3 -m twine upload --verbose --skip-existing wheelhouse/*tar.gz
+        env:
+          TWINE_REPOSITORY: testpypi
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}

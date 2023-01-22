@@ -461,9 +461,6 @@ jobs:
     needs: [create_release]
     name: Publish release
     runs-on: ubuntu-20.04
-    env:
-      TWINE_USERNAME: __token__
-      TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN_PILLOW_HEIF }}
 
     steps:
       - name: Collect sdist and wheels
@@ -478,3 +475,6 @@ jobs:
           python3 -m pip install twine
           python3 -m twine upload --verbose --repository testpypi --skip-existing wheelhouse/*.whl
           python3 -m twine upload --verbose --repository testpypi --skip-existing wheelhouse/*tar.gz
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN_PILLOW_HEIF }}

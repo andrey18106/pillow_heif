@@ -68,8 +68,8 @@ jobs:
           ls -la
           ls -la .github/workflows/test-wheels.yml
 
-      - uses: .github/workflows/test-wheels.yml
+      - uses: ${{ github.repository }}/.github/workflows/test-wheels.yml
         name: Test wheels • Pillow-Heif
 
-      - uses: .github/workflows/test-wheels-pi_heif.yml
+      - uses: ${{ github.repository }}/.github/workflows/test-wheels-pi_heif.yml
         name: Test wheels • Pi-Heif

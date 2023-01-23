@@ -64,6 +64,9 @@ jobs:
 #      - uses: rickstaa/action-create-tag@v1
 #        with:
 #          tag: ${{ env.RELEASE_TAG }}
+      - run: |
+          ls -la
+          ls -la .github
 
       - uses: ./.github/workflows/test-wheels.yml
         name: Test wheels • Pillow-Heif

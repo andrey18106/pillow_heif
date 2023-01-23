@@ -43,7 +43,6 @@ jobs:
 
       - name: Publish Pillow-Heif
         run: |
-          ls -la wheelhouse_pillow_heif
           python3 -m pip install twine
           python3 -m twine upload --skip-existing wheelhouse_pillow_heif/*.whl
           python3 -m twine upload --skip-existing wheelhouse_pillow_heif/*tar.gz
@@ -54,7 +53,6 @@ jobs:
 
       - name: Publish Pi-Heif
         run: |
-          ls -la wheelhouse_pi_heif
           python3 -m pip install twine
           python3 -m twine upload --skip-existing wheelhouse_pi_heif/*.whl
           python3 -m twine upload --skip-existing wheelhouse_pi_heif/*tar.gz
@@ -63,7 +61,12 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN_PI_HEIF }}
           TWINE_REPOSITORY: testpypi
 
-      - uses: rickstaa/action-create-tag@v1
-        with:
-          tag: ${{ env.RELEASE_TAG }}
-          message: "${{ env.RELEASE_TAG }} release"
+#      - uses: rickstaa/action-create-tag@v1
+#        with:
+#          tag: ${{ env.RELEASE_TAG }}
+
+      - uses: ./.github/workflows/wheels-pillow_heif.yml
+        name: Test wheels • Pillow-Heif
+
+      - uses: ./.github/workflows/wheels-pi_heif.yml
+        name: Test wheels • Pi-Heif

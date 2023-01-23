@@ -74,4 +74,4 @@ jobs:
           commit: ${{ github.ref }}
           draft: false
           body: ${{ env.CHANGELOG }}
-          token: ${{ secrets.PAT }}
+          token: ${{ secrets.PAT_FINE_GRAINED }}

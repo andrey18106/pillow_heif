@@ -3,7 +3,7 @@ name: Wheels test • Pi-Heif
 on:
   workflow_dispatch:
   release:
-    types: [ created ]
+    types: [ published ]
 
 jobs:
   docker-tests:

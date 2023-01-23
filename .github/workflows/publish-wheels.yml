@@ -67,6 +67,8 @@ jobs:
       - run: |
           ls -la
           ls -la .github
+          ls -la ./.github/workflows/
+          ls -la ./.github/workflows/test-wheels.yml
 
       - uses: ./.github/workflows/test-wheels.yml
         name: Test wheels • Pillow-Heif

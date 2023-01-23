@@ -74,4 +74,4 @@ jobs:
           commit: ${{ github.ref }}
           draft: false
           body: ${{ env.CHANGELOG }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT }}

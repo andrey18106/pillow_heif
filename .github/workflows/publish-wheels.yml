@@ -64,7 +64,7 @@ jobs:
 #        env:
 #          TWINE_USERNAME: __token__
 #          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN_PI_HEIF }}
-#          TWINE_REPOSITORY: testpypi1
+#          TWINE_REPOSITORY: testpypi
 
       - name: Create release draft
         uses: ncipollo/release-action@v1.12.0

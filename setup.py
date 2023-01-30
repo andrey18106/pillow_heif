@@ -1,18 +1,10 @@
 #!/usr/bin/env python
 """Script to build wheel"""
-from setuptools import setup
-from wheel.bdist_wheel import bdist_wheel
+from sys import platform
 
+from setuptools import Extension, setup
 
-class WheelsABI3(bdist_wheel):
-    def get_tag(self):
-        python, abi, plat = super().get_tag()
-        if python.startswith("cp"):
-            python = "cp37"
-            abi = "abi3"
-            if plat.startswith("macosx") and plat.find("x86_64") == -1:
-                python = "cp38"
-        return python, abi, plat
+from libheif import build_helpers
 
 
 def get_version():
@@ -22,8 +14,19 @@ def get_version():
     return locals()["__version__"]
 
 
+include_dirs, library_dirs = build_helpers.get_include_lib_dirs()
+
 setup(
     version=get_version(),
+    ext_modules=[
+        Extension(
+            name="_pillow_heif",
+            sources=["pillow_heif/_pillow_heif.c"],
+            include_dirs=include_dirs,
+            library_dirs=library_dirs,
+            libraries=["libheif"] if platform.lower() == "win32" else ["heif"],
+            extra_compile_args=["/d2FH4-"] if platform.lower() == "win32" else [],
+        )
+    ],
     cffi_modules=["libheif/build.py:ffi"],
-    cmdclass={"bdist_wheel": WheelsABI3},
 )

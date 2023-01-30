@@ -2,14 +2,16 @@
 Functions to get version and encoders/decoders info of embedded C libraries.
 """
 
+from _pillow_heif import lib_info
 from _pillow_heif_cffi import ffi, lib
 
 from .constants import HeifCompressionFormat
 
 
 def libheif_version() -> str:
-    """Wrapper around `libheif.heif_get_version`"""
-    return ffi.string(lib.heif_get_version()).decode()
+    """Returns ``libheif`` version."""
+
+    return lib_info["libheif"]
 
 
 def have_decoder_for_format(format_id: HeifCompressionFormat) -> bool:

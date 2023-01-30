@@ -33,4 +33,5 @@ if __name__ == "__main__":
             with open(file_name + DEV_NAME_ADD, "w") as file:
                 file.write(modified_data)
 
+    os.rename("pillow_heif/_pillow_heif.c", "pillow_heif/_pi_heif.c")
     os.rename("pillow_heif", "pi_heif")

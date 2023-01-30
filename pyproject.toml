@@ -29,7 +29,7 @@ profile = "black"
 
 [tool.pylint]
 master.py-version = "3.7"
-master.extension-pkg-allow-list = ["_pillow_heif_cffi"]
+master.extension-pkg-allow-list = ["_pillow_heif_cffi", "_pillow_heif"]
 design.max-attributes = 9
 design.max-branches = 14
 design.max-locals = 18

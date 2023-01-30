@@ -19,6 +19,7 @@ if __name__ == "__main__":
         "docker/from_src/Debian_11.Dockerfile",
         "docker/from_src/Ubuntu_22_04.Dockerfile",
         "MANIFEST.in",
+        "pillow_heif/_pillow_heif.c",
     ]
     for dir_name in ("pillow_heif", "tests"):
         for x in os.listdir(dir_name):

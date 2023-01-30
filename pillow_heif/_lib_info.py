@@ -16,11 +16,13 @@ def libheif_version() -> str:
 
 def have_decoder_for_format(format_id: HeifCompressionFormat) -> bool:
     """Wrapper around `libheif.heif_have_decoder_for_format`"""
+
     return lib.heif_have_decoder_for_format(format_id)
 
 
 def have_encoder_for_format(format_id: HeifCompressionFormat) -> bool:
     """Wrapper around `libheif.heif_have_encoder_for_format`"""
+
     return lib.heif_have_encoder_for_format(format_id)
 
 

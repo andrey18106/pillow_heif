@@ -14,7 +14,8 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 def test_libheif_info():
     info = pillow_heif.libheif_info()
     assert info["libheif"] in ("1.13.0", "1.14.0", "1.14.1", "1.14.2")
-    assert info["HEIF"]
+    for key in ("HEIF", "AVIF"):
+        assert key in info.keys()
 
 
 @pytest.mark.skipif(helpers.aom(), reason="Only when AVIF support missing.")

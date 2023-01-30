@@ -5,11 +5,11 @@ Functions and classes for heif images to read and write.
 from typing import Any, Dict, Iterator, List, Optional, Union
 from weakref import ref
 
+from _pillow_heif import lib_info
 from _pillow_heif_cffi import ffi, lib
 from PIL import Image, ImageOps, ImageSequence
 
 from . import options
-from ._lib_info import have_encoder_for_format
 from ._libheif_ctx import LibHeifCtx, LibHeifCtxWrite
 from .constants import HeifChannel, HeifChroma, HeifColorspace, HeifCompressionFormat
 from .error import HeifError, HeifErrorCode, check_libheif_error
@@ -662,8 +662,8 @@ class HeifFile:
         :raises: :py:exc:`~pillow_heif.HeifError` or :py:exc:`ValueError`"""
 
         compression = kwargs.get("format", "HEIF")
-        compression = HeifCompressionFormat.AV1 if compression == "AVIF" else HeifCompressionFormat.HEVC
-        if not have_encoder_for_format(compression):
+        compression_format = HeifCompressionFormat.AV1 if compression == "AVIF" else HeifCompressionFormat.HEVC
+        if not lib_info[compression]:
             raise HeifError(code=HeifErrorCode.ENCODING_ERROR, subcode=5000, message="No encoder found.")
         images_to_save = self.__get_images_for_save(self.images, **kwargs)
         if not images_to_save:
@@ -676,7 +676,7 @@ class HeifFile:
                     primary_index = i
         elif primary_index == -1 or primary_index >= len(images_to_save):
             primary_index = len(images_to_save) - 1
-        heif_ctx_write = LibHeifCtxWrite(compression_format=compression)
+        heif_ctx_write = LibHeifCtxWrite(compression_format=compression_format)
         enc_params = kwargs.get("enc_params", {})
         chroma = kwargs.get("chroma", None)
         if chroma:

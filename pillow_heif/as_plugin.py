@@ -5,11 +5,11 @@ Plugins for Pillow library.
 from typing import Any
 from warnings import warn
 
+from _pillow_heif import lib_info
 from PIL import Image, ImageFile
 
 from . import options
-from ._lib_info import have_decoder_for_format, have_encoder_for_format
-from .constants import HeifCompressionFormat, HeifErrorCode
+from .constants import HeifErrorCode
 from .error import HeifError
 from .heif import HeifFile, open_heif
 from .misc import _get_bytes, set_orientation
@@ -155,7 +155,7 @@ def register_heif_opener(**kwargs) -> None:
 
     __options_update(**kwargs)
     Image.register_open(HeifImageFile.format, HeifImageFile, _is_supported_heif)
-    if have_encoder_for_format(HeifCompressionFormat.HEVC):
+    if lib_info["HEIF"]:
         Image.register_save(HeifImageFile.format, _save_heif)
         Image.register_save_all(HeifImageFile.format, _save_all_heif)
     extensions = [".heic", ".heics", ".heif", ".heifs", ".hif"]
@@ -198,17 +198,13 @@ def register_avif_opener(**kwargs) -> None:
     :param kwargs: dictionary with values to set in options. See: :ref:`options`.
     """
 
-    if not have_decoder_for_format(HeifCompressionFormat.AV1) and not have_encoder_for_format(
-        HeifCompressionFormat.AV1
-    ):
+    if not lib_info["AVIF"]:
         warn("This version of `pillow-heif` was built without AVIF support.")
         return
     __options_update(**kwargs)
-    if have_decoder_for_format(HeifCompressionFormat.AV1):
-        Image.register_open(AvifImageFile.format, AvifImageFile, _is_supported_avif)
-    if have_encoder_for_format(HeifCompressionFormat.AV1):
-        Image.register_save(AvifImageFile.format, _save_avif)
-        Image.register_save_all(AvifImageFile.format, _save_all_avif)
+    Image.register_open(AvifImageFile.format, AvifImageFile, _is_supported_avif)
+    Image.register_save(AvifImageFile.format, _save_avif)
+    Image.register_save_all(AvifImageFile.format, _save_all_avif)
     # extensions = [".avif", ".avifs"]
     extensions = [".avif"]
     Image.register_mime(AvifImageFile.format, "image/avif")

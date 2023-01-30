@@ -4,7 +4,7 @@ from io import SEEK_END, BytesIO
 from time import perf_counter
 
 import pytest
-from helpers import aom_enc, create_heif, hevc_enc
+from helpers import aom, create_heif, hevc_enc
 from PIL import Image
 
 from pillow_heif import (
@@ -19,7 +19,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 
 @pytest.mark.skipif(not hevc_enc(), reason="No HEVC encoder.")
-@pytest.mark.skipif(not aom_enc(), reason="No AVIF encoder.")
+@pytest.mark.skipif(not aom(), reason="Requires AVIF support.")
 @pytest.mark.parametrize("register_opener", (register_avif_opener, register_heif_opener))
 def test_options_change_from_plugin_registering(register_opener):
     try:
@@ -53,7 +53,7 @@ def test_thumbnails_option():
 
 
 @pytest.mark.skipif(not hevc_enc(), reason="No HEVC encoder.")
-@pytest.mark.skipif(not aom_enc(), reason="No AVIF encoder.")
+@pytest.mark.skipif(not aom(), reason="Requires AVIF support.")
 @pytest.mark.parametrize("save_format", ("HEIF", "AVIF"))
 def test_quality_option(save_format):
     try:

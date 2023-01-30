@@ -13,8 +13,8 @@ import pillow_heif
 
 pytest.importorskip("numpy", reason="NumPy not installed")
 
-if not helpers.hevc_enc() or not helpers.aom_enc():
-    pytest.skip("No HEVC or AVIF encoder.", allow_module_level=True)
+if not helpers.hevc_enc() or not helpers.aom():
+    pytest.skip("No HEIF or AVIF support.", allow_module_level=True)
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 pillow_heif.register_avif_opener()
@@ -94,9 +94,7 @@ def test_pillow_save_one_all():
 
 
 def test_heif_no_encoder():
-    with mock.patch("pillow_heif.heif.have_encoder_for_format") as mock_func:
-        mock_func.return_value = False
-
+    with mock.patch.dict("pillow_heif.heif.lib_info", {"libheif": "1.14.2", "HEIF": "", "AVIF": ""}):
         im_heif = pillow_heif.from_pillow(Image.new("L", (64, 64)))
         out_buffer = BytesIO()
         with pytest.raises(pillow_heif.HeifError):

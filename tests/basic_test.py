@@ -13,12 +13,11 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 def test_libheif_info():
     info = pillow_heif.libheif_info()
-    assert info["version"]["libheif"] in ("1.13.0", "1.14.0", "1.14.1", "1.14.2")
-    assert info["decoders"]["HEVC"]
+    assert info["libheif"] in ("1.13.0", "1.14.0", "1.14.1", "1.14.2")
+    assert info["HEIF"]
 
 
-@pytest.mark.skipif(helpers.aom_enc() and helpers.aom_dec(), reason="Only when AOM missing.")
-@pytest.mark.skipif(pillow_heif.libheif_info()["version"]["aom"] == "Rav1e encoder", reason="Rav1e not supported")
+@pytest.mark.skipif(helpers.aom(), reason="Only when AVIF support missing.")
 def test_pillow_register_avif_plugin():
     with pytest.warns(UserWarning):
         pillow_heif.register_avif_opener()
@@ -105,20 +104,18 @@ def test_heif_str():
 @pytest.mark.skipif(not helpers.RELEASE_FULL_FLAG, reason="Only when building full release")
 def test_full_build():
     info = pillow_heif.libheif_info()
-    assert info["decoders"]["AV1"]
-    assert info["encoders"]["AV1"]
-    assert info["encoders"]["HEVC"]
+    assert info["AVIF"]
+    assert info["HEIF"]
     expected_version = os.getenv("EXP_PH_LIBHEIF_VERSION", "1.14.2")
     if expected_version:
-        assert info["version"]["libheif"] == expected_version
+        assert info["libheif"] == expected_version
 
 
 @pytest.mark.skipif(not helpers.RELEASE_LIGHT_FLAG, reason="Only when building light release")
 def test_light_build():
     info = pillow_heif.libheif_info()
-    assert not info["decoders"]["AV1"]
-    assert not info["encoders"]["AV1"]
-    assert not info["encoders"]["HEVC"]
+    assert not info["AVIF"]
+    assert not info["HEIF"]
     expected_version = os.getenv("EXP_PH_LIBHEIF_VERSION", "1.14.2")
     if expected_version:
-        assert info["version"]["libheif"] == expected_version
+        assert info["libheif"] == expected_version

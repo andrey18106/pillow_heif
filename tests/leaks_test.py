@@ -25,7 +25,7 @@ def perform_open_save(iterations, image_path):
         if helpers.hevc_enc():
             out_buf = BytesIO()
             image.save(out_buf, quality=20, format="HEIF", save_all=True)
-        elif helpers.aom_enc():
+        elif helpers.aom():
             out_buf = BytesIO()
             image.save(out_buf, quality=20, format="AVIF", save_all=True)
 

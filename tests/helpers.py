@@ -218,20 +218,12 @@ def gradient_pa_bytes(im_format: str) -> bytearray:
 def hevc_enc() -> bool:
     if getenv("PH_TESTS_NO_HEVC_ENC", "0") != "0":
         return False
-    return libheif_info()["encoders"]["HEVC"]
+    return bool(libheif_info()["HEIF"])
 
 
-def aom_dec() -> bool:
+def aom() -> bool:
     if getenv("PH_TESTS_NO_AVIF_DEC", "0") != "0":
         return False
-    if libheif_info()["version"]["aom"] == "Rav1e encoder":
+    if libheif_info()["AVIF"] == "Rav1e encoder":
         return False
-    return libheif_info()["decoders"]["AV1"]
-
-
-def aom_enc() -> bool:
-    if getenv("PH_TESTS_NO_AVIF_ENC", "0") != "0":
-        return False
-    if libheif_info()["version"]["aom"] == "Rav1e encoder":
-        return False
-    return libheif_info()["encoders"]["AV1"]
+    return bool(libheif_info()["AVIF"])

@@ -355,6 +355,6 @@ def test_hdr_read(im_path, original_path):
         ("images/heif/RGBA_12.avif", "images/non_heif/RGBA_16.png"),
     ),
 )
-@pytest.mark.skipif(not helpers.aom_dec(), reason="requires AVIF decoder.")
+@pytest.mark.skipif(not helpers.aom(), reason="requires AVIF support.")
 def test_hdr_read_avif(im_path, original_path):
     helpers.compare_hashes([im_path, original_path], max_difference=1)

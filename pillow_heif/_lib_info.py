@@ -9,7 +9,7 @@ from .constants import HeifCompressionFormat
 
 
 def libheif_version() -> str:
-    """Returns ``libheif`` version."""
+    """Returns ``libheif`` version.1"""
 
     return lib_info["libheif"]
 

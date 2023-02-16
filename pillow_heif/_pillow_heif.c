@@ -329,9 +329,9 @@ static PyObject* _CtxWriteImage_add_plane_la(CtxWriteImageObject* self, PyObject
                 out_word_y[i2] = in_word[i2 * 2 + 0];
                 out_word_alpha[i2] = in_word[i2 * 2 + 1];
             }
-            ((uint8_t *)in_word) += stride_in;
-            ((uint8_t *)out_word_y) += stride_y;
-            ((uint8_t *)out_word_alpha) += stride_alpha;
+            in_word += stride_in / 2;
+            out_word_y += stride_y / 2;
+            out_word_alpha += stride_alpha / 2;
         }
     }
     else if ((depth_in == 16) && (depth == 10))
@@ -340,9 +340,9 @@ static PyObject* _CtxWriteImage_add_plane_la(CtxWriteImageObject* self, PyObject
                 out_word_y[i2] = in_word[i2 * 2 + 0] >> 6;
                 out_word_alpha[i2] = in_word[i2 * 2 + 1] >> 6;
             }
-            ((uint8_t *)in_word) += stride_in;
-            ((uint8_t *)out_word_y) += stride_y;
-            ((uint8_t *)out_word_alpha) += stride_alpha;
+            in_word += stride_in / 2;
+            out_word_y += stride_y / 2;
+            out_word_alpha += stride_alpha / 2;
         }
     else if ((depth_in == 16) && (depth == 12))
         for (int i = 0; i < height; i++) {
@@ -350,9 +350,9 @@ static PyObject* _CtxWriteImage_add_plane_la(CtxWriteImageObject* self, PyObject
                 out_word_y[i2] = in_word[i2 * 2 + 0] >> 4;
                 out_word_alpha[i2] = in_word[i2 * 2 + 1] >> 4;
             }
-            ((uint8_t *)in_word) += stride_in;
-            ((uint8_t *)out_word_y) += stride_y;
-            ((uint8_t *)out_word_alpha) += stride_alpha;
+            in_word += stride_in / 2;
+            out_word_y += stride_y / 2;
+            out_word_alpha += stride_alpha / 2;
         }
     else
         invalid_mode = 1;
@@ -410,15 +410,15 @@ static PyObject* _CtxWriteImage_add_plane_l(CtxWriteImageObject* self, PyObject*
         for (int i = 0; i < height; i++) {
             for (int i2 = 0; i2 < width; i2++)
                 out_word[i2] = in_word[i2] >> 6;
-            ((uint8_t *)in_word) += stride_in;
-            ((uint8_t *)out_word) += stride;
+            in_word += stride_in / 2;
+            out_word += stride / 2;
         }
     else if ((depth_in == 16) && (depth == 12))
         for (int i = 0; i < height; i++) {
             for (int i2 = 0; i2 < width; i2++)
                 out_word[i2] = in_word[i2] >> 4;
-            ((uint8_t *)in_word) += stride_in;
-            ((uint8_t *)out_word) += stride;
+            in_word += stride_in / 2;
+            out_word += stride / 2;
         }
     else
         invalid_mode = 1;
@@ -737,7 +737,8 @@ static PyObject* _CtxImage_color_profile(CtxImageObject* self, void* closure) {
     }
 
     PyObject* result = PyDict_New();
-    __PyDict_SetItemString(result, "type", PyUnicode_FromString(heif_color_profile_type_rICC ? "rICC" : "prof"));
+    __PyDict_SetItemString(
+        result, "type", PyUnicode_FromString(profile_type == heif_color_profile_type_rICC ? "rICC" : "prof"));
     size_t size = heif_image_handle_get_raw_color_profile_size(self->handle);
     if (!size)
         __PyDict_SetItemString(result, "data", PyBytes_FromString(""));
@@ -922,8 +923,8 @@ int decode_image(CtxImageObject* self) {
                         out[i2 * 4 + 2] = in[i2 * 4 + 2] << 6;
                         out[i2 * 4 + 3] = in[i2 * 4 + 3] << 6;
                     }
-                    ((uint8_t *)in) += stride;
-                    ((uint8_t *)out) += self->stride;
+                    in += stride / 2;
+                    out += self->stride / 2;
                 }
             else if ((self->bits == 10) && (self->alpha) && (self->bgr_mode))
                 for (int i = 0; i < self->height; i++) {
@@ -934,8 +935,8 @@ int decode_image(CtxImageObject* self) {
                         out[i2 * 4 + 2] = tmp << 6;
                         out[i2 * 4 + 3] = in[i2 * 4 + 3] << 6;
                     }
-                    ((uint8_t *)in) += stride;
-                    ((uint8_t *)out) += self->stride;
+                    in += stride / 2;
+                    out += self->stride / 2;
                 }
             else if ((self->bits == 10) && (!self->alpha) && (!self->bgr_mode))
                 for (int i = 0; i < self->height; i++) {
@@ -944,8 +945,8 @@ int decode_image(CtxImageObject* self) {
                         out[i2 * 3 + 1] = in[i2 * 3 + 1] << 6;
                         out[i2 * 3 + 2] = in[i2 * 3 + 2] << 6;
                     }
-                    ((uint8_t *)in) += stride;
-                    ((uint8_t *)out) += self->stride;
+                    in += stride / 2;
+                    out += self->stride / 2;
                 }
             else if ((self->bits == 10) && (!self->alpha) && (self->bgr_mode))
                 for (int i = 0; i < self->height; i++) {
@@ -955,8 +956,8 @@ int decode_image(CtxImageObject* self) {
                         out[i2 * 3 + 1] = in[i2 * 3 + 1] << 6;
                         out[i2 * 3 + 2] = tmp << 6;
                     }
-                    ((uint8_t *)in) += stride;
-                    ((uint8_t *)out) += self->stride;
+                    in += stride / 2;
+                    out += self->stride / 2;
                 }
             else if ((self->bits == 12) && (self->alpha) && (!self->bgr_mode))
                 for (int i = 0; i < self->height; i++) {
@@ -966,8 +967,8 @@ int decode_image(CtxImageObject* self) {
                         out[i2 * 4 + 2] = in[i2 * 4 + 2] << 4;
                         out[i2 * 4 + 3] = in[i2 * 4 + 3] << 4;
                     }
-                    ((uint8_t *)in) += stride;
-                    ((uint8_t *)out) += self->stride;
+                    in += stride / 2;
+                    out += self->stride / 2;
                 }
             else if ((self->bits == 12) && (self->alpha) && (self->bgr_mode)) {
                 for (int i = 0; i < self->height; i++) {
@@ -978,8 +979,8 @@ int decode_image(CtxImageObject* self) {
                         out[i2 * 4 + 2] = tmp << 4;
                         out[i2 * 4 + 3] = in[i2 * 4 + 3] << 4;
                     }
-                    ((uint8_t *)in) += stride;
-                    ((uint8_t *)out) += self->stride;
+                    in += stride / 2;
+                    out += self->stride / 2;
                 }
             }
             else if ((self->bits == 12) && (!self->alpha) && (!self->bgr_mode))
@@ -989,8 +990,8 @@ int decode_image(CtxImageObject* self) {
                         out[i2 * 3 + 1] = in[i2 * 3 + 1] << 4;
                         out[i2 * 3 + 2] = in[i2 * 3 + 2] << 4;
                     }
-                    ((uint8_t *)in) += stride;
-                    ((uint8_t *)out) += self->stride;
+                    in += stride / 2;
+                    out += self->stride / 2;
                 }
             else if ((self->bits == 12) && (!self->alpha) && (self->bgr_mode))
                 for (int i = 0; i < self->height; i++) {
@@ -1000,8 +1001,8 @@ int decode_image(CtxImageObject* self) {
                         out[i2 * 3 + 1] = in[i2 * 3 + 1] << 4;
                         out[i2 * 3 + 2] = tmp << 4;
                     }
-                    ((uint8_t *)in) += stride;
-                    ((uint8_t *)out) += self->stride;
+                    in += stride / 2;
+                    out += self->stride / 2;
                 }
             else
                 invalid_mode = 1;
@@ -1009,7 +1010,7 @@ int decode_image(CtxImageObject* self) {
         Py_END_ALLOW_THREADS
         if (invalid_mode) {
             PyErr_SetString(PyExc_ValueError, "invalid plane mode value");
-            return NULL;
+            return 0;
         }
     }
     return 1;
@@ -1053,9 +1054,8 @@ static PyObject* _CtxWrite(PyObject* self, PyObject* args) {
         return NULL;
 
     struct heif_context* ctx = heif_context_alloc();
-    if (check_error(
-        heif_context_get_encoder_for_format(ctx, compression_format, &encoder)
-        )) {
+    error = heif_context_get_encoder_for_format(ctx, compression_format, &encoder);
+    if (check_error(error)) {
         heif_context_free(ctx);
         return NULL;
     }
@@ -1164,8 +1164,6 @@ static PyObject* _test(PyObject* self, PyObject* args){
     }
 
     Py_XDECREF(mem_view);
-//    printf("size of data: %d\n", );
-//    printf("%u %u %u\n", *(a) & 0xFF, *(a+1) & 0xFF, *(a+2) & 0xFF);
     RETURN_NONE
 }
 

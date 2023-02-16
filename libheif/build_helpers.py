@@ -1,7 +1,7 @@
 # This is temporary a temporary solution, in future this code will be moved to `setup.py`
 
 import sys
-from os import environ, getenv, path
+from os import getenv, path
 from pathlib import Path
 from shutil import copy
 from subprocess import DEVNULL, PIPE, run
@@ -14,7 +14,6 @@ def get_include_lib_dirs():
     include_dirs = ["/usr/local/include", "/usr/include"]
     library_dirs = ["/usr/local/lib", "/usr/lib64", "/usr/lib", "/lib"]
 
-    print(environ)
     if sys.platform.lower() == "darwin":
         include_path_prefix = getenv("HOMEBREW_PREFIX")
         if not include_path_prefix:

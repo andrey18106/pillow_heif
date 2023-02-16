@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """Script to build wheel"""
+from os import getenv
 from sys import platform
 
 from setuptools import Extension, setup
@@ -14,18 +15,21 @@ def get_version():
     return locals()["__version__"]
 
 
-include_dirs, library_dirs = build_helpers.get_include_lib_dirs()
+if getenv("PRE_COMMIT", None):
+    include_dirs, library_dirs = build_helpers.get_include_lib_dirs()
 
-setup(
-    version=get_version(),
-    ext_modules=[
-        Extension(
-            name="_pillow_heif",
-            sources=["pillow_heif/_pillow_heif.c"],
-            include_dirs=include_dirs,
-            library_dirs=library_dirs,
-            libraries=["libheif"] if platform.lower() == "win32" else ["heif"],
-            extra_compile_args=["/d2FH4-"] if platform.lower() == "win32" else [],
-        )
-    ],
-)
+    setup(
+        version=get_version(),
+        ext_modules=[
+            Extension(
+                name="_pillow_heif",
+                sources=["pillow_heif/_pillow_heif.c"],
+                include_dirs=include_dirs,
+                library_dirs=library_dirs,
+                libraries=["libheif"] if platform.lower() == "win32" else ["heif"],
+                extra_compile_args=["/d2FH4-"] if platform.lower() == "win32" else [],
+            )
+        ],
+    )
+else:
+    setup(version=get_version())

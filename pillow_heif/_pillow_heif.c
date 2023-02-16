@@ -37,7 +37,7 @@ int check_error(struct heif_error error) {
     return 1;
 }
 
-inline int __PyDict_SetItemString(PyObject *p, const char *key, PyObject *val) {
+int __PyDict_SetItemString(PyObject *p, const char *key, PyObject *val) {
     int r = PyDict_SetItemString(p, key, val);
     Py_DECREF(val);
     return r;

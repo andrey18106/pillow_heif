@@ -41,7 +41,6 @@ repos:
     hooks:
     -   id: check-manifest
         args: [--no-build-isolation]
-        stages: [commit]
 
 -   repo: local
     hooks:

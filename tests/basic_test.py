@@ -83,23 +83,16 @@ def test_heif_str():
     str_img_nl_3 = "<HeifImage 96x64 RGB with no image data and 0 thumbnails>"
     str_img_l_1 = "<HeifImage 64x64 RGB with 12288 bytes image data and 2 thumbnails>"
     str_img_l_2 = "<HeifImage 64x64 RGB with 12288 bytes image data and 1 thumbnails>"
-    str_thumb_nl = "<HeifThumbnail 32x32 RGB with no image data>"
-    str_thumb_l = "<HeifThumbnail 32x32 RGB with 6144 bytes image data>"
     heif_file = pillow_heif.open_heif(Path("images/heif/zPug_3.heic"))
     assert str(heif_file) == f"<HeifFile with 3 images: ['{str_img_nl_1}', '{str_img_nl_2}', '{str_img_nl_3}']>"
     assert str(heif_file[0]) == str_img_nl_1
     assert str(heif_file[1]) == str_img_nl_2
     assert str(heif_file[2]) == str_img_nl_3
-    assert str(heif_file.thumbnails[0]) == f"{str_thumb_nl} Original:{str_img_nl_2}"
-    heif_file.load()
+    assert heif_file.data
     assert str(heif_file) == f"<HeifFile with 3 images: ['{str_img_nl_1}', '{str_img_l_2}', '{str_img_nl_3}']>"
-    heif_file.thumbnails[0].load()
-    assert str(heif_file.thumbnails[0]) == f"{str_thumb_l} Original:{str_img_l_2}"
-    heif_file = pillow_heif.HeifFile().add_from_heif(heif_file[0])
-    assert str(heif_file) == f"<HeifFile with 1 images: ['{str_img_l_1}']>"
-    assert str(heif_file.thumbnails[0]) == f"{str_thumb_nl} Original:{str_img_l_1}"
-    heif_file.thumbnails[0].load()  # Should not change anything, thumbnails are cloned without data.
-    assert str(heif_file.thumbnails[0]) == f"{str_thumb_nl} Original:{str_img_l_1}"
+    heif_file2 = pillow_heif.HeifFile()
+    heif_file2.add_from_heif(heif_file[0])
+    assert str(heif_file2) == f"<HeifFile with 1 images: ['{str_img_l_1}']>"
 
 
 @pytest.mark.skipif(not helpers.RELEASE_FULL_FLAG, reason="Only when building full release")

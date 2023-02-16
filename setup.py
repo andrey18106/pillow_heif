@@ -28,5 +28,4 @@ setup(
             extra_compile_args=["/d2FH4-"] if platform.lower() == "win32" else [],
         )
     ],
-    cffi_modules=["libheif/build.py:ffi"],
 )

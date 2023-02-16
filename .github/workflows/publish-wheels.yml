@@ -50,6 +50,7 @@ jobs:
         run: |
           python3 -m pip install twine
           ls -la wheelhouse_pillow_heif
+          du -h
 #          python3 -m twine upload --skip-existing wheelhouse_pillow_heif/*.whl
 #          python3 -m twine upload --skip-existing wheelhouse_pillow_heif/*tar.gz
 #        env:
@@ -61,6 +62,7 @@ jobs:
         run: |
           python3 -m pip install twine
           ls -la wheelhouse_pi_heif
+          du -h
 #          python3 -m twine upload --skip-existing wheelhouse_pi_heif/*.whl
 #          python3 -m twine upload --skip-existing wheelhouse_pi_heif/*tar.gz
 #        env:

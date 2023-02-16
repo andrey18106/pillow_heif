@@ -67,7 +67,7 @@ def test_open_to_numpy_mem_leaks():
     import numpy as np
 
     mem_limit = None
-    im_path = Path("images/heif/L_10.heif")
+    im_path = Path("images/heif/L_10__29x100.heif")
     for i in range(1000):
         heif_file = pillow_heif.open_heif(im_path, convert_hdr_to_8bit=False)
         _array = np.asarray(heif_file[0])  # noqa

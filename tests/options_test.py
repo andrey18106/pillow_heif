@@ -11,6 +11,7 @@ from pillow_heif import (
     from_pillow,
     open_heif,
     options,
+    read_heif,
     register_avif_opener,
     register_heif_opener,
 )
@@ -40,14 +41,11 @@ def test_thumbnails_option():
     heif_buf = create_heif((128, 128), [64])
     try:
         heif_file = open_heif(heif_buf)
-        assert heif_file.thumbnails
-        assert str(heif_file.thumbnails[0]).find("bytes image data") == -1
-        assert heif_file.thumbnails[0].data
-        assert str(heif_file.thumbnails[0]).find("bytes image data") != -1
+        assert heif_file.info["thumbnails"]
         # disabling thumbnails and checking them not to be present
         options.THUMBNAILS = False
         heif_file = open_heif(heif_buf)
-        assert not heif_file.thumbnails
+        assert not heif_file.info["thumbnails"]
     finally:
         options.THUMBNAILS = True
 
@@ -83,11 +81,11 @@ def test_decode_threads():
     try:
         options.DECODE_THREADS = 1
         start_time_one_thread = perf_counter()
-        open_heif(test_image, convert_hdr_to_8bit=False).load()
+        read_heif(test_image, convert_hdr_to_8bit=False)
         total_time_one_thread = perf_counter() - start_time_one_thread
         options.DECODE_THREADS = 2
         start_time_multiply_threads = perf_counter()
-        open_heif(test_image, convert_hdr_to_8bit=False).load()
+        read_heif(test_image, convert_hdr_to_8bit=False)
         total_time_multiply_threads = perf_counter() - start_time_multiply_threads
         # decoding in multiply threads should be faster at least by 12%
         assert total_time_one_thread > total_time_multiply_threads * 1.12

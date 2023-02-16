@@ -12,12 +12,9 @@ from .as_plugin import (
     register_avif_opener,
     register_heif_opener,
 )
-from .constants import HeifErrorCode
-from .error import HeifError
 from .heif import (
     HeifFile,
     HeifImage,
-    HeifThumbnail,
     from_bytes,
     from_pillow,
     is_supported,
@@ -25,4 +22,3 @@ from .heif import (
     read_heif,
 )
 from .misc import get_file_mimetype, set_orientation
-from .thumbnails import add_thumbnails, thumbnail

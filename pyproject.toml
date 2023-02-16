@@ -2,7 +2,6 @@
 requires = [
     "setuptools>=42",
     "wheel",
-    "cffi>=1.14.6",
 ]
 # build-backend = "setuptools.build_meta"
 
@@ -29,10 +28,10 @@ profile = "black"
 
 [tool.pylint]
 master.py-version = "3.7"
-master.extension-pkg-allow-list = ["_pillow_heif_cffi", "_pillow_heif"]
-design.max-attributes = 9
+master.extension-pkg-allow-list = ["_pillow_heif"]
+design.max-attributes = 8
 design.max-branches = 14
-design.max-locals = 18
+design.max-locals = 16
 design.max-returns = 8
 basic.good-names = [
     "a", "b", "c", "d", "e", "f", "i", "j", "k", "v",

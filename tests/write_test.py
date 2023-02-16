@@ -112,7 +112,7 @@ def test_pillow_save_zero(size: tuple):
 @pytest.mark.parametrize("size", ((1, 0), (0, 1), (0, 0)))
 def test_heif_save_zero(size: tuple):
     out_heif = BytesIO()
-    im = pillow_heif.from_pillow(Image.new("RGB", size))
+    im = pillow_heif.from_bytes("L", size, b"")
     with pytest.raises(ValueError):
         im.save(out_heif, format="HEIF")
 

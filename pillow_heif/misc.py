@@ -221,6 +221,7 @@ def _pil_to_supported_mode(img: Image.Image) -> Image.Image:
 
 
 class Transpose(IntEnum):
+    # Temporary till we support old Pillows, remove this when minimum Pillow version will have this.
     FLIP_LEFT_RIGHT = 0
     FLIP_TOP_BOTTOM = 1
     ROTATE_90 = 2
@@ -231,8 +232,8 @@ class Transpose(IntEnum):
 
 
 def _rotate_pil(img: Image.Image, orientation: int) -> Image.Image:
-    # Probably create issue in Pillow to add support
-    # for info["xmp"] or `getxmp()` and remove this func.
+    # Probably need create issue in Pillow to add support
+    # for info["xmp"] or `getxmp()` for ImageOps.exif_transpose and remove this func.
     method = {
         2: Transpose.FLIP_LEFT_RIGHT,
         3: Transpose.ROTATE_180,

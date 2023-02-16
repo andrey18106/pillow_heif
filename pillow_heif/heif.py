@@ -325,6 +325,8 @@ class HeifFile:
         return added_image
 
     def add_from_pillow(self, image: Image.Image):
+        if image.size[0] <= 0 or image.size[1] <= 0:
+            raise ValueError("Empty images are not supported.")
         _info = image.info.copy()
         _info["exif"] = _exif_from_pillow(image)
         _info["xmp"] = _xmp_from_pillow(image)

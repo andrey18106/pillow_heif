@@ -9,7 +9,6 @@ DEV_NAME_ADD = ""  # This is only for debugging purposes of this script.
 if __name__ == "__main__":
     # change `pillow_heif` to `pi_heif`
     files_list = [
-        "libheif/build.py",
         "setup.py",
         "docker/manylinux_armv7l_wheel.Dockerfile",
         "docker/musllinux_armv7l_wheel.Dockerfile",

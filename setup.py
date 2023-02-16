@@ -15,7 +15,7 @@ def get_version():
     return locals()["__version__"]
 
 
-if getenv("PRE_COMMIT", None):
+if not getenv("PRE_COMMIT", None):
     include_dirs, library_dirs = build_helpers.get_include_lib_dirs()
 
     setup(

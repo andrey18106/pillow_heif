@@ -879,12 +879,15 @@ int decode_image(CtxImageObject* self) {
         int invalid_mode = 0;
         Py_BEGIN_ALLOW_THREADS
         if ((self->hdr_to_8bit) || (self->bits == 8)) {
+            uint8_t *in = (uint8_t*)self->data;
+            uint8_t *out = (uint8_t*)self->data;
             if (!self->bgr_mode)    // just remove stride
-                for (int i = 1; i < self->height; i++)
-                    memcpy((uint8_t*)self->data + self->stride * i, (uint8_t*)self->data + stride * i, self->stride);
+                for (int i = 0; i < self->height; i++) {
+                    memmove(out, in, self->stride); // possible will change to memcpy and set -D_FORTIFY_SOURCE=0
+                    in += stride;
+                    out += self->stride;
+                }
             else {                  // remove stride && convert to BGR(A)
-                uint8_t *in = (uint8_t*)self->data;
-                uint8_t *out = (uint8_t*)self->data;
                 uint8_t tmp;
                 if (!self->alpha)
                     for (int i = 0; i < self->height; i++) {

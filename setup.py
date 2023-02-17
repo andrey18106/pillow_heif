@@ -26,7 +26,7 @@ else:
             include_dirs=include_dirs,
             library_dirs=library_dirs,
             libraries=["libheif"] if platform.lower() == "win32" else ["heif"],
-            extra_compile_args=["/d2FH4-"] if platform.lower() == "win32" else [],
+            extra_compile_args=["/d2FH4-", "/O2"] if platform.lower() == "win32" else ["-Ofast"],
         )
     ]
 

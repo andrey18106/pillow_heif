@@ -44,6 +44,8 @@ def test_open_save_objects_leaks():
     gc.set_debug(gc.DEBUG_SAVEALL)
     perform_open_save(8, image_file_data)
     gc.collect()
+    gc.collect()
+    gc.collect()
     summary2 = tracker.SummaryTracker().create_summary()
     results = summary._sweep(summary.get_diff(_summary1, summary2))  # noqa
     if results:

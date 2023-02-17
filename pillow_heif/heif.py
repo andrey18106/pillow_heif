@@ -149,17 +149,18 @@ class HeifFile:
     def __init__(self, fp=None, convert_hdr_to_8bit=True, bgr_mode=False, postprocess=True):
         if bgr_mode and not postprocess:
             raise ValueError("BGR mode does not work when post-processing is disabled.")
-
         if hasattr(fp, "seek"):
             fp.seek(0, SEEK_SET)
+
         if fp is None:
-            self.fp_bytes = b""
             images = []
+            mimetype = ""
         else:
-            self.fp_bytes = _get_bytes(fp)
-            images = load_file(self.fp_bytes, options.DECODE_THREADS, convert_hdr_to_8bit, bgr_mode, postprocess)
+            fp_bytes = _get_bytes(fp)
+            mimetype = get_file_mimetype(fp_bytes)
+            images = load_file(fp_bytes, options.DECODE_THREADS, convert_hdr_to_8bit, bgr_mode, postprocess)
+        self.mimetype = mimetype
         self._images: List[HeifImage] = [HeifImage(i) for i in images if i is not None]
-        self.mimetype = get_file_mimetype(self.fp_bytes)
         self.primary_index = 0
         for index, _ in enumerate(self._images):
             if _.info.get("primary", False):

@@ -9,10 +9,10 @@ on:
       - 'docker/from_src/*.Dockerfile'
       - 'libheif/linux/**'
       - 'libheif/linux_*.py'
-      - 'libheif/build.py'
       - 'libheif/public_api.h'
       - 'setup.*'
       - 'pyproject.toml'
+      - 'pillow_heif/_pillow_heif.c'
   push:
     branches: [master]
     paths:
@@ -20,10 +20,10 @@ on:
       - 'docker/from_src/*.Dockerfile'
       - 'libheif/linux/**'
       - 'libheif/linux_*.py'
-      - 'libheif/build.py'
       - 'libheif/public_api.h'
       - 'setup.*'
       - 'pyproject.toml'
+      - 'pillow_heif/_pillow_heif.c'
 
 concurrency:
   group: src_linux-${{ github.ref }}

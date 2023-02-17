@@ -78,7 +78,8 @@ typedef struct {
     struct heif_image_handle *handle;       // private
     struct heif_image *heif_image;          // private
     uint8_t *data;                          // pointer to data after decoding
-    int stride;                             // ??
+    int stride;                             // time when it get filled depends on `postprocess` value
+    PyObject *file_bytes;                   // private
 } CtxImageObject;
 
 static PyTypeObject CtxImage_Type;
@@ -659,10 +660,12 @@ static void _CtxImage_destructor(CtxImageObject* self) {
         heif_image_release(self->heif_image);
     if (self->handle)
         heif_image_handle_release(self->handle);
+    Py_DECREF(self->file_bytes);
     PyObject_Del(self);
 }
 
-PyObject* _CtxImage(struct heif_image_handle* handle, int hdr_to_8bit, int bgr_mode, int postprocess, int primary) {
+PyObject* _CtxImage(struct heif_image_handle* handle, int hdr_to_8bit, int bgr_mode, int postprocess,
+                    int primary, PyObject* file_bytes) {
     CtxImageObject *ctx_image = PyObject_New(CtxImageObject, &CtxImage_Type);
     if (!ctx_image) {
         heif_image_handle_release(handle);
@@ -691,6 +694,8 @@ PyObject* _CtxImage(struct heif_image_handle* handle, int hdr_to_8bit, int bgr_m
     ctx_image->postprocess = postprocess;
     ctx_image->stride = stride;
     ctx_image->primary = primary;
+    ctx_image->file_bytes = file_bytes;
+    Py_INCREF(file_bytes);
     return (PyObject*)ctx_image;
 }
 
@@ -1088,15 +1093,15 @@ static PyObject* _CtxWrite(PyObject* self, PyObject* args) {
 }
 
 static PyObject* _load_file(PyObject* self, PyObject* args) {
-    int hdr_to_8bit, threads_count, bgr_mode, postprocess, heif_size;
-    const char* heif_bytes;
+    int hdr_to_8bit, threads_count, bgr_mode, postprocess;
+    PyObject *heif_bytes;
 
-    if (!PyArg_ParseTuple(args,"y#iiii",
-            &heif_bytes, &heif_size, &threads_count, &hdr_to_8bit, &bgr_mode, &postprocess))
+    if (!PyArg_ParseTuple(args,"Oiiii", &heif_bytes, &threads_count, &hdr_to_8bit, &bgr_mode, &postprocess))
         return NULL;
 
     struct heif_context* heif_ctx = heif_context_alloc();
-    if (check_error(heif_context_read_from_memory_without_copy(heif_ctx, heif_bytes, heif_size, NULL))) {
+    if (check_error(heif_context_read_from_memory_without_copy(
+                        heif_ctx, (void*)PyBytes_AS_STRING(heif_bytes), PyBytes_GET_SIZE(heif_bytes), NULL))) {
         heif_context_free(heif_ctx);
         return NULL;
     }
@@ -1135,7 +1140,7 @@ static PyObject* _load_file(PyObject* self, PyObject* args) {
         else
             error = heif_context_get_image_handle(heif_ctx, images_ids[i], &handle);
         if (error.code == heif_error_Ok)
-            PyList_SET_ITEM(images_list, i, _CtxImage(handle, hdr_to_8bit, bgr_mode, postprocess, primary));
+            PyList_SET_ITEM(images_list, i, _CtxImage(handle, hdr_to_8bit, bgr_mode, postprocess, primary, heif_bytes));
         else {
             Py_INCREF(Py_None);
             PyList_SET_ITEM(images_list, i, Py_None);

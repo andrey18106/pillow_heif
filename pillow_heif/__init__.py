@@ -15,6 +15,7 @@ from .as_plugin import (
 from .heif import (
     HeifFile,
     HeifImage,
+    encode,
     from_bytes,
     from_pillow,
     is_supported,

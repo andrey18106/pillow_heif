@@ -267,6 +267,16 @@ def test_CMYK_color_mode():  # noqa
     helpers.compare_hashes([im, im_heif], hash_size=16)
 
 
+def test_YCbCr_color_mode():  # noqa
+    im = helpers.gradient_rgb().convert("YCbCr")
+    assert im.mode == "YCbCr"
+    out_heif = BytesIO()
+    im.save(out_heif, format="HEIF", quality=-1)
+    im_heif = Image.open(out_heif)
+    assert im_heif.mode == "RGB"
+    helpers.compare_hashes([im, im_heif], hash_size=16)
+
+
 @pytest.mark.parametrize("enc_bits", (10, 12))
 @pytest.mark.parametrize("save_format", ("HEIF", "AVIF"))
 def test_I_color_modes_to_10_12_bit(enc_bits, save_format):  # noqa
@@ -409,3 +419,11 @@ def test_chroma_avif_encoding_8bit(chroma, diff_epsilon, im):
     im_out = Image.open(im_buf)
     im = im.convert(mode=im_out.mode)
     helpers.assert_image_similar(im, im_out, diff_epsilon)
+
+
+@pytest.mark.parametrize("size", ((8, 8), (9, 9), (11, 11), (21, 21), (31, 31), (64, 64)))
+def test_encode_function(size):
+    im = Image.effect_mandelbrot(size, (-3, -2.5, 2, 2.5), 100)
+    buf = BytesIO()
+    pillow_heif.encode(im.mode, im.size, im.tobytes(), buf, quality=-1)
+    helpers.compare_hashes([buf, im])

@@ -30,6 +30,18 @@ def test_read_heif():
         assert im._data
 
 
+def test_bgr_mode_with_disabled_postprocess():
+    with pytest.raises(ValueError):
+        pillow_heif.open_heif(Path("images/heif/RGB_8__29x100.heif"), bgr_mode=True, postprocess=False)
+
+
+def test_add_empty_from_pillow():
+    im = Image.new(mode="L", size=(1, 0))
+    heif = pillow_heif.HeifFile()
+    with pytest.raises(ValueError):
+        heif.add_from_pillow(im)
+
+
 @pytest.mark.parametrize("img_path", dataset.CORRUPTED_DATASET)
 def test_heif_corrupted_open(img_path):
     for input_type in [img_path.read_bytes(), BytesIO(img_path.read_bytes()), img_path, builtins.open(img_path, "rb")]:

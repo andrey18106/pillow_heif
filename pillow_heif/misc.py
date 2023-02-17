@@ -11,7 +11,7 @@ from enum import IntEnum
 from math import ceil
 from pathlib import Path
 from struct import pack, unpack
-from typing import List, Literal, Optional
+from typing import List, Optional
 
 from _pillow_heif import CtxWrite
 from PIL import Image
@@ -45,7 +45,7 @@ MODE_INFO = {
 }
 
 
-def set_orientation(info: dict) -> Optional[Literal[1, 2, 3, 4, 5, 6, 7, 8]]:
+def set_orientation(info: dict) -> Optional[int]:
     """Reset orientation in ``EXIF`` to ``1`` if any orientation present.
     Removes ``XMP`` orientation tag if it is present.
     In Pillow plugin mode it called automatically for images.
@@ -217,6 +217,8 @@ def _pil_to_supported_mode(img: Image.Image) -> Image.Image:
         img = img.convert(mode="L")
     elif img.mode == "CMYK":
         img = img.convert(mode="RGBA")
+    elif img.mode == "YCbCr":  # note: libheif supports native `YCbCr`.
+        img = img.convert(mode="RGB")
     return img
 
 

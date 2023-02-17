@@ -1,6 +1,7 @@
 #define PY_SSIZE_T_CLEAN
 
-#include <Python.h>
+#include "Python.h"
+//#include "libheif/heif.h"
 #include "libheif/public_api.h"
 
 /* =========== Common stuff ======== */
@@ -1105,7 +1106,10 @@ static PyObject* _load_file(PyObject* self, PyObject* args) {
         heif_context_free(heif_ctx);
         return NULL;
     }
-    heif_context_set_max_decoding_threads(heif_ctx, threads_count);
+
+    #ifdef heif_context_set_max_decoding_threads
+        heif_context_set_max_decoding_threads(heif_ctx, threads_count);
+    #endif
 
     heif_item_id primary_image_id;
     if (check_error(heif_context_get_primary_image_ID(heif_ctx, &primary_image_id))) {

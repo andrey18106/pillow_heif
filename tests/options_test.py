@@ -78,7 +78,7 @@ def test_quality_option(save_format):
 @pytest.mark.skipif(os.getenv("TEST_DECODE_THREADS", "1") == "0", reason="TEST_DECODE_THREADS set to `0`")
 @pytest.mark.skipif(sys.maxsize <= 2147483647, reason="Run test only on 64 bit CPU.")
 @pytest.mark.skipif(libheif_version() == "1.12.0", reason="`DECODE_THREADS` parameter is not supported.")
-@pytest.mark.skipif(machine() in ("arm64", "aarch64") and sys.platform == "linux", reason="skip emulator")
+@pytest.mark.skipif(machine() in ("arm64", "aarch64") and sys.platform.lower() == "linux", reason="skip emulator")
 def test_decode_threads():
     test_image = "images/heif_other/arrow.heic"  # not all images can be decoded using more than one thread
     # As we do not know real performance of hardware, measure relative

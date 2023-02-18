@@ -1106,7 +1106,7 @@ static PyObject* _load_file(PyObject* self, PyObject* args) {
         return NULL;
     }
 
-    #ifdef heif_context_set_max_decoding_threads
+    #if LIBHEIF_HAVE_VERSION(1,13,0)
         heif_context_set_max_decoding_threads(heif_ctx, threads_count);
     #endif
 

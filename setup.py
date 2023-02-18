@@ -23,7 +23,7 @@ def get_version():
 
 
 class PillowHeifBuildExt(build_ext):
-    """This class is based on the Pillow setup method as I understand it (I'm a noob at this)"""
+    """This class is based on the Pillow setup method"""
 
     def build_extensions(self):  # pylint: disable=too-many-branches disable=too-many-statements
         if getenv("PRE_COMMIT"):
@@ -32,7 +32,7 @@ class PillowHeifBuildExt(build_ext):
         include_dirs = []
         library_dirs = []
 
-        # respect CFLAGS/CPPFLAGS/LDFLAGS (taken from Pillow)
+        # respect CFLAGS/CPPFLAGS/LDFLAGS
         for k in ("CFLAGS", "CPPFLAGS", "LDFLAGS"):
             if k in environ:
                 for match in finditer(r"-I([^\s]+)", environ[k]):
@@ -40,13 +40,13 @@ class PillowHeifBuildExt(build_ext):
                 for match in finditer(r"-L([^\s]+)", environ[k]):
                     self._add_directory(library_dirs, match.group(1))
 
-        # include, rpath, if set as environment variables(taken from Pillow):
+        # include, rpath, if set as environment variables
         for k in ("C_INCLUDE_PATH", "CPATH", "INCLUDE"):
             if k in environ:
                 for d in environ[k].split(path.pathsep):
                     self._add_directory(include_dirs, d)
 
-        for k in ("LD_RUN_PATH", "LIBRARY_PATH", "LIB"):  # taken from Pillow
+        for k in ("LD_RUN_PATH", "LIBRARY_PATH", "LIB"):
             if k in environ:
                 for d in environ[k].split(path.pathsep):
                     self._add_directory(library_dirs, d)

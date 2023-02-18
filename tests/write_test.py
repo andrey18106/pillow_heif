@@ -310,7 +310,8 @@ def test_gif():
     assert out_heic.seek(0, SEEK_END) * 2 < out_all_heic.seek(0, SEEK_END)
     heic_pillow = Image.open(out_all_heic)
     for i, frame in enumerate(ImageSequence.Iterator(gif_pillow)):
-        helpers.compare_hashes([ImageSequence.Iterator(heic_pillow)[i], frame])
+        # On Ubuntu 22.04 with basic repos(old versions of libs) without `max_difference` it fails.
+        helpers.compare_hashes([ImageSequence.Iterator(heic_pillow)[i], frame], max_difference=1)
 
 
 def test_pillow_append_images():

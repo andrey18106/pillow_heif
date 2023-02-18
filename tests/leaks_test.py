@@ -7,7 +7,7 @@ from platform import machine
 
 import helpers
 import pytest
-from PIL import Image
+from PIL import Image, ImageSequence
 
 import pillow_heif
 
@@ -109,6 +109,26 @@ def test_metadata_leaks():
         gc.collect()
         mem = _get_mem_usage()
         if i < 100:
+            mem_limit = mem + 1
+            continue
+        assert mem <= mem_limit, f"memory usage limit exceeded after {i + 1} iterations"
+
+
+@pytest.mark.skipif(sys.platform.lower() in ("win32", "darwin"), reason="run only on Linux")
+@pytest.mark.skipif(machine().find("x86_64") == -1, reason="run only on x86_64")
+def test_pillow_plugin_leaks():
+    mem_limit = None
+    image_file_data = BytesIO(open(Path("images/heif/zPug_3.heic"), mode="rb").read())
+    for i in range(1000):
+        im = Image.open(image_file_data)
+        for frame in ImageSequence.Iterator(im):
+            frame.load()
+            frame = None  # noqa
+        im = None  # noqa
+        gc.collect()
+        gc.collect()
+        mem = _get_mem_usage()
+        if i < 400:
             mem_limit = mem + 1
             continue
         assert mem <= mem_limit, f"memory usage limit exceeded after {i + 1} iterations"

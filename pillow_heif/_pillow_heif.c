@@ -1,8 +1,7 @@
 #define PY_SSIZE_T_CLEAN
 
 #include "Python.h"
-//#include "libheif/heif.h"
-#include "libheif/public_api.h"
+#include "libheif/heif.h"
 
 /* =========== Common stuff ======== */
 

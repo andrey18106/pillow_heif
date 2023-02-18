@@ -25,7 +25,7 @@ def get_version():
 class PillowHeifBuildExt(build_ext):
     """This class is based on the Pillow setup method as I understand it (I'm a noob at this)"""
 
-    def build_extensions(self):  # pylint: disable=too-many-branches
+    def build_extensions(self):  # pylint: disable=too-many-branches disable=too-many-statements
         if getenv("PRE_COMMIT"):
             return
 
@@ -65,6 +65,7 @@ class PillowHeifBuildExt(build_ext):
                 raise ValueError("MSYS2 not found and `LIBHEIF_PATH_PREFIX` is not set or is invalid.")
 
             library_dir = path.join(include_path_prefix, "lib")
+            # See comment a few lines below. We can't include MSYS2 directory before compiler directories :(
             # self._add_directory(include_dirs, path.join(include_path_prefix, "include"))
             self._add_directory(library_dirs, library_dir)
             lib_export_file = Path(path.join(library_dir, "libheif.dll.a"))
@@ -76,13 +77,17 @@ class PillowHeifBuildExt(build_ext):
             self._update_extension(
                 "_pillow_heif", ["libheif"], extra_compile_args=["/d2FH4-", "/WX"], extra_link_args=["/WX"]
             )
+
+            # on Windows, we include root of project instead of MSYS2 directory.
+            # Including MSYS2 directory leads to compilation errors, theirs `stdio.h` and others files are different.
+            # ATTENTION: If someone know how without hacks include MSYS2 directory as last directory in list - help!
+            self.compiler.include_dirs.append(path.dirname(path.abspath(__file__)))
+
         elif sys.platform.lower() == "darwin":
-            # if Homebrew is installed, use its lib and include directories
-            try:
+            try:  # if Homebrew is installed, use its lib and include directories
                 homebrew_prefix = check_output(["brew", "--prefix"]).strip().decode("latin1")
             except Exception:  # noqa # pylint: disable=broad-except
-                # Homebrew not installed
-                homebrew_prefix = None
+                homebrew_prefix = None  # Homebrew not installed
             if homebrew_prefix:
                 # add Homebrew's include and lib directories
                 self._add_directory(library_dirs, path.join(homebrew_prefix, "lib"))
@@ -97,19 +102,24 @@ class PillowHeifBuildExt(build_ext):
 
             self._update_extension("_pillow_heif", ["heif"], extra_compile_args=["-Ofast", "-Werror"])
         else:  # let's assume it's some kind of linux
+            # this old code waiting for refactoring, when time comes.
+            self._add_directory(include_dirs, "/usr/local/include")
+            self._add_directory(include_dirs, "/usr/include")
+            self._add_directory(library_dirs, "/usr/local/lib")
+            self._add_directory(library_dirs, "/usr/lib64")
+            self._add_directory(library_dirs, "/usr/lib")
+            self._add_directory(library_dirs, "/lib")
+
             include_path_prefix = linux_build_libs.build_libs()  # this need a rework in the future
             self._add_directory(library_dirs, path.join(include_path_prefix, "lib"))
             self._add_directory(include_dirs, path.join(include_path_prefix, "include"))
 
             self._update_extension("_pillow_heif", ["heif"], extra_compile_args=["-Ofast", "-Werror"])
 
-        # Here opposite what Pillow do in their code, we DO NOT WANT to take priority over default directories.
-        self.compiler.library_dirs = self.compiler.library_dirs + library_dirs
-        self.compiler.include_dirs = self.compiler.include_dirs + include_dirs
+        self.compiler.library_dirs = library_dirs + self.compiler.library_dirs
+        self.compiler.include_dirs = include_dirs + self.compiler.include_dirs
 
-        self.compiler.include_dirs.append(path.dirname(path.abspath(__file__)))
-
-        super().build_extensions()
+        build_ext.build_extensions(self)
 
     def _update_extension(self, name, libraries, extra_compile_args=None, extra_link_args=None):
         for extension in self.extensions:

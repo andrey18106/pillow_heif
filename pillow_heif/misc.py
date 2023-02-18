@@ -148,7 +148,7 @@ def _get_bytes(fp, length=None) -> bytes:
     return bytes(fp)[:length]
 
 
-def _retrieve_exif(metadata: List[dict]):
+def _retrieve_exif(metadata: List[dict]) -> Optional[bytes]:
     _result = None
     _purge = []
     for i, md_block in enumerate(metadata):
@@ -162,7 +162,7 @@ def _retrieve_exif(metadata: List[dict]):
     return _result
 
 
-def _retrieve_xmp(metadata: List[dict]):
+def _retrieve_xmp(metadata: List[dict]) -> Optional[bytes]:
     _result = None
     _purge = []
     for i, md_block in enumerate(metadata):
@@ -274,7 +274,7 @@ class CtxEncode:
             _value = value if isinstance(value, str) else str(value)
             self.ctx_write.set_parameter(key, _value)
 
-    def add_image(self, size: tuple, mode: str, data, **kwargs):
+    def add_image(self, size: tuple, mode: str, data, **kwargs) -> None:
         if size[0] <= 0 or size[1] <= 0:
             raise ValueError("Empty images are not supported.")
         bit_depth_in = MODE_INFO[mode][1]

@@ -4,7 +4,7 @@ Functions and classes for heif images to read and write.
 
 from copy import deepcopy
 from io import SEEK_SET
-from typing import List
+from typing import Any, Dict, List, Optional, Tuple
 
 from _pillow_heif import lib_info, load_file
 from PIL import Image
@@ -32,7 +32,9 @@ class HeifImage:
     """Class represents one image in a :py:class:`~pillow_heif.HeifFile`"""
 
     size: tuple
-    """Width and height of the image."""
+    """Width and height of the image.
+
+    .. note:: in rare cases this value can be changed during decoding."""
 
     mode: str
     """A string which defines the type and depth of a pixel in the image:
@@ -45,15 +47,18 @@ class HeifImage:
         _metadata: List[dict] = c_image.metadata
         _exif = _retrieve_exif(_metadata)
         _xmp = _retrieve_xmp(_metadata)
+        _thumbnails: List[Optional[int]] = (
+            [i for i in c_image.thumbnails if i is not None] if options.THUMBNAILS else []
+        )
         self.info = {
             "primary": bool(c_image.primary),
             "bit_depth": int(c_image.bit_depth),
             "exif": _exif,
             "xmp": _xmp,
             "metadata": _metadata,
-            "thumbnails": [i for i in c_image.thumbnails if i is not None] if options.THUMBNAILS else [],
+            "thumbnails": _thumbnails,
         }
-        _color_profile = c_image.color_profile
+        _color_profile: Dict[str, Any] = c_image.color_profile
         if _color_profile:
             if _color_profile["type"] in ("rICC", "prof"):
                 self.info["icc_profile"] = _color_profile["data"]
@@ -74,7 +79,7 @@ class HeifImage:
     def __array_interface__(self):
         """Numpy array interface support"""
 
-        shape = (self.size[1], self.size[0])
+        shape: Tuple[Any, ...] = (self.size[1], self.size[0])
         if MODE_INFO[self.mode][0] > 1:
             shape += (MODE_INFO[self.mode][0],)
         typestr = "|u1" if self.mode.find(";16") == -1 else "<u2"
@@ -82,11 +87,9 @@ class HeifImage:
 
     @property
     def data(self):
-        """Decodes image and returns image data from ``libheif``. See :ref:`image_data`
+        """Decodes image and returns image data.
 
-        .. note:: Actual size of data returned by ``data`` can be bigger than ``width * height * pixel size``.
-
-        :returns: ``bytes`` of the decoded image from ``libheif``."""
+        :returns: ``bytes`` of the decoded image."""
 
         if not self._data:
             self._data = self._c_image.data
@@ -94,6 +97,12 @@ class HeifImage:
 
     @property
     def stride(self):
+        """Stride of the image.
+
+        .. note:: from `0.10.0` version this value always will have width * sizeof pixel in default usage mode.
+
+        :returns: An Int value indicating the image stride after decoding."""
+
         return self._c_image.stride
 
     @property
@@ -118,9 +127,9 @@ class HeifImage:
             self.mode = self.mode.replace("A" if value else "a", "a" if value else "A")
 
     def to_pillow(self) -> Image.Image:
-        """Helper method to create :py:class:`PIL.Image.Image`
+        """Helper method to create :external:py:class:`~PIL.Image.Image`
 
-        :returns: :py:class:`PIL.Image.Image` class created from this image/thumbnail."""
+        :returns: :external:py:class:`~PIL.Image.Image` class created from an image."""
 
         image = Image.frombytes(
             self.mode,  # noqa
@@ -141,12 +150,12 @@ class HeifFile:
     To create :py:class:`~pillow_heif.HeifFile` object, use the appropriate factory functions.
 
     * :py:func:`~pillow_heif.open_heif`
+    * :py:func:`~pillow_heif.read_heif`
     * :py:func:`~pillow_heif.from_pillow`
-    * :py:func:`~pillow_heif.from_bytes`
+    * :py:func:`~pillow_heif.from_bytes`"""
 
-    .. note:: To get an empty container to fill up later, create a class with no parameters."""
-
-    def __init__(self, fp=None, convert_hdr_to_8bit=True, bgr_mode=False, postprocess=True):
+    def __init__(self, fp=None, convert_hdr_to_8bit=True, bgr_mode=False, **kwargs):
+        postprocess: bool = kwargs.get("postprocess", True)
         if bgr_mode and not postprocess:
             raise ValueError("BGR mode does not work when post-processing is disabled.")
         if hasattr(fp, "seek"):
@@ -233,9 +242,9 @@ class HeifFile:
         return self._images[self.primary_index].info
 
     def to_pillow(self) -> Image.Image:
-        """Helper method to create :py:class:`PIL.Image.Image`
+        """Helper method to create :external:py:class:`~PIL.Image.Image`
 
-        :returns: :py:class:`PIL.Image.Image` class created from the primary image."""
+        :returns: :external:py:class:`~PIL.Image.Image` class created from the primary image."""
 
         return self._images[self.primary_index].to_pillow()
 
@@ -300,20 +309,22 @@ class HeifFile:
 
         .. note:: Supports ``stride`` value if needed.
 
-        :param mode: `BGR(A);16`, `L;16`, `I;16L`, `RGB(A);12`, `L;12`, `RGB(A);10`, `L;10`, `RGB(A)`, `BGR(A)`, `L`
+        :param mode: `BGR(A);16`, `RGB(A);16`, LA;16`, `L;16`, `I;16L`, `BGR(A)`, `RGB(A)`, `LA`, `L`
         :param size: tuple with ``width`` and ``height`` of image.
         :param data: bytes object with raw image data.
 
-        :returns: :py:class:`~pillow_heif.HeifImage` object that was appended to HeifFile."""
+        :returns: :py:class:`~pillow_heif.HeifImage` added object."""
 
         added_image = HeifImage(MimCImage(mode, size, data, **kwargs))
         self._images.append(added_image)
         return added_image
 
-    def add_from_heif(self, image: HeifImage):
+    def add_from_heif(self, image: HeifImage) -> HeifImage:
         """Add image to the container.
 
-        :param image: ``HeifImage`` class to get images from."""
+        :param image: :py:class:`~pillow_heif.HeifImage`` class to add from.
+
+        :returns: :py:class:`~pillow_heif.HeifImage` added object."""
 
         added_image = self.add_frombytes(
             image.mode,
@@ -325,7 +336,13 @@ class HeifFile:
         added_image.info.pop("primary", None)
         return added_image
 
-    def add_from_pillow(self, image: Image.Image):
+    def add_from_pillow(self, image: Image.Image) -> HeifImage:
+        """Add image to the container.
+
+        :param image: Pillow :external:py:class:`~PIL.Image.Image` class to add from.
+
+        :returns: :py:class:`~pillow_heif.HeifImage` added object."""
+
         if image.size[0] <= 0 or image.size[1] <= 0:
             raise ValueError("Empty images are not supported.")
         _info = image.info.copy()
@@ -372,25 +389,47 @@ def is_supported(fp) -> bool:
     return get_file_mimetype(__data) != ""
 
 
-def open_heif(fp, convert_hdr_to_8bit=True, bgr_mode=False, postprocess=True) -> HeifFile:
-    return HeifFile(fp, convert_hdr_to_8bit, bgr_mode, postprocess)
+def open_heif(fp, convert_hdr_to_8bit=True, bgr_mode=False, **kwargs) -> HeifFile:
+    """Opens the given HEIF(AVIF) image file.
+
+    :param fp: See parameter ``fp`` in :func:`is_supported`
+    :param convert_hdr_to_8bit: Boolean indicating should 10 bit or 12 bit images
+        be converted to 8 bit images during loading. Otherwise, they will open in 16 bit mode.
+    :param bgr_mode: Boolean indicating should be `RGB(A)` images be opened in `BGR(A)` mode.
+
+    :returns: :py:class:`~pillow_heif.HeifFile` object.
+    :exception HeifError: If file is corrupted or is not in Heif format."""
+
+    return HeifFile(fp, convert_hdr_to_8bit, bgr_mode, **kwargs)
 
 
-def read_heif(fp, convert_hdr_to_8bit=True, bgr_mode=False, postprocess=True) -> HeifFile:
-    ret = open_heif(fp, convert_hdr_to_8bit, bgr_mode, postprocess)
+def read_heif(fp, convert_hdr_to_8bit=True, bgr_mode=False, **kwargs) -> HeifFile:
+    """Opens the given HEIF(AVIF) image file and decodes all images.
+
+    .. note:: In most cases it is better to call :py:meth:`~pillow_heif.open_heif`, and
+        let images decoded automatically only when needed.
+
+    :param fp: See parameter ``fp`` in :func:`is_supported`
+    :param convert_hdr_to_8bit: Boolean indicating should 10 bit or 12 bit images
+        be converted to 8 bit images during loading. Otherwise, they will open in 16 bit mode.
+    :param bgr_mode: Boolean indicating should be `RGB(A)` images be opened in `BGR(A)` mode.
+
+    :returns: :py:class:`~pillow_heif.HeifFile` object.
+    :exception HeifError: If file is corrupted or is not in Heif format."""
+
+    ret = open_heif(fp, convert_hdr_to_8bit, bgr_mode, **kwargs)
     for img in ret:
-        _ = img.data
+        _ = img.data  # this will decode image
     return ret
 
 
 def encode(mode: str, size: tuple, data, fp, **kwargs) -> None:
-    """Creates :py:class:`~pillow_heif.HeifFile` from bytes.
+    """Encodes data in a ``fp``.
 
-    :param mode: `BGR(A);16`, `RGB(A);16`, `L;16`, `I;16L`, `RGB(A)`, `BGR(A)`, `L`
-    :param size: tuple with ``width`` and ``height`` of image.
+    :param mode: `BGR(A);16`, `RGB(A);16`, LA;16`, `L;16`, `I;16L`, `BGR(A)`, `RGB(A)`, `LA`, `L`
+    :param size: tuple with ``width`` and ``height`` of an image.
     :param data: bytes object with raw image data.
-
-    :returns: An :py:class:`~pillow_heif.HeifFile` object."""
+    :param fp: A filename (string), pathlib.Path object or an object with ``write`` method."""
 
     _encode_images([HeifImage(MimCImage(mode, size, data, **kwargs))], fp, **kwargs)
 
@@ -422,7 +461,7 @@ def from_pillow(pil_image: Image.Image) -> HeifFile:
 
     :param pil_image: Pillow :external:py:class:`~PIL.Image.Image` class.
 
-    :returns: An :py:class:`~pillow_heif.HeifFile` object."""
+    :returns: New :py:class:`~pillow_heif.HeifFile` object."""
 
     _ = HeifFile()
     _.add_from_pillow(pil_image)
@@ -434,11 +473,11 @@ def from_bytes(mode: str, size: tuple, data, **kwargs) -> HeifFile:
 
     .. note:: Supports ``stride`` value if needed.
 
-    :param mode: `BGR(A);16`, `L;16`, `I;16L`, `RGB(A);12`, `L;12`, `RGB(A);10`, `L;10`, `RGB(A)`, `BGR(A)`, `L`
-    :param size: tuple with ``width`` and ``height`` of image.
+    :param mode: `BGR(A);16`, `RGB(A);16`, LA;16`, `L;16`, `I;16L`, `BGR(A)`, `RGB(A)`, `LA`, `L`
+    :param size: tuple with ``width`` and ``height`` of an image.
     :param data: bytes object with raw image data.
 
-    :returns: An :py:class:`~pillow_heif.HeifFile` object."""
+    :returns: New :py:class:`~pillow_heif.HeifFile` object."""
 
     _ = HeifFile()
     _.add_frombytes(mode, size, data, **kwargs)

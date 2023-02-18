@@ -3,7 +3,7 @@ Plugins for Pillow library.
 """
 
 from itertools import chain
-from typing import Any
+from typing import Union
 from warnings import warn
 
 from _pillow_heif import lib_info
@@ -27,7 +27,7 @@ from .misc import (
 class _LibHeifImageFile(ImageFile.ImageFile):
     """Base class with all functionality for ``HeifImageFile`` and ``AvifImageFile`` classes."""
 
-    heif_file: Any
+    heif_file: Union[HeifFile, None]
     _close_exclusive_fp_after_loading = True
 
     def __init__(self, *args, **kwargs):
@@ -109,10 +109,11 @@ class _LibHeifImageFile(ImageFile.ImageFile):
         return self.tell() != frame
 
     def _init_from_heif_file(self, img_index: int) -> None:
-        self._size = self.heif_file[img_index].size
-        self.mode = self.heif_file[img_index].mode
-        self.info = self.heif_file[img_index].info
-        self.info["original_orientation"] = set_orientation(self.info)
+        if self.heif_file:
+            self._size = self.heif_file[img_index].size
+            self.mode = self.heif_file[img_index].mode
+            self.info = self.heif_file[img_index].info
+            self.info["original_orientation"] = set_orientation(self.info)
 
 
 class HeifImageFile(_LibHeifImageFile):

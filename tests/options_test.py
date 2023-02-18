@@ -78,7 +78,7 @@ def test_quality_option(save_format):
 @pytest.mark.skipif(sys.maxsize <= 2147483647, reason="Run test only on 64 bit CPU.")
 @pytest.mark.skipif(libheif_version() == "1.12.0", reason="`DECODE_THREADS` parameter is not supported.")
 def test_decode_threads():
-    test_image = "images/heif_other/arrow.heic"  # not all images can be decoded using more than one thread
+    test_image = "images/heif_other/cat.hif"  # not all images can be decoded using more than one thread
     # As we do not know real performance of hardware, measure relative
     try:
         options.DECODE_THREADS = 1

@@ -68,7 +68,7 @@ jobs:
           target: build_test
 
   ubuntu_22:
-    name: With minimal supported LibHeif
+    name: LibHeif==1.12.0
     runs-on: ubuntu-22.04
 
     steps:
@@ -76,6 +76,9 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: '3.8'
+
+      - name: Install LibHeif rom standart repo
+        run: sudo apt -y install libheif-dev
 
       - name: Install from source
         run: python3 -m pip -v install ".[dev]"

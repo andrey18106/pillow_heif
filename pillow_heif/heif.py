@@ -277,7 +277,7 @@ class HeifFile:
 
             ``format`` - string with encoder format name. Possible values: ``HEIF`` (default) or ``AVIF``.
 
-        :param fp: A filename (string), pathlib.Path object or file object.
+        :param fp: A filename (string), pathlib.Path object or an object with `write` method.
 
         :returns: None
         :raises: :py:exc:`~pillow_heif.HeifError` or :py:exc:`ValueError`"""

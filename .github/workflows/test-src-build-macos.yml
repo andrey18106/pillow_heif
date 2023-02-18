@@ -7,7 +7,6 @@ on:
     paths:
       - '.github/workflows/test-src-build-macos.yml'
       - 'libheif/macos/**'
-      - 'libheif/public_api.h'
       - 'setup.*'
       - 'pyproject.toml'
       - 'pi-heif/libheif/macos/**'
@@ -18,7 +17,6 @@ on:
     paths:
       - '.github/workflows/test-src-build-macos.yml'
       - 'libheif/macos/**'
-      - 'libheif/public_api.h'
       - 'setup.*'
       - 'pyproject.toml'
       - 'pi-heif/libheif/macos/**'

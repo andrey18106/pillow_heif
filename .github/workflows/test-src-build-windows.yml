@@ -7,7 +7,7 @@ on:
     paths:
       - '.github/workflows/test-src-build-windows.yml'
       - 'libheif/windows/**'
-      - 'libheif/public_api.h'
+      - 'libheif/heif.h'
       - 'setup.*'
       - 'pyproject.toml'
       - 'pi-heif/libheif/windows/**'
@@ -18,7 +18,7 @@ on:
     paths:
       - '.github/workflows/test-src-build-windows.yml'
       - 'libheif/windows/**'
-      - 'libheif/public_api.h'
+      - 'libheif/heif.h'
       - 'setup.*'
       - 'pyproject.toml'
       - 'pi-heif/libheif/windows/**'

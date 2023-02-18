@@ -56,13 +56,13 @@ class PillowHeifBuildExt(build_ext):
 
         if sys.platform.lower() == "win32":
             # Currently only MSYS2 is supported for Windows systems. Do a PR if you need support for anything else.
-            include_path_prefix = getenv("LIBHEIF_PATH_PREFIX")
+            include_path_prefix = getenv("MSYS2_PREFIX")
             if include_path_prefix is None:
                 include_path_prefix = "C:\\msys64\\mingw64"
                 warn(f"MSYS2_PREFIX environment variable is not set. Assuming `MSYS2_PREFIX={include_path_prefix}`")
 
             if not path.isdir(include_path_prefix):
-                raise ValueError("MSYS2 not found and `LIBHEIF_PATH_PREFIX` is not set or is invalid.")
+                raise ValueError("MSYS2 not found and `MSYS2_PREFIX` is not set or is invalid.")
 
             library_dir = path.join(include_path_prefix, "lib")
             # See comment a few lines below. We can't include MSYS2 directory before compiler directories :(
@@ -74,15 +74,14 @@ class PillowHeifBuildExt(build_ext):
             else:
                 warn("If you build this with MSYS2, you should not see this warning.")
 
-            self._update_extension(
-                "_pillow_heif", ["libheif"], extra_compile_args=["/d2FH4-", "/WX"], extra_link_args=["/WX"]
-            )
-
             # on Windows, we include root of project instead of MSYS2 directory.
             # Including MSYS2 directory leads to compilation errors, theirs `stdio.h` and others files are different.
             # ATTENTION: If someone know how without hacks include MSYS2 directory as last directory in list - help!
             self.compiler.include_dirs.append(path.dirname(path.abspath(__file__)))
 
+            self._update_extension(
+                "_pillow_heif", ["libheif"], extra_compile_args=["/d2FH4-", "/WX"], extra_link_args=["/WX"]
+            )
         elif sys.platform.lower() == "darwin":
             try:  # if Homebrew is installed, use its lib and include directories
                 homebrew_prefix = check_output(["brew", "--prefix"]).strip().decode("latin1")

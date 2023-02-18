@@ -12,6 +12,11 @@ from .as_plugin import (
     register_avif_opener,
     register_heif_opener,
 )
+from .constants import (
+    HeifColorPrimaries,
+    HeifMatrixCoefficients,
+    HeifTransferCharacteristics,
+)
 from .heif import (
     HeifFile,
     HeifImage,

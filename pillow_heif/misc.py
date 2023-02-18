@@ -56,7 +56,7 @@ def set_orientation(info: dict) -> Optional[int]:
         If both XMP and EXIF orientation tags present, EXIF orientation tag will be returned,
         but both tags will be removed.
 
-    :param info: `info` dictionary from `~PIL.Image.Image` or `~pillow_heif.HeifImage`.
+    :param info: `info` dictionary from :external:py:class:`~PIL.Image.Image` or :py:class:`~pillow_heif.HeifImage`.
     :returns: Original orientation or None if it is absent."""
 
     original_orientation = None

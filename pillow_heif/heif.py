@@ -152,7 +152,10 @@ class HeifFile:
     * :py:func:`~pillow_heif.open_heif`
     * :py:func:`~pillow_heif.read_heif`
     * :py:func:`~pillow_heif.from_pillow`
-    * :py:func:`~pillow_heif.from_bytes`"""
+    * :py:func:`~pillow_heif.from_bytes`
+
+    Exceptions that can be raised when working with methods:
+        `ValueError`, `EOFError`, `SyntaxError`, `RuntimeError`, `OSError`"""
 
     def __init__(self, fp=None, convert_hdr_to_8bit=True, bgr_mode=False, **kwargs):
         postprocess: bool = kwargs.get("postprocess", True)
@@ -279,8 +282,7 @@ class HeifFile:
 
         :param fp: A filename (string), pathlib.Path object or an object with `write` method.
 
-        :returns: None
-        :raises: :py:exc:`~pillow_heif.HeifError` or :py:exc:`ValueError`"""
+        :returns: None"""
 
         _encode_images(self._images, fp, **kwargs)
 
@@ -309,7 +311,7 @@ class HeifFile:
 
         .. note:: Supports ``stride`` value if needed.
 
-        :param mode: `BGR(A);16`, `RGB(A);16`, LA;16`, `L;16`, `I;16L`, `BGR(A)`, `RGB(A)`, `LA`, `L`
+        :param mode: see :ref:`image-modes`.
         :param size: tuple with ``width`` and ``height`` of image.
         :param data: bytes object with raw image data.
 
@@ -322,7 +324,7 @@ class HeifFile:
     def add_from_heif(self, image: HeifImage) -> HeifImage:
         """Add image to the container.
 
-        :param image: :py:class:`~pillow_heif.HeifImage`` class to add from.
+        :param image: :py:class:`~pillow_heif.HeifImage` class to add from.
 
         :returns: :py:class:`~pillow_heif.HeifImage` added object."""
 
@@ -398,7 +400,11 @@ def open_heif(fp, convert_hdr_to_8bit=True, bgr_mode=False, **kwargs) -> HeifFil
     :param bgr_mode: Boolean indicating should be `RGB(A)` images be opened in `BGR(A)` mode.
 
     :returns: :py:class:`~pillow_heif.HeifFile` object.
-    :exception HeifError: If file is corrupted or is not in Heif format."""
+    :exception ValueError: invalid input data.
+    :exception EOFError: corrupted image data.
+    :exception SyntaxError: unsupported feature.
+    :exception RuntimeError: some other error.
+    :exception OSError: out of memory."""
 
     return HeifFile(fp, convert_hdr_to_8bit, bgr_mode, **kwargs)
 
@@ -415,7 +421,11 @@ def read_heif(fp, convert_hdr_to_8bit=True, bgr_mode=False, **kwargs) -> HeifFil
     :param bgr_mode: Boolean indicating should be `RGB(A)` images be opened in `BGR(A)` mode.
 
     :returns: :py:class:`~pillow_heif.HeifFile` object.
-    :exception HeifError: If file is corrupted or is not in Heif format."""
+    :exception ValueError: invalid input data.
+    :exception EOFError: corrupted image data.
+    :exception SyntaxError: unsupported feature.
+    :exception RuntimeError: some other error.
+    :exception OSError: out of memory."""
 
     ret = open_heif(fp, convert_hdr_to_8bit, bgr_mode, **kwargs)
     for img in ret:
@@ -473,7 +483,7 @@ def from_bytes(mode: str, size: tuple, data, **kwargs) -> HeifFile:
 
     .. note:: Supports ``stride`` value if needed.
 
-    :param mode: `BGR(A);16`, `RGB(A);16`, LA;16`, `L;16`, `I;16L`, `BGR(A)`, `RGB(A)`, `LA`, `L`
+    :param mode: see :ref:`image-modes`.
     :param size: tuple with ``width`` and ``height`` of an image.
     :param data: bytes object with raw image data.
 

@@ -1,5 +1,27 @@
 All notable changes to this project will be documented in this file.
 
+## [0.10.0 - 2023-02-22]
+
+Reworked version with native C extension.
+
+### Added
+
+- Restored ability to build from source with libheif==1.12.0
+- Ability to encode images in `LA` mode
+
+### Changed
+
+- (Heif) `convert_to` method was removed, `bgr_mode` opt. parameter added to `open_heif`
+- Many other changes mostly for standalone usage. [topic](https://github.com/bigcat88/pillow_heif/issues/75)
+
+### Fixed
+
+Two bugs in XMP metadata handling that were causing exceptions. All versions were affected.
+Thanks to @eeyrw for pointing out such a problem.
+
+- Handling XMP data with `zero` byte at the end. #69
+- Handling XMP data in `latin1` encoding. #69
+
 ## [0.9.3 - 2023-01-22]
 
 ### Fixed

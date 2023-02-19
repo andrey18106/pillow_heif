@@ -23,6 +23,10 @@ on:
       - 'pi-heif/setup.cfg'
       - 'pillow_heif/_pillow_heif.c'
 
+concurrency:
+  group: src_macos-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   full_macos_11:
     name: macOS:11-x86_64

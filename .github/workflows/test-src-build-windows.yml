@@ -25,6 +25,10 @@ on:
       - 'pi-heif/setup.cfg'
       - 'pillow_heif/_pillow_heif.c'
 
+concurrency:
+  group: src_windows-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   full_windows_2019:
     name: Windows:2019-x86_64

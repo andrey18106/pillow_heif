@@ -7,7 +7,6 @@ load("cirrus", "env", "fs", "http")
 
 def main(ctx):
 
-    return []
     if env.get("CIRRUS_REPO_FULL_NAME") != "andrey18106/pillow_heif":
         return []
 

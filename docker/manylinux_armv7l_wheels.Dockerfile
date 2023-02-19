@@ -26,6 +26,7 @@ RUN \
   ./bootstrap.sh && ./configure && make && make check && make install && \
   cd ..
 
+ARG PY_VERSION
 RUN \
   echo "**** Install python build dependencies ****" && \
   python3 -m pip install wheel && \
@@ -35,7 +36,6 @@ RUN \
   python3 setup.py bdist_wheel && \
   echo "**** Repairing wheel ****" && \
   PTAG=$(echo $PY_VERSION | tr -d '.' | tr -d '"') && \
-  echo $PTAG && \
   python3 -m pip install auditwheel && \
   python3 -m auditwheel repair -w repaired_dist/ dist/*-cp$PTAG-*manylinux*.whl --plat manylinux_2_28_armv7l && \
   echo "**** Testing wheel ****" && \

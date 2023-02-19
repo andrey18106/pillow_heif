@@ -36,12 +36,12 @@ jobs:
       matrix:
         i: [
           { "docker_file": "manylinux_armv7l_wheels", "name": "manylinux" },
-#          { "docker_file": "musllinux_armv7l_wheels", "name": "musllinux" },
+          { "docker_file": "musllinux_armv7l_wheels", "name": "musllinux" },
         ]
         v: ["3.7", "3.8", "3.9", "3.10", "3.11"]
-#        exclude:
-#          - v: "3.7"
-#            i: { "docker_file": "musllinux_armv7l_wheels", "name": "musllinux" }
+        exclude:
+          - v: "3.7"
+            i: { "docker_file": "musllinux_armv7l_wheels", "name": "musllinux" }
 
     steps:
       - uses: actions/checkout@v3

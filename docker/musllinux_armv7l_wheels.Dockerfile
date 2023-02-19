@@ -1,6 +1,6 @@
-ARG PYTHON_VERSION
+ARG PY_VERSION
 
-FROM python:$PYTHON_VERSION-alpine3.15
+FROM python:$PY_VERSION-alpine3.15
 
 COPY . /pillow_heif
 
@@ -24,6 +24,7 @@ RUN \
   ./bootstrap.sh && ./configure && make && make check && make install && \
   cd ..
 
+ARG PY_VERSION
 RUN \
   echo "**** Install python build dependencies ****" && \
   python3 -m pip install wheel && \
@@ -32,11 +33,11 @@ RUN \
   cd pillow_heif && \
   python3 setup.py bdist_wheel && \
   echo "**** Repairing wheel ****" && \
-  PTAG=$(echo $PYTHON_VERSION | tr -d '.' | tr -d '"') && \
+  PTAG=$(echo $PY_VERSION | tr -d '.' | tr -d '"') && \
   python3 -m pip install auditwheel && \
-  python3 -m auditwheel repair -w repaired_dist/ dist/*cp$PTAG*musllinux*.whl && \
+  python3 -m auditwheel repair -w repaired_dist/ dist/*-cp$PTAG-*musllinux*.whl && \
   echo "**** Testing wheel ****" && \
-  python3 -m pip install repaired_dist/*cp$PTAG*musllinux*.whl && \
+  python3 -m pip install repaired_dist/*-cp$PTAG-*musllinux*.whl && \
   python3 -c "import pillow_heif; print(pillow_heif.libheif_info())" && \
   export PH_LIGHT_ACTION=1 && \
   python3 -m pytest -rs && \

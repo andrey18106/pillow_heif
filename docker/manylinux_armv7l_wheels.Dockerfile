@@ -1,6 +1,6 @@
-ARG PYTHON_VERSION
+ARG PY_VERSION
 
-FROM python:$PYTHON_VERSION-buster
+FROM python:$PY_VERSION-buster
 
 COPY . /pillow_heif
 
@@ -34,7 +34,7 @@ RUN \
   cd pillow_heif && \
   python3 setup.py bdist_wheel && \
   echo "**** Repairing wheel ****" && \
-  PTAG=$(echo $PYTHON_VERSION | tr -d '.' | tr -d '"') && \
+  PTAG=$(echo $PY_VERSION | tr -d '.' | tr -d '"') && \
   echo $PTAG && \
   python3 -m pip install auditwheel && \
   python3 -m auditwheel repair -w repaired_dist/ dist/*-cp$PTAG-*manylinux*.whl --plat manylinux_2_28_armv7l && \

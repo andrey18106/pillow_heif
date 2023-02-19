@@ -133,4 +133,4 @@ pillow_heif.register_avif_opener()
 
 &ast; **i686**, **x86_64**, **aarch64** wheels.
 
-`ARMv7`(`armv7l`) wheels are published only for [pi-heif](https://pypi.org/project/pi-heif/) from `0.10.0` version.
+`ARMv7l`, `PyPy` 32-bit wheels are published only for [pi-heif](https://pypi.org/project/pi-heif/) from `0.10.0` version.

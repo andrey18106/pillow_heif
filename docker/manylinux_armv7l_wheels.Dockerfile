@@ -36,7 +36,7 @@ RUN \
   echo "**** Python3.7: Install python build dependencies ****" && \
   python3 -m pip install --upgrade pip && \
   python3 -m pip install wheel && \
-  python3 -m pip install pytest Pillow \
+  python3 -m pip install pytest Pillow && \
   echo "**** Python3.7: Start building ****" && \
   cd pillow_heif && \
   python3 setup.py bdist_wheel && \
@@ -62,7 +62,7 @@ RUN \
   echo "**** Python3.8: Install python build dependencies ****" && \
   python3.8 -m pip install --upgrade pip && \
   python3.8 -m pip install wheel && \
-  python3.8 -m pip install pytest Pillow \
+  python3.8 -m pip install pytest Pillow && \
   echo "**** Python3.8: Start building ****" && \
   cd pillow_heif && \
   python3.8 setup.py bdist_wheel && \
@@ -88,7 +88,7 @@ RUN \
   echo "**** Python3.9: Install python build dependencies ****" && \
   python3.9 -m pip install --upgrade pip && \
   python3.9 -m pip install wheel && \
-  python3.9 -m pip install pytest Pillow \
+  python3.9 -m pip install pytest Pillow && \
   echo "**** Python3.9: Start building ****" && \
   cd pillow_heif && \
   python3.9 setup.py bdist_wheel && \
@@ -114,7 +114,7 @@ RUN \
   echo "**** Python3.10: Install python build dependencies ****" && \
   python3.10 -m pip install --upgrade pip && \
   python3.10 -m pip install wheel && \
-  python3.10 -m pip install pytest Pillow \
+  python3.10 -m pip install pytest Pillow && \
   echo "**** Python3.10: Start building ****" && \
   cd pillow_heif && \
   python3.10 setup.py bdist_wheel && \
@@ -140,7 +140,7 @@ RUN \
   echo "**** Python3.11: Install python build dependencies ****" && \
   python3.11 -m pip install --upgrade pip && \
   python3.11 -m pip install wheel && \
-  python3.11 -m pip install pytest Pillow \
+  python3.11 -m pip install pytest Pillow && \
   echo "**** Python3.11: Start building ****" && \
   cd pillow_heif && \
   python3.11 setup.py bdist_wheel && \

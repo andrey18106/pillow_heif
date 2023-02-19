@@ -28,7 +28,6 @@ RUN \
 
 RUN \
   echo "**** Install python build dependencies ****" && \
-  python3 -m pip install --upgrade pip && \
   python3 -m pip install wheel && \
   python3 -m pip install pytest Pillow && \
   echo "**** Start building ****" && \
@@ -36,10 +35,11 @@ RUN \
   python3 setup.py bdist_wheel && \
   echo "**** Repairing wheel ****" && \
   PTAG=$(echo $PYTHON_VERSION | tr -d '.' | tr -d '"') && \
+  echo $PTAG && \
   python3 -m pip install auditwheel && \
-  python3 -m auditwheel repair -w repaired_dist/ dist/*cp$PTAG*manylinux*.whl --plat manylinux_2_28_armv7l && \
+  python3 -m auditwheel repair -w repaired_dist/ dist/*-cp$PTAG-*manylinux*.whl --plat manylinux_2_28_armv7l && \
   echo "**** Testing wheel ****" && \
-  python3 -m pip install repaired_dist/*cp$PTAG*manylinux*.whl && \
+  python3 -m pip install repaired_dist/*-cp$PTAG-*manylinux*.whl && \
   python3 -c "import pillow_heif; print(pillow_heif.libheif_info())" && \
   export PH_LIGHT_ACTION=1 && \
   python3 -m pytest -rs && \

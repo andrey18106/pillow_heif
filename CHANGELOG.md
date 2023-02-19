@@ -14,14 +14,6 @@ Reworked version with native C extension.
 - (Heif) `convert_to` method was removed, `bgr_mode` opt. parameter added to `open_heif`
 - Many other changes mostly for standalone usage. [topic](https://github.com/bigcat88/pillow_heif/issues/75)
 
-### Fixed
-
-Two bugs in XMP metadata handling that were causing exceptions. All versions were affected.
-Thanks to @eeyrw for pointing out such a problem.
-
-- Handling XMP data with `zero` byte at the end. #69
-- Handling XMP data in `latin1` encoding. #69
-
 ## [0.9.3 - 2023-01-22]
 
 ### Fixed

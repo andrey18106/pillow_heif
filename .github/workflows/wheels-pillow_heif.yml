@@ -39,6 +39,9 @@ jobs:
 #          { "docker_file": "musllinux_armv7l_wheels", "name": "musllinux" },
         ]
         v: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+#        exclude:
+#          - v: "3.7"
+#            i: { "docker_file": "musllinux_armv7l_wheels", "name": "musllinux" }
 
     steps:
       - uses: actions/checkout@v3
@@ -51,7 +54,7 @@ jobs:
           context: .
           file: docker/${{ matrix.i['docker_file'] }}.Dockerfile
           build-args: |
-            PYTHON_VERSION=${{ matrix.v }}
+            PY_VERSION=${{ matrix.v }}
           platforms: linux/arm/v7
           push: false
           outputs: type=local,dest=./

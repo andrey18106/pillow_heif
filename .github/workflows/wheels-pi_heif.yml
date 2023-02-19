@@ -16,7 +16,7 @@ jobs:
         ref: ${{ github.ref }}
         check-name: 'macosx • aarch64 • Pi-Heif • Cirrus'
         repo-token: ${{ secrets.GITHUB_TOKEN }}
-        wait-interval: 10
+        wait-interval: 30
 
     - name: Download artifacts
       run: |
@@ -234,8 +234,8 @@ jobs:
     strategy:
       matrix:
         i: [
-          { "docker_file": "manylinux_armv7l_wheel", "name": "manylinux" },
-          { "docker_file": "musllinux_armv7l_wheel", "name": "musllinux" },
+          { "docker_file": "manylinux_armv7l_wheels", "name": "manylinux" },
+          { "docker_file": "musllinux_armv7l_wheels", "name": "musllinux" },
         ]
 
     steps:

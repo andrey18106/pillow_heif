@@ -4,78 +4,82 @@ on:
   push:
     branches: [ master ]
 
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   pillow_heif_build:
     if: "contains(github.event.head_commit.message, '[publish]')"
     name: Pillow-Heif
     uses: ./.github/workflows/wheels-pillow_heif.yml
 
-  pi_heif_build:
-    needs: [pillow_heif_build]
-    if: "contains(github.event.head_commit.message, '[publish]')"
-    name: Pi-Heif
-    uses: ./.github/workflows/wheels-pi_heif.yml
-
-  publish_pypi:
-    needs: [pi_heif_build]
-    if: "contains(github.event.head_commit.message, '[publish]')"
-    name: Upload to PyPi
-    runs-on: ubuntu-20.04
-
-    steps:
-      - uses: actions/checkout@v3
-      - name: Get tag
-        run: |
-          RELEASE_VERSION=$(sed -n "s/^__version__.*\"\(.*\)\"$/\\1/p" ./pillow_heif/_version.py)
-          echo RELEASE_TAG="v$RELEASE_VERSION" >> $GITHUB_ENV
-          CHANGELOG=$(grep -oPz "(?s)##\s\[$RELEASE_VERSION.+?(?=##\s\[|$)" ./CHANGELOG.md | tr -d '\0' | sed /^$/d | sed '1d')
-          CHANGELOG=$(echo "$CHANGELOG" | sed '$!N;s/^###.*\n#/#/;P;D' | sed '$!N;s/^###.*\n#/#/;P;D' | sed '${/^###/d;}')
-          echo "CHANGELOG<<EOF" >> $GITHUB_ENV
-          echo "$CHANGELOG" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-
-      - name: Pillow-Heif sdist and wheels
-        uses: actions/download-artifact@v3
-        with:
-          name: wheels_pillow_heif
-          path: wheelhouse_pillow_heif
-
-      - name: Pi-Heif sdist and wheels
-        uses: actions/download-artifact@v3
-        with:
-          name: wheels_pi_heif
-          path: wheelhouse_pi_heif
-
-      - name: Publish Pillow-Heif
-        run: |
-          python3 -m pip install twine
-          ls -la wheelhouse_pillow_heif
-          du -h
-#          python3 -m twine upload --skip-existing wheelhouse_pillow_heif/*.whl
-#          python3 -m twine upload --skip-existing wheelhouse_pillow_heif/*tar.gz
-#        env:
-#          TWINE_USERNAME: __token__
-#          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN_PILLOW_HEIF }}
-#          TWINE_REPOSITORY: testpypi
-
-      - name: Publish Pi-Heif
-        run: |
-          python3 -m pip install twine
-          ls -la wheelhouse_pi_heif
-          du -h
-#          python3 -m twine upload --skip-existing wheelhouse_pi_heif/*.whl
-#          python3 -m twine upload --skip-existing wheelhouse_pi_heif/*tar.gz
-#        env:
-#          TWINE_USERNAME: __token__
-#          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN_PI_HEIF }}
-#          TWINE_REPOSITORY: testpypi
-
-#      - name: Create release draft
-#        uses: ncipollo/release-action@v1.12.0
+#  pi_heif_build:
+#    needs: [pillow_heif_build]
+#    if: "contains(github.event.head_commit.message, '[publish]')"
+#    name: Pi-Heif
+#    uses: ./.github/workflows/wheels-pi_heif.yml
+#
+#  publish_pypi:
+#    needs: [pi_heif_build]
+#    if: "contains(github.event.head_commit.message, '[publish]')"
+#    name: Upload to PyPi
+#    runs-on: ubuntu-20.04
+#
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Get tag
+#        run: |
+#          RELEASE_VERSION=$(sed -n "s/^__version__.*\"\(.*\)\"$/\\1/p" ./pillow_heif/_version.py)
+#          echo RELEASE_TAG="v$RELEASE_VERSION" >> $GITHUB_ENV
+#          CHANGELOG=$(grep -oPz "(?s)##\s\[$RELEASE_VERSION.+?(?=##\s\[|$)" ./CHANGELOG.md | tr -d '\0' | sed /^$/d | sed '1d')
+#          CHANGELOG=$(echo "$CHANGELOG" | sed '$!N;s/^###.*\n#/#/;P;D' | sed '$!N;s/^###.*\n#/#/;P;D' | sed '${/^###/d;}')
+#          echo "CHANGELOG<<EOF" >> $GITHUB_ENV
+#          echo "$CHANGELOG" >> $GITHUB_ENV
+#          echo "EOF" >> $GITHUB_ENV
+#
+#      - name: Pillow-Heif sdist and wheels
+#        uses: actions/download-artifact@v3
 #        with:
-#          name: ${{ env.RELEASE_TAG }}
-#          tag: ${{ env.RELEASE_TAG }}
-#          commit: ${{ github.ref }}
-#          draft: false
-#          body: ${{ env.CHANGELOG }}
-#          token: ${{ secrets.PAT_FINE_GRAINED }}
+#          name: wheels_pillow_heif
+#          path: wheelhouse_pillow_heif
+#
+#      - name: Pi-Heif sdist and wheels
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: wheels_pi_heif
+#          path: wheelhouse_pi_heif
+#
+#      - name: Publish Pillow-Heif
+#        run: |
+#          python3 -m pip install twine
+#          ls -la wheelhouse_pillow_heif
+#          du -h
+##          python3 -m twine upload --skip-existing wheelhouse_pillow_heif/*.whl
+##          python3 -m twine upload --skip-existing wheelhouse_pillow_heif/*tar.gz
+##        env:
+##          TWINE_USERNAME: __token__
+##          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN_PILLOW_HEIF }}
+##          TWINE_REPOSITORY: testpypi
+#
+#      - name: Publish Pi-Heif
+#        run: |
+#          python3 -m pip install twine
+#          ls -la wheelhouse_pi_heif
+#          du -h
+##          python3 -m twine upload --skip-existing wheelhouse_pi_heif/*.whl
+##          python3 -m twine upload --skip-existing wheelhouse_pi_heif/*tar.gz
+##        env:
+##          TWINE_USERNAME: __token__
+##          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN_PI_HEIF }}
+##          TWINE_REPOSITORY: testpypi
+#
+##      - name: Create release draft
+##        uses: ncipollo/release-action@v1.12.0
+##        with:
+##          name: ${{ env.RELEASE_TAG }}
+##          tag: ${{ env.RELEASE_TAG }}
+##          commit: ${{ github.ref }}
+##          draft: false
+##          body: ${{ env.CHANGELOG }}
+##          token: ${{ secrets.PAT_FINE_GRAINED }}

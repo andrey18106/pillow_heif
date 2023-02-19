@@ -133,5 +133,4 @@ pillow_heif.register_avif_opener()
 
 &ast; **i686**, **x86_64**, **aarch64** wheels.
 
-For `ARMv7`(`armv7l`) wheels are present for Debian 10+(Ubuntu 20.04+) and Alpine 14+.
-They supports only decoding and builds without `x265` encoder.
+`ARMv7`(`armv7l`) wheels are published only for `pi-heif` from `0.10.0` version.

@@ -36,7 +36,7 @@ jobs:
       matrix:
         i: [
           { "docker_file": "manylinux_armv7l_wheels", "name": "manylinux" },
-          { "docker_file": "musllinux_armv7l_wheels", "name": "musllinux" },
+#          { "docker_file": "musllinux_armv7l_wheels", "name": "musllinux" },
         ]
 
     steps:

@@ -5,14 +5,16 @@ COPY . /pillow_heif
 RUN \
   apt-get update && \
   apt-get install -y \
-    build-essential \
     python3-pip \
     libfribidi-dev \
     libharfbuzz-dev \
     libjpeg-dev \
     liblcms2-dev \
     libffi-dev \
+    git \
     wget \
+    cmake \
+    build-essential \
     zlib1g-dev \
     libncurses5-dev \
     libgdbm-dev \

@@ -11,10 +11,11 @@ RUN \
     libjpeg-dev \
     liblcms2-dev \
     libffi-dev \
+    libtool \
     git \
     wget \
-    cmake \
     build-essential \
+    cmake \
     zlib1g-dev \
     libncurses5-dev \
     libgdbm-dev \

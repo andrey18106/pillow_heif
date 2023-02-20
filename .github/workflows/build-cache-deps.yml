@@ -112,12 +112,12 @@ jobs:
           KEY_LINUX_LIBS: ${{ hashFiles('libheif/linux/**') }}
           KEY_C_BUILD: ${{ hashFiles('libheif/linux_*.py') }}-${{ hashFiles('libheif/setup.py') }}
 
-      - name: debug
-        run: |
-          echo $PWD
-          ls -la .
-          ls -la ./build_cache
-          ls -la ./build_cache/libde265
+#      - name: debug
+#        run: |
+#          echo $PWD
+#          ls -la .
+#          ls -la ./build_cache
+#          ls -la ./build_cache/libde265
 
       - name: Build Pi-Heif
         uses: docker/build-push-action@v4

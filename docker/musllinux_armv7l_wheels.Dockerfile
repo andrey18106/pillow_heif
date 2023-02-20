@@ -2,7 +2,7 @@ ARG PY_VERSION
 
 FROM python:$PY_VERSION-alpine3.15
 
-COPY . /pillow_heif
+COPY . /
 
 RUN \
   apk add --no-cache \
@@ -30,8 +30,7 @@ RUN \
   python3 -m pip install wheel && \
   python3 -m pip install pytest Pillow && \
   echo "**** Start building ****" && \
-  export BUILD_DIR="$PWD/build_cache" && \
-  echo $BUILD_DIR && \
+  export BUILD_DIR="/build_cache" && \
   cd pillow_heif && \
   python3 setup.py bdist_wheel -d dist_musllinux && \
   echo "**** Repairing wheel ****" && \

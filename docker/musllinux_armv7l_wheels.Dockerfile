@@ -32,6 +32,8 @@ RUN \
   echo "**** Start building ****" && \
   cd pillow_heif && \
   export BUILD_DIR="$PWD/build_cache" && \
+  echo $BUILD_DIR && \
+  ls -la $BUILD_DIR && \
   python3 setup.py bdist_wheel -d dist_musllinux && \
   echo "**** Repairing wheel ****" && \
   PTAG=$(echo $PY_VERSION | tr -d '.' | tr -d '"') && \

@@ -79,7 +79,7 @@ jobs:
 #      - name: Fix cache permissions
 #        run: sudo chmod -R 777 ${{ env.BUILD_DIR_PREFIX }}
 
-  dependencies_linux_armv7:
+  pi_heif_dependencies_linux_armv7:
     strategy:
       fail-fast: true
       matrix:
@@ -88,10 +88,10 @@ jobs:
           { "docker_file": "musllinux_armv7l_wheels", "name": "musllinux" },
         ]
         v: ["3.8"]
-    name: ${{ matrix.i['name'] }} • ARMv7l
+    name: Pi-Heif • ARMv7l • ${{ matrix.i['name'] }}
     runs-on: ubuntu-20.04
     env:
-      KEY_HEAD: ARMv7l-${{ matrix.i['name'] }}
+      KEY_HEAD: Pi-Heif-ARMv7l-${{ matrix.i['name'] }}
       BUILD_DIR: "./build_cache"
 
     steps:

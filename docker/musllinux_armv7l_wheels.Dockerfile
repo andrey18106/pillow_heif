@@ -17,24 +17,23 @@ RUN \
     jpeg-dev \
     lcms2-dev
 
-#RUN \
-#  echo "**** Installing patchelf ****" && \
-#  git clone -b 0.17.2 https://github.com/NixOS/patchelf.git && \
-#  cd patchelf && \
-#  ./bootstrap.sh && ./configure && make && make check && make install && \
-#  cd ..
+RUN \
+  echo "**** Installing patchelf ****" && \
+  git clone -b 0.17.2 https://github.com/NixOS/patchelf.git && \
+  cd patchelf && \
+  ./bootstrap.sh && ./configure && make && make install && \
+  cd ..
 
 ARG PY_VERSION
 RUN \
-  ls -la . && \
-  ls -la tmp && \
-  ls -la pi_heif && \
-  ls -la pi_heif/tmp && \
   echo "**** Install python build dependencies ****" && \
   python3 -m pip install wheel && \
   python3 -m pip install pytest Pillow && \
   echo "**** Start building ****" && \
   cd pillow_heif && \
+  BUILD_DIR_PREFIX="$PWD/tmp/pillow"_"heif" && \
+  ls -la $BUILD_DIR_PREFIX && \
+  ls -la $BUILD_DIR_PREFIX/build-stuff && \
   python3 setup.py bdist_wheel -d dist_musllinux && \
   echo "**** Repairing wheel ****" && \
   PTAG=$(echo $PY_VERSION | tr -d '.' | tr -d '"') && \

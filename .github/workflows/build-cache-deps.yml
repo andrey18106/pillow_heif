@@ -112,6 +112,14 @@ jobs:
           KEY_LINUX_LIBS: ${{ hashFiles('libheif/linux/**') }}
           KEY_C_BUILD: ${{ hashFiles('libheif/linux_*.py') }}-${{ hashFiles('libheif/setup.py') }}
 
+      - name: debug
+        run: |
+          echo $PWD
+          ls -la .
+          ls -la ./tmp
+          ls -la ./tmp/pillow_heif
+          ls -la ./tmp/pillow_heif/build-stuff
+
       - name: Build Pi-Heif
         uses: docker/build-push-action@v4
         with:
@@ -125,6 +133,7 @@ jobs:
 
       - name: Checking built wheels
         run: |
+          echo $PWD
           ls -la .
           ls -la ./tmp
           ls -la ./tmp/pillow_heif

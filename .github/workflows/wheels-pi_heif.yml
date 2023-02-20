@@ -263,6 +263,8 @@ jobs:
           KEY_LINUX_LIBS: ${{ hashFiles('libheif/linux/**') }}
           KEY_C_BUILD: ${{ hashFiles('libheif/linux_*.py') }}-${{ hashFiles('libheif/setup.py') }}
 
+      - run: ls -la .
+
       - name: Build Pi-Heif
         uses: docker/build-push-action@v4
         with:

@@ -132,10 +132,6 @@ jobs:
 
       - name: Checking built wheels
         run: |
-          ls -la .
-          ls -la ./build_cache
-          ls -la ./build_cache/libde265
-          ls -la ./pi_heif/repaired_dist
           python3 -m pip install twine
           python3 -m twine check ./pi_heif/repaired_dist/*
 

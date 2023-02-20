@@ -84,7 +84,7 @@ jobs:
       fail-fast: true
       matrix:
         i: [
-          { "docker_file": "manylinux_armv7l_wheels", "name": "manylinux" },
+#          { "docker_file": "manylinux_armv7l_wheels", "name": "manylinux" },
           { "docker_file": "musllinux_armv7l_wheels", "name": "musllinux" },
         ]
         v: ["3.8"]
@@ -96,6 +96,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - name: Transform to Pi-Heif
+        run: |
+          cp -r -v ./pi-heif/* .
+          python3 .github/transform_to-pi_heif.py
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
 
@@ -106,11 +111,6 @@ jobs:
         env:
           KEY_LINUX_LIBS: ${{ hashFiles('libheif/linux/**') }}
           KEY_C_BUILD: ${{ hashFiles('libheif/linux_*.py') }}-${{ hashFiles('libheif/setup.py') }}
-
-      - name: Transform to Pi-Heif
-        run: |
-          cp -r -v ./pi-heif/* .
-          python3 .github/transform_to-pi_heif.py
 
       - name: Build Pi-Heif
         uses: docker/build-push-action@v4

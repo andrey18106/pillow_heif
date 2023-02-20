@@ -17,17 +17,19 @@ RUN \
     jpeg-dev \
     lcms2-dev
 
-RUN \
-  echo "**** Installing patchelf ****" && \
-  git clone -b 0.17.2 https://github.com/NixOS/patchelf.git && \
-  cd patchelf && \
-  ./bootstrap.sh && ./configure && make && make check && make install && \
-  cd ..
+#RUN \
+#  echo "**** Installing patchelf ****" && \
+#  git clone -b 0.17.2 https://github.com/NixOS/patchelf.git && \
+#  cd patchelf && \
+#  ./bootstrap.sh && ./configure && make && make check && make install && \
+#  cd ..
 
 ARG PY_VERSION
 RUN \
   ls -la . && \
   ls -la tmp && \
+  ls -la pi_heif && \
+  ls -la pi_heif/tmp && \
   echo "**** Install python build dependencies ****" && \
   python3 -m pip install wheel && \
   python3 -m pip install pytest Pillow && \

@@ -27,7 +27,6 @@ RUN \
 #  cd ..
 
 ARG PY_VERSION
-ARG BUILD_DIR_PREFIX
 RUN \
   echo "**** Install python build dependencies ****" && \
   python3 -m pip install wheel && \

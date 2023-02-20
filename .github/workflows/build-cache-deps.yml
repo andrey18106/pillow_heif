@@ -92,7 +92,6 @@ jobs:
     runs-on: ubuntu-20.04
     env:
       KEY_HEAD: ARMv7l-${{ matrix.i['name'] }}
-      BUILD_DIR_PREFIX: "tmp_cache"
 
     steps:
       - uses: actions/checkout@v3
@@ -119,7 +118,6 @@ jobs:
           file: docker/${{ matrix.i['docker_file'] }}.Dockerfile
           build-args: |
             PY_VERSION=${{ matrix.v }}
-            BUILD_DIR_PREFIX=${{ env.BUILD_DIR_PREFIX }}
           platforms: linux/arm/v7
           push: false
           outputs: type=local,dest=./
@@ -127,7 +125,8 @@ jobs:
       - name: Checking built wheels
         run: |
           ls -la ./
-          ls -la ./tmp_cache
+          ls -la ./tmp
+          ls -la ./tmp/pillow_heif
           ls -la ./pi_heif/repaired_dist
           python3 -m pip install twine
           python3 -m twine check ./pi_heif/repaired_dist/*

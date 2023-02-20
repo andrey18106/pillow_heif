@@ -92,7 +92,7 @@ jobs:
     runs-on: ubuntu-20.04
     env:
       KEY_HEAD: ARMv7l-${{ matrix.i['name'] }}
-      BUILD_DIR_PREFIX: "./tmp_cache"
+      BUILD_DIR_PREFIX: "tmp_cache"
 
     steps:
       - uses: actions/checkout@v3

@@ -8,6 +8,7 @@ Reworked version with native C extension.
 
 - Restored ability to build from source with libheif==1.12.0
 - Ability to encode images in `LA` mode
+- `libde265`(HEIF decoder) updated from 1.0.9 to 1.0.11 version.
 
 ### Changed
 

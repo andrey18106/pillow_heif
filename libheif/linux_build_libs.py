@@ -11,7 +11,7 @@ PH_LIGHT_VERSION = sys.maxsize <= 2**32 or getenv("PH_LIGHT_ACTION", "0") != "0"
 
 LIBX265_URL = "https://bitbucket.org/multicoreware/x265_git/get/0b75c44c10e605fe9e9ebed58f04a46271131827.tar.gz"
 LIBAOM_URL = "https://aomedia.googlesource.com/aom/+archive/v3.5.0.tar.gz"
-LIBDE265_URL = "https://github.com/strukturag/libde265/releases/download/v1.0.9/libde265-1.0.9.tar.gz"
+LIBDE265_URL = "https://github.com/strukturag/libde265/releases/download/v1.0.11/libde265-1.0.11.tar.gz"
 LIBHEIF_URL = "https://github.com/strukturag/libheif/releases/download/v1.14.2/libheif-1.14.2.tar.gz"
 
 
@@ -137,6 +137,7 @@ def build_lib_linux(url: str, name: str, musl: bool = False):
             chdir(_lib_path)
         else:
             _build_path = path.join(_lib_path, "build")
+            print("0000")
             makedirs(_build_path)
             if name == "aom":
                 download_extract_to(url, path.join(_lib_path, "aom"), False)

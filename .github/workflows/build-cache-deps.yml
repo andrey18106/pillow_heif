@@ -5,6 +5,7 @@ on:
     branches: [master]
     paths:
       - '.github/workflows/build-cache-deps.yml'
+      - 'docker/*_armv7l_wheels.Dockerfile'
       - 'libheif/linux/**'
       - 'libheif/linux_*.py'
       - 'setup.py'

@@ -26,6 +26,8 @@ RUN \
 
 ARG PY_VERSION
 RUN \
+  ls -la . && \
+  ls -la tmp && \
   echo "**** Install python build dependencies ****" && \
   python3 -m pip install wheel && \
   python3 -m pip install pytest Pillow && \

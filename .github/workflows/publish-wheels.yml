@@ -4,10 +4,6 @@ on:
   push:
     branches: [ master ]
 
-concurrency:
-  group: publish-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
 #  pillow_heif_build:
 #    if: "contains(github.event.head_commit.message, '[publish]')"

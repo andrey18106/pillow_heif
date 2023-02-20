@@ -86,6 +86,7 @@ jobs:
           { "docker_file": "manylinux_armv7l_wheels", "name": "manylinux" },
           { "docker_file": "musllinux_armv7l_wheels", "name": "musllinux" },
         ]
+        v: ["3.8"]
     name: ${{ matrix.i['name'] }} • ARMv7l
     runs-on: ubuntu-20.04
     env:
@@ -116,7 +117,7 @@ jobs:
           context: .
           file: docker/${{ matrix.i['docker_file'] }}.Dockerfile
           build-args: |
-            PY_VERSION="3.8"
+            PY_VERSION=${{ matrix.v }}
             BUILD_DIR_PREFIX=${{ env.BUILD_DIR_PREFIX }}
           platforms: linux/arm/v7
           push: false

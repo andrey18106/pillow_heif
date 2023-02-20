@@ -84,7 +84,7 @@ jobs:
       fail-fast: true
       matrix:
         i: [
-#          { "docker_file": "manylinux_armv7l_wheels", "name": "manylinux" },
+          { "docker_file": "manylinux_armv7l_wheels", "name": "manylinux" },
           { "docker_file": "musllinux_armv7l_wheels", "name": "musllinux" },
         ]
         v: ["3.8"]
@@ -112,13 +112,6 @@ jobs:
           KEY_LINUX_LIBS: ${{ hashFiles('libheif/linux/**') }}
           KEY_C_BUILD: ${{ hashFiles('libheif/linux_*.py') }}-${{ hashFiles('libheif/setup.py') }}
 
-      - name: debug
-        run: |
-          echo $PWD
-          ls -la .
-          ls -la ./build_cache
-          ls -la ./build_cache/libde265
-
       - name: Build Pi-Heif
         uses: docker/build-push-action@v4
         with:
@@ -133,13 +126,13 @@ jobs:
       - name: Checking built wheels
         run: |
           python3 -m pip install twine
-          python3 -m twine check ./pi_heif/repaired_dist/*
+          python3 -m twine check ./repaired_dist/*
 
       - name: Uploading wheel
         uses: actions/upload-artifact@v3
         with:
           name: wheels_pi_heif
-          path: ./pi_heif/repaired_dist/*.whl
+          path: ./repaired_dist/*.whl
           if-no-files-found: error
 
       - name: Fix cache permissions

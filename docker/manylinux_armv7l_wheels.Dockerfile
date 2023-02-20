@@ -2,7 +2,7 @@ ARG PY_VERSION
 
 FROM python:$PY_VERSION-buster
 
-COPY . /pillow_heif
+COPY . /
 
 RUN \
   apt-get update && \
@@ -32,7 +32,7 @@ RUN \
   python3 -m pip install wheel && \
   python3 -m pip install pytest Pillow && \
   echo "**** Start building ****" && \
-  cd pillow_heif && \
+  export BUILD_DIR="/build_cache" && \
   python3 setup.py bdist_wheel -d dist_manylinux && \
   echo "**** Repairing wheel ****" && \
   PTAG=$(echo $PY_VERSION | tr -d '.' | tr -d '"') && \

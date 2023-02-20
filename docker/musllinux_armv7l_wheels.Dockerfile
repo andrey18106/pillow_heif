@@ -31,7 +31,6 @@ RUN \
   python3 -m pip install pytest Pillow && \
   echo "**** Start building ****" && \
   export BUILD_DIR="/build_cache" && \
-  cd pillow_heif && \
   python3 setup.py bdist_wheel -d dist_musllinux && \
   echo "**** Repairing wheel ****" && \
   PTAG=$(echo $PY_VERSION | tr -d '.' | tr -d '"') && \

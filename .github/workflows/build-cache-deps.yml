@@ -128,7 +128,7 @@ jobs:
           CIBW_ARCHS: ${{ matrix.cibw_arch }}
           CIBW_BEFORE_ALL_LINUX: ${{ env.INSTALL_OS_PACKAGES }}
           CIBW_ENVIRONMENT_LINUX: BUILD_DIR=/host${{ env.BUILD_DIR }} PH_LIGHT_ACTION=1
-          CIBW_TEST_COMMAND: "python3 -c 'import pillow_heif; print(pillow_heif.libheif_info())'"
+          CIBW_TEST_COMMAND: "python3 -c 'import pi_heif; print(pi_heif.libheif_info())'"
           CIBW_TEST_EXTRAS: ""
           CIBW_BUILD_VERBOSITY: 1
 

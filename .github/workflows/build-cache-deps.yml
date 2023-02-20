@@ -92,7 +92,7 @@ jobs:
     runs-on: ubuntu-20.04
     env:
       KEY_HEAD: ARMv7l-${{ matrix.i['name'] }}
-      BUILD_DIR_PREFIX: "./tmp/pillow_heif"
+      BUILD_DIR: "./build_cache"
 
     steps:
       - uses: actions/checkout@v3
@@ -106,7 +106,7 @@ jobs:
 
       - uses: actions/cache@v3
         with:
-          path: ${{ env.BUILD_DIR_PREFIX }}/build-stuff
+          path: ${{ env.BUILD_DIR }}
           key: ${{ env.KEY_HEAD }}-${{ env.KEY_C_BUILD }}-${{ env.KEY_LINUX_LIBS }}
         env:
           KEY_LINUX_LIBS: ${{ hashFiles('libheif/linux/**') }}
@@ -116,9 +116,8 @@ jobs:
         run: |
           echo $PWD
           ls -la .
-          ls -la ./tmp
-          ls -la ./tmp/pillow_heif
-          ls -la ./tmp/pillow_heif/build-stuff
+          ls -la ./build_cache
+          ls -la ./build_cache/libde265
 
       - name: Build Pi-Heif
         uses: docker/build-push-action@v4
@@ -133,11 +132,9 @@ jobs:
 
       - name: Checking built wheels
         run: |
-          echo $PWD
           ls -la .
-          ls -la ./tmp
-          ls -la ./tmp/pillow_heif
-          ls -la ./tmp/pillow_heif/build-stuff
+          ls -la ./build_cache
+          ls -la ./build_cache/libde265
           ls -la ./pi_heif/repaired_dist
           python3 -m pip install twine
           python3 -m twine check ./pi_heif/repaired_dist/*

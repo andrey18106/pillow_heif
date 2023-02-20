@@ -9,13 +9,13 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  pillow_heif_build:
-    if: "contains(github.event.head_commit.message, '[publish]')"
-    name: Pillow-Heif
-    uses: ./.github/workflows/wheels-pillow_heif.yml
+#  pillow_heif_build:
+#    if: "contains(github.event.head_commit.message, '[publish]')"
+#    name: Pillow-Heif
+#    uses: ./.github/workflows/wheels-pillow_heif.yml
 
   pi_heif_build:
-    needs: [pillow_heif_build]
+#    needs: [pillow_heif_build]
     if: "contains(github.event.head_commit.message, '[publish]')"
     name: Pi-Heif
     uses: ./.github/workflows/wheels-pi_heif.yml
@@ -38,11 +38,11 @@ jobs:
           echo "$CHANGELOG" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
-      - name: Pillow-Heif sdist and wheels
-        uses: actions/download-artifact@v3
-        with:
-          name: wheels_pillow_heif
-          path: wheelhouse_pillow_heif
+#      - name: Pillow-Heif sdist and wheels
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: wheels_pillow_heif
+#          path: wheelhouse_pillow_heif
 
       - name: Pi-Heif sdist and wheels
         uses: actions/download-artifact@v3
@@ -50,11 +50,11 @@ jobs:
           name: wheels_pi_heif
           path: wheelhouse_pi_heif
 
-      - name: Publish Pillow-Heif
-        run: |
-          python3 -m pip install twine
-          ls -la wheelhouse_pillow_heif
-          du -h
+#      - name: Publish Pillow-Heif
+#        run: |
+#          python3 -m pip install twine
+#          ls -la wheelhouse_pillow_heif
+#          du -h
 #          python3 -m twine upload --skip-existing wheelhouse_pillow_heif/*.whl
 #          python3 -m twine upload --skip-existing wheelhouse_pillow_heif/*tar.gz
 #        env:

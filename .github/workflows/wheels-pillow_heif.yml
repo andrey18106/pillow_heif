@@ -119,7 +119,7 @@ jobs:
     name: ${{ matrix.cibw_buildlinux }} • ${{ matrix.cibw_arch }} • CPython
     runs-on: ubuntu-20.04
     env:
-      BUILD_DIR_PREFIX: "/tmp/pillow_heif"
+      BUILD_DIR: "/tmp/ph_build_stuff"
       KEY_HEAD: ${{ matrix.cibw_arch }}-${{ matrix.cibw_buildlinux }}
 
     steps:
@@ -142,7 +142,7 @@ jobs:
 
       - uses: actions/cache@v3
         with:
-          path: ${{ env.BUILD_DIR_PREFIX }}/build-stuff
+          path: ${{ env.BUILD_DIR_PREFIX }}
           key: ${{ env.KEY_HEAD }}-${{ env.KEY_C_BUILD }}-${{ env.KEY_LINUX_LIBS }}
         env:
           KEY_LINUX_LIBS: ${{ hashFiles('libheif/linux/**') }}
@@ -156,7 +156,7 @@ jobs:
           CIBW_BUILD: ${{ format('cp3*-{0}_{1}', matrix.cibw_buildlinux, matrix.cibw_arch) }}
           CIBW_ARCHS: ${{ matrix.cibw_arch }}
           CIBW_BEFORE_ALL_LINUX: ${{ env.INSTALL_OS_PACKAGES }}
-          CIBW_ENVIRONMENT_LINUX: BUILD_DIR_PREFIX=/host${{ env.BUILD_DIR_PREFIX }} PH_FULL_ACTION=1
+          CIBW_ENVIRONMENT_LINUX: BUILD_DIR=/host${{ env.BUILD_DIR }} PH_FULL_ACTION=1
 
       - name: Checking built wheels
         run: |
@@ -171,7 +171,7 @@ jobs:
           if-no-files-found: error
 
       - name: Fix cache permissions
-        run: sudo chmod -R 777 ${{ env.BUILD_DIR_PREFIX }}
+        run: sudo chmod -R 777 ${{ env.BUILD_DIR }}
 
   wheels_linux_cpython_32bit:
     strategy:
@@ -182,7 +182,7 @@ jobs:
     name: ${{ matrix.cibw_buildlinux }} • ${{ matrix.cibw_arch }} • CPython
     runs-on: ubuntu-20.04
     env:
-      BUILD_DIR_PREFIX: "/tmp/pillow_heif"
+      BUILD_DIR: "/tmp/ph_build_stuff"
       KEY_HEAD: ${{ matrix.cibw_arch }}-${{ matrix.cibw_buildlinux }}
 
     steps:
@@ -201,7 +201,7 @@ jobs:
 
       - uses: actions/cache@v3
         with:
-          path: ${{ env.BUILD_DIR_PREFIX }}/build-stuff
+          path: ${{ env.BUILD_DIR }}
           key: ${{ env.KEY_HEAD }}-${{ env.KEY_C_BUILD }}-${{ env.KEY_LINUX_LIBS }}
         env:
           KEY_LINUX_LIBS: ${{ hashFiles('libheif/linux/**') }}
@@ -215,7 +215,7 @@ jobs:
           CIBW_BUILD: ${{ format('cp3*-{0}_{1}', matrix.cibw_buildlinux, matrix.cibw_arch) }}
           CIBW_ARCHS: ${{ matrix.cibw_arch }}
           CIBW_BEFORE_ALL_LINUX: ${{ env.INSTALL_OS_PACKAGES }}
-          CIBW_ENVIRONMENT_LINUX: BUILD_DIR_PREFIX=/host${{ env.BUILD_DIR_PREFIX }} PH_LIGHT_ACTION=1
+          CIBW_ENVIRONMENT_LINUX: BUILD_DIR=/host${{ env.BUILD_DIR }} PH_LIGHT_ACTION=1
 
       - name: Checking built wheels
         run: |
@@ -230,7 +230,7 @@ jobs:
           if-no-files-found: error
 
       - name: Fix cache permissions
-        run: sudo chmod -R 777 ${{ env.BUILD_DIR_PREFIX }}
+        run: sudo chmod -R 777 ${{ env.BUILD_DIR }}
 
   wheels_linux_pypy:
     strategy:
@@ -242,7 +242,7 @@ jobs:
     name: ${{ matrix.cibw_buildlinux }} • ${{ matrix.cibw_arch }} • ${{ matrix.cibw_build }}
     runs-on: ubuntu-20.04
     env:
-      BUILD_DIR_PREFIX: "/tmp/pillow_heif"
+      BUILD_DIR: "/tmp/ph_build_stuff"
       KEY_HEAD: ${{ matrix.cibw_arch }}-${{ matrix.cibw_buildlinux }}
 
     steps:
@@ -259,7 +259,7 @@ jobs:
 
       - uses: actions/cache@v3
         with:
-          path: ${{ env.BUILD_DIR_PREFIX }}/build-stuff
+          path: ${{ env.BUILD_DIR }}
           key: ${{ env.KEY_HEAD }}-${{ env.KEY_C_BUILD }}-${{ env.KEY_LINUX_LIBS }}
         env:
           KEY_LINUX_LIBS: ${{ hashFiles('libheif/linux/**') }}
@@ -273,7 +273,7 @@ jobs:
           CIBW_BUILD: ${{ format('{0}-{1}_{2}', matrix.cibw_build , matrix.cibw_buildlinux, matrix.cibw_arch) }}
           CIBW_ARCHS: ${{ matrix.cibw_arch }}
           CIBW_BEFORE_ALL_LINUX: "yum makecache && yum install -y libjpeg-turbo-devel lcms2-devel"
-          CIBW_ENVIRONMENT_LINUX: BUILD_DIR_PREFIX=/host${{ env.BUILD_DIR_PREFIX }} PH_FULL_ACTION=1
+          CIBW_ENVIRONMENT_LINUX: BUILD_DIR=/host${{ env.BUILD_DIR }} PH_FULL_ACTION=1
 
       - name: Checking built wheels
         run: |
@@ -288,7 +288,7 @@ jobs:
           if-no-files-found: error
 
       - name: Fix cache permissions
-        run: sudo chmod -R 777 ${{ env.BUILD_DIR_PREFIX }}
+        run: sudo chmod -R 777 ${{ env.BUILD_DIR }}
 
   sdist:
     name: Source distribution

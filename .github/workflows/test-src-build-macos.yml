@@ -69,7 +69,7 @@ jobs:
 
       - name: Install libheif from formula
         run: |
-          brew uninstall --force --ignore-dependencies imagemagick x265 aom
+          brew uninstall --force --ignore-dependencies imagemagick libheif x265 aom
           brew install --formula ./libheif/macos/libheif.rb
 
       - name: Installing Pi-Heif

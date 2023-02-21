@@ -142,7 +142,7 @@ jobs:
 
       - uses: actions/cache@v3
         with:
-          path: ${{ env.BUILD_DIR_PREFIX }}
+          path: ${{ env.BUILD_DIR }}
           key: ${{ env.KEY_HEAD }}-${{ env.KEY_C_BUILD }}-${{ env.KEY_LINUX_LIBS }}
         env:
           KEY_LINUX_LIBS: ${{ hashFiles('libheif/linux/**') }}

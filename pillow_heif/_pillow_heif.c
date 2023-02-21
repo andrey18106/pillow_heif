@@ -875,6 +875,17 @@ int decode_image(CtxImageObject* self) {
         return 0;
     }
 
+    int decoded_width = heif_image_get_primary_width(self->heif_image);
+    int decoded_height = heif_image_get_primary_height(self->heif_image);
+    if ((self->width != decoded_width) || (self->height != decoded_height)) {
+        heif_image_release(self->heif_image);
+        self->heif_image = NULL;
+        PyErr_Format(PyExc_ValueError,
+                    "corrupted image(dimensions in header: (%d, %d), decoded dimensions: (%d, %d)",
+                    self->width, self->height, decoded_width, decoded_height);
+        return 0;
+    }
+
     if (!self->postprocess) {
         self->stride = stride;
         return 1;
@@ -912,7 +923,7 @@ int decode_image(CtxImageObject* self) {
                             out[i2 * 4 + 0] = in[i2 * 4 + 2];
                             out[i2 * 4 + 1] = in[i2 * 4 + 1];
                             out[i2 * 4 + 2] = tmp;
-                            out[i2 * 4 + 3] = in[i2 * 4 + 3];;
+                            out[i2 * 4 + 3] = in[i2 * 4 + 3];
                         }
                         in += stride;
                         out += self->stride;
@@ -1154,36 +1165,11 @@ static PyObject* _load_file(PyObject* self, PyObject* args) {
     return images_list;
 }
 
-static PyObject* _test(PyObject* self, PyObject* args){
-    PyObject *input_object, *mem_view = NULL;
-    Py_buffer *buffer;
-    unsigned const char *data;
-    Py_ssize_t size;
-
-    if (!PyArg_ParseTuple(args, "O", &input_object))
-        return NULL;
-
-    if (PyMemoryView_Check(input_object)) {
-        mem_view = PyMemoryView_FromObject(input_object);
-        buffer = PyMemoryView_GET_BUFFER(mem_view);
-        data = buffer->buf;
-        size = buffer->len;
-    }
-    else {
-        if (!PyArg_ParseTuple(args, "y#", &data, &size))
-            return NULL;
-    }
-
-    Py_XDECREF(mem_view);
-    RETURN_NONE
-}
-
 /* =========== Module =========== */
 
 static PyMethodDef heifMethods[] = {
     {"CtxWrite", (PyCFunction)_CtxWrite, METH_VARARGS},
     {"load_file", (PyCFunction)_load_file, METH_VARARGS},
-    {"test", (PyCFunction)_test, METH_VARARGS},
     {NULL, NULL}
 };
 

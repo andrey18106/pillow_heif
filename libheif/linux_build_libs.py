@@ -136,7 +136,6 @@ def build_lib_linux(url: str, name: str, musl: bool = False):
             chdir(_lib_path)
         else:
             _build_path = path.join(_lib_path, "build")
-            print("0000")
             makedirs(_build_path)
             if name == "aom":
                 download_extract_to(url, path.join(_lib_path, "aom"), False)

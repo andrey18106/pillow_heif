@@ -69,6 +69,7 @@ test-command = "pytest -rs {project}"
 
 [tool.cibuildwheel.macos]
 before-all = [
+    "brew uninstall --force --ignore-dependencies libheif",
     "brew install libjpeg little-cms2",
     "brew install --formula {project}/libheif/macos/libheif.rb",
     "HOMEBREW_PREFIX=$(brew --prefix)",

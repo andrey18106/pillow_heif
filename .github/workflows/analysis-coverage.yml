@@ -94,6 +94,7 @@ jobs:
       - name: Install from source
         run: |
           brew uninstall --force --ignore-dependencies imagemagick libheif
+          brew install --formula ./libheif/macos/libheif.rb
           python3 -m pip install opencv-python coverage
           python3 -m pip -v install ".[tests]"
 

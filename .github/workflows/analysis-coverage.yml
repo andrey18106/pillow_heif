@@ -200,14 +200,14 @@ jobs:
 
       - name: Install from source
         run: |
-          sudo -H python3 -m pip install pillow==9.0.1 pytest defusedxml packaging numpy coverage
+          python3 -m pip install pillow==9.0.1 pytest defusedxml packaging numpy coverage
           sudo -H PH_LIGHT_ACTION=1 python3 -m pip -v install --no-build-isolation .
 
       - name: LibHeif info
-        run: sudo -H python3 -c "import pillow_heif; print(pillow_heif.libheif_info())"
+        run: python3 -c "import pillow_heif; print(pillow_heif.libheif_info())"
 
       - name: Generate coverage report
-        run: sudo -H coverage run -m pytest -s && coverage xml && coverage html
+        run: coverage run -m pytest -s && coverage xml && coverage html
 
       - name: HTML coverage to artifacts
         uses: actions/upload-artifact@v3
@@ -246,11 +246,11 @@ jobs:
 
       - name: Install from source
         run: |
-          sudo -H python3 -m pip install pillow==9.1.1 pytest defusedxml packaging numpy
+          python3 -m pip install pillow==9.1.1 pytest defusedxml packaging numpy
           sudo -H PH_LIGHT_ACTION=1 python3 -m pip -v install --no-build-isolation .
 
       - name: LibHeif info
-        run: sudo -H python3 -c "import pi_heif; print(pi_heif.libheif_info())"
+        run: python3 -c "import pi_heif; print(pi_heif.libheif_info())"
 
       - name: Perform tests
-        run: sudo -H PH_LIGHT_ACTION=1 EXP_PH_LIBHEIF_VERSION="" python3 -m pytest -rs
+        run: PH_LIGHT_ACTION=1 EXP_PH_LIBHEIF_VERSION="" python3 -m pytest -rs

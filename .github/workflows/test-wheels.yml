@@ -102,7 +102,7 @@ jobs:
           python3 -m pip install -i https://test.pypi.org/simple/ --only-binary=:all: pillow_heif
 
       - name: Test wheel
-        run: cd .. && python3 -m pytest -rsx pillow_heif
+        run: cd .. && python3 -m pytest -rs pillow_heif
 
   macos-wheels:
     name: macOS • 11 • ${{ matrix.python-version }}
@@ -136,7 +136,7 @@ jobs:
         run: |
           export TEST_DECODE_THREADS=0
           export PH_FULL_ACTION=1
-          cd .. && python3 -m pytest -rsx pillow_heif
+          cd .. && python3 -m pytest -rs pillow_heif
 
   manylinux-wheels:
     name: Ubuntu-Focal • ${{ matrix.python-version }}
@@ -169,4 +169,4 @@ jobs:
       - name: Test wheel
         run: |
           export PH_FULL_ACTION=1
-          cd .. && python3 -m pytest -rsx pillow_heif
+          cd .. && python3 -m pytest -rs pillow_heif

@@ -193,8 +193,7 @@ jobs:
       matrix:
         cibw_buildlinux: [ manylinux ]
         cibw_arch: [ "aarch64", "i686", "x86_64" ]
-        cibw_build: [ "pp38", "pp39" ]
-    name: ${{ matrix.cibw_buildlinux }} • ${{ matrix.cibw_arch }} • ${{ matrix.cibw_build }}
+    name: ${{ matrix.cibw_buildlinux }} • ${{ matrix.cibw_arch }} • PyPy
     runs-on: ubuntu-20.04
     env:
       BUILD_DIR: "/tmp/ph_build_stuff"
@@ -230,7 +229,7 @@ jobs:
           python3 -m pip install cibuildwheel==2.11.4
           python3 -m cibuildwheel
         env:
-          CIBW_BUILD: ${{ format('{0}-{1}_{2}', matrix.cibw_build , matrix.cibw_buildlinux, matrix.cibw_arch) }}
+          CIBW_BUILD: ${{ format('pp3*-{1}_{2}', matrix.cibw_buildlinux, matrix.cibw_arch) }}
           CIBW_ARCHS: ${{ matrix.cibw_arch }}
           CIBW_BEFORE_ALL_LINUX: "yum makecache && yum install -y libjpeg-turbo-devel lcms2-devel"
           CIBW_ENVIRONMENT_LINUX: BUILD_DIR=/host${{ env.BUILD_DIR }} PH_LIGHT_ACTION=1
@@ -347,7 +346,7 @@ jobs:
       - name: Test sdist
         run: |
           export PH_LIGHT_ACTION=1 TEST_DECODE_THREADS=0
-          python3 -m pytest -rsx
+          python3 -m pytest -rs
 
       - name: Upload sdist
         uses: actions/upload-artifact@v3

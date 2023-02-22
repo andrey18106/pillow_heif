@@ -55,7 +55,7 @@ jobs:
 
       - name: Preparing musli
 #        if: matrix.i['os'] == 'alpine'
-        run: echo INSTALL_CMD="apk add --no-cache python3 py3-pip py3-pillow py3-numpy" >> $GITHUB_ENV
+        run: echo INSTALL_CMD="apk add --no-cache python3 py3-pip py3-pillow py3-numpy fribidi-dev harfbuzz-dev jpeg-dev lcms2-dev" >> $GITHUB_ENV
 
 #      - name: Preparing centos
 #        if: matrix.i['os'] != 'debian' && matrix.i['os'] != 'ubuntu' && matrix.i['os'] != 'alpine'

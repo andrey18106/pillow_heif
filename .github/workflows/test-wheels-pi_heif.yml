@@ -31,9 +31,9 @@ jobs:
           { "os": "alpine", "ver": "3.16", "arch": "amd64" },
           { "os": "alpine", "ver": "3.16", "arch": "arm64" },
           { "os": "alpine", "ver": "3.16", "arch": "arm/v7" },
-          { "os": "alpine", "ver": "3.17", "arch": "amd64" },
-          { "os": "alpine", "ver": "3.17", "arch": "arm64" },
-          { "os": "alpine", "ver": "3.17", "arch": "arm/v7" },
+#          { "os": "alpine", "ver": "3.17", "arch": "amd64" },
+#          { "os": "alpine", "ver": "3.17", "arch": "arm64" },
+#          { "os": "alpine", "ver": "3.17", "arch": "arm/v7" },
         ]
 
     steps:
@@ -55,7 +55,7 @@ jobs:
 
       - name: Preparing musli
 #        if: matrix.i['os'] == 'alpine'
-        run: echo INSTALL_CMD="apk add --no-cache python3 py3-pip py3-pillow py3-numpy fribidi-dev harfbuzz-dev jpeg-dev lcms2-dev" >> $GITHUB_ENV
+        run: echo INSTALL_CMD="apk add --no-cache python3 py3-pip py3-pillow py3-numpy fribidi-dev harfbuzz-dev jpeg-dev lcms2-dev alpine-sdk" >> $GITHUB_ENV
 
 #      - name: Preparing centos
 #        if: matrix.i['os'] != 'debian' && matrix.i['os'] != 'ubuntu' && matrix.i['os'] != 'alpine'

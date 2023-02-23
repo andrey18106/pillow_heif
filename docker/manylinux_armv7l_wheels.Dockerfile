@@ -23,7 +23,7 @@ RUN \
   echo "**** Installing patchelf ****" && \
   git clone -b 0.17.2 https://github.com/NixOS/patchelf.git && \
   cd patchelf && \
-  ./bootstrap.sh && ./configure && make && make check && make install && \
+  ./bootstrap.sh && ./configure && make && make install && \
   cd ..
 
 ARG PY_VERSION

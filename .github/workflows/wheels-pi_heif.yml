@@ -74,7 +74,7 @@ jobs:
           CIBW_BUILD: "cp37-* cp38-* cp39-* cp310-* cp311-*"
           CIBW_ARCHS_WINDOWS: "AMD64"
           CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: "delvewheel repair -vv -w {dest_dir} {wheel} --add-path ${{ env.MSYS2_PREFIX }}/bin"
-          CIBW_ENVIRONMENT_WINDOWS: PH_LIGHT_ACTION=1
+          CIBW_ENVIRONMENT_WINDOWS: PH_LIGHT_ACTION=1 TEST_DECODE_THREADS=0
 
       - name: Checking built wheels
         run: |

@@ -38,10 +38,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-
       - name: Install libheif from formula
         run: |
           brew uninstall --force --ignore-dependencies imagemagick libheif
@@ -66,10 +62,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
-
       - name: Transform to Pi-Heif
         run: |
           cp -r -v ./pi-heif/* .

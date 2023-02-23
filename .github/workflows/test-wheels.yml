@@ -98,7 +98,7 @@ jobs:
 
       - name: Preparations
         run: |
-          python3 -m pip install pytest pillow numpy pympler defusedxml opencv-python
+          python3 -m pip install pytest pillow numpy pympler defusedxml
           python3 -m pip install -i https://test.pypi.org/simple/ --only-binary=:all: pillow_heif
 
       - name: Test wheel
@@ -127,10 +127,6 @@ jobs:
           brew install libjpeg little-cms2
           python3 -m pip install pytest pillow numpy pympler defusedxml
           python3 -m pip install -i https://test.pypi.org/simple/ --only-binary=:all: pillow_heif
-
-      - name: Install OpenCV for CPython
-        if: startsWith(matrix.python-version, '3.')
-        run: python3 -m pip install opencv-python
 
       - name: Test wheel
         run: |
@@ -161,10 +157,6 @@ jobs:
           sudo apt update && sudo apt install libjpeg-dev liblcms2-dev
           python3 -m pip install pytest pillow numpy pympler defusedxml
           python3 -m pip install -i https://test.pypi.org/simple/ --only-binary=:all: pillow_heif
-
-      - name: Install OpenCV for CPython
-        if: startsWith(matrix.python-version, '3.')
-        run: python3 -m pip install opencv-python
 
       - name: Test wheel
         run: |

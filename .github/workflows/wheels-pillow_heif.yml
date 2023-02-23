@@ -291,7 +291,7 @@ jobs:
 
   sdist:
     name: Source distribution
-    runs-on: ubuntu-22.04
+    runs-on: macos-12
 
     steps:
       - uses: actions/checkout@v3
@@ -301,8 +301,10 @@ jobs:
       - name: Run check-manifest
         run: python3 -m check_manifest
 
-      - name: Install LibHeif from default repo
-        run: sudo apt -y install libheif-dev
+      - name: Install libheif from formula
+        run: |
+          brew uninstall --force --ignore-dependencies imagemagick libheif
+          brew install --formula ./libheif/macos/libheif.rb
 
       - name: Build sdist
         run: |
@@ -319,7 +321,7 @@ jobs:
 
       - name: Test sdist
         run: |
-          export PH_FULL_ACTION=1
+          export PH_FULL_ACTION=1 TEST_DECODE_THREADS=0
           python3 -m pytest -rs
 
       - name: Upload sdist

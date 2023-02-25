@@ -18,6 +18,9 @@ image_large.heic - 6000x8000 = 48MP, with Exif and IPTC data.
 
 .. image:: ../benchmarks/results_decode_macOS.png
 
+.. note:: in some cases decode speed is a bit slower compared to previous version, it will be fixed with new release of
+    `Pillow <https://github.com/python-pillow/Pillow/issues/6933>`_
+
 Encode benchmarks
 -----------------
 

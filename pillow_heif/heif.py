@@ -6,8 +6,9 @@ from copy import deepcopy
 from io import SEEK_SET
 from typing import Any, Dict, List, Optional, Tuple
 
-from _pillow_heif import lib_info, load_file
 from PIL import Image
+
+from _pillow_heif import lib_info, load_file
 
 from . import options
 from .constants import HeifCompressionFormat

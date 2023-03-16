@@ -6,9 +6,8 @@ from itertools import chain
 from typing import Union
 from warnings import warn
 
-from PIL import Image, ImageFile, ImageSequence
-
 from _pillow_heif import lib_info
+from PIL import Image, ImageFile, ImageSequence
 
 from . import options
 from .constants import HeifCompressionFormat

@@ -13,10 +13,9 @@ from pathlib import Path
 from struct import pack, unpack
 from typing import List, Optional
 
+from _pillow_heif import CtxWrite
 from PIL import Image
 from PIL import __version__ as pil_version
-
-from _pillow_heif import CtxWrite
 
 from . import options
 from .constants import HeifChroma, HeifColorspace, HeifCompressionFormat

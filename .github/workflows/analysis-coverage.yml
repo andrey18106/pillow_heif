@@ -253,3 +253,49 @@ jobs:
 
       - name: Perform tests
         run: sudo -H PH_LIGHT_ACTION=1 EXP_PH_LIBHEIF_VERSION="" python3 -m pytest -rs
+
+  coverage-linux-pillow-dev:
+    runs-on: ubuntu-22.04
+    name: Coverage(Linux, Pillow-dev)
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Prepare system
+        run: |
+          sudo apt -y purge libheif1
+          sudo apt -y install libaom-dev libx265-dev libde265-dev nasm
+          sudo add-apt-repository ppa:strukturag/libheif
+          sudo apt update
+          sudo apt -y install libheif-dev
+          sudo apt -y install fribidi-dev harfbuzz-dev jpeg-dev lcms2-dev openjpeg-dev
+
+      - name: Install from source
+        run: |
+          git clone --depth=1 https://github.com/python-pillow/Pillow.git
+          cd Pillow && python3 -m pip install . && cd ..
+          python3 -m pip -v install ".[dev]"
+
+      - name: LibHeif info
+        run: python3 -c "import pillow_heif; print(pillow_heif.libheif_info())"
+
+      - name: Generate coverage report
+        run: coverage run -m pytest -s && coverage xml && coverage html
+
+      - name: HTML coverage to artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage_linux_dev
+          path: ./htmlcov
+          if-no-files-found: error
+
+      - name: Upload report to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.xml
+          fail_ci_if_error: true
+          verbose: true

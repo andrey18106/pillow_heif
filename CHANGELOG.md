@@ -1,5 +1,11 @@
 All notable changes to this project will be documented in this file.
 
+## [0.10.1 - 2023-0x-xx]
+
+### Added
+
+- Faster image loading implementation with Pillow `9.5.0`
+
 ## [0.10.0 - 2023-02-24]
 
 Reworked version with native C extension.

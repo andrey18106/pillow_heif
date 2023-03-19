@@ -1,10 +1,15 @@
 All notable changes to this project will be documented in this file.
 
-## [0.10.1 - 2023-0x-xx]
+## [0.10.1 - 2023-04-03]
 
 ### Added
 
+- Windows PyPy wheels.
 - Faster image loading implementation with Pillow `9.5.0`
+
+# Fixed
+
+- When the image `size` after decoding is different, the image `size` will be updated instead of throwing an error. Thanks to @Soooda #86
 
 ## [0.10.0 - 2023-02-24]
 

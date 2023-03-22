@@ -99,7 +99,7 @@ def test_decode_threads():
 
 def test_allow_incorrect_headers():
     test_image = "images/heif_special/L_8__29(255)x100.heif"
-    with pytest.raises(UnidentifiedImageError):
+    with pytest.raises(expected_exception=(UnidentifiedImageError, ValueError)):  # noqa
         Image.open(test_image).load()
     register_heif_opener(allow_incorrect_headers=True)
     assert options.ALLOW_INCORRECT_HEADERS

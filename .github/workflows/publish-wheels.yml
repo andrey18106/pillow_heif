@@ -51,30 +51,30 @@ jobs:
           python3 -m pip install twine
           ls -la wheelhouse_pillow_heif
           du -h wheelhouse_pillow_heif
-#          python3 -m twine upload --skip-existing wheelhouse_pillow_heif/*.whl
-#          python3 -m twine upload --skip-existing wheelhouse_pillow_heif/*tar.gz
-#        env:
-#          TWINE_USERNAME: __token__
-#          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN_PILLOW_HEIF }}
-#          TWINE_REPOSITORY: testpypi
+          python3 -m twine upload --skip-existing wheelhouse_pillow_heif/*.whl
+          python3 -m twine upload --skip-existing wheelhouse_pillow_heif/*tar.gz
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN_PILLOW_HEIF }}
+          TWINE_REPOSITORY: testpypi
 
       - name: Publish Pi-Heif
         run: |
           ls -la wheelhouse_pi_heif
           du -h wheelhouse_pi_heif
-#          python3 -m twine upload --skip-existing wheelhouse_pi_heif/*.whl
-#          python3 -m twine upload --skip-existing wheelhouse_pi_heif/*tar.gz
-#        env:
-#          TWINE_USERNAME: __token__
-#          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN_PI_HEIF }}
-#          TWINE_REPOSITORY: testpypi
-#
-#      - name: Create release draft
-#        uses: ncipollo/release-action@v1.12.0
-#        with:
-#          name: ${{ env.RELEASE_TAG }}
-#          tag: ${{ env.RELEASE_TAG }}
-#          commit: ${{ github.ref }}
-#          draft: false
-#          body: ${{ env.CHANGELOG }}
-#          token: ${{ secrets.PAT_FINE_GRAINED }}
+          python3 -m twine upload --skip-existing wheelhouse_pi_heif/*.whl
+          python3 -m twine upload --skip-existing wheelhouse_pi_heif/*tar.gz
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN_PI_HEIF }}
+          TWINE_REPOSITORY: testpypi
+
+      - name: Create release draft
+        uses: ncipollo/release-action@v1.12.0
+        with:
+          name: ${{ env.RELEASE_TAG }}
+          tag: ${{ env.RELEASE_TAG }}
+          commit: ${{ github.ref }}
+          draft: false
+          body: ${{ env.CHANGELOG }}
+          token: ${{ secrets.PAT_FINE_GRAINED }}

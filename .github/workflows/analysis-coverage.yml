@@ -138,10 +138,7 @@ jobs:
 #      to remove `brew uninstall --force --ignore-dependencies imagemagick libheif` when libheif will be updated.
 #      https://github.com/strukturag/libheif/issues/788
       - name: Install from source
-        run: |
-          brew uninstall --force --ignore-dependencies imagemagick libheif
-          brew install --formula ./libheif/macos/libheif.rb
-          python3 -m pip -v install ".[dev]"
+        run: python3 -m pip -v install ".[dev]"
 
       - name: LibHeif info
         run: python3 -c "import pillow_heif; print(pillow_heif.libheif_info())"

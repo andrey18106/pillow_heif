@@ -3,6 +3,7 @@ name: Wheels test
 on:
   release:
     types: [ published ]
+  workflow_dispatch:
 
 jobs:
   docker-tests:

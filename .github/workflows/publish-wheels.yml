@@ -69,12 +69,12 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN_PI_HEIF }}
           TWINE_REPOSITORY: testpypi
 
-      - name: Create release draft
-        uses: ncipollo/release-action@v1.12.0
-        with:
-          name: ${{ env.RELEASE_TAG }}
-          tag: ${{ env.RELEASE_TAG }}
-          commit: ${{ github.ref }}
-          draft: false
-          body: ${{ env.CHANGELOG }}
-          token: ${{ secrets.PAT_FINE_GRAINED }}
+#      - name: Create release draft
+#        uses: ncipollo/release-action@v1.12.0
+#        with:
+#          name: ${{ env.RELEASE_TAG }}
+#          tag: ${{ env.RELEASE_TAG }}
+#          commit: ${{ github.ref }}
+#          draft: false
+#          body: ${{ env.CHANGELOG }}
+#          token: ${{ secrets.PAT_FINE_GRAINED }}

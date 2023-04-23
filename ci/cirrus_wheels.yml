@@ -14,6 +14,7 @@ wheel_macos_arm_task:
     CIBW_ENVIRONMENT: 'MACOSX_DEPLOYMENT_TARGET=12.0'
 
   install_pre_requirements_script:
+    - brew upgrade
     - brew install python@3.10
     - ln -s python3 /opt/homebrew/opt/python@3.10/bin/python
   install_cibuildwheel_script:
@@ -39,6 +40,7 @@ wheel_pi_heif_macos_arm_task:
     CIBW_ENVIRONMENT: 'MACOSX_DEPLOYMENT_TARGET=12.0'
 
   install_pre_requirements_script:
+    - brew upgrade
     - brew install python@3.10
     - ln -s python3 /opt/homebrew/opt/python@3.10/bin/python
   install_cibuildwheel_script:

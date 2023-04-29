@@ -154,10 +154,9 @@ def _retrieve_exif(metadata: List[dict]) -> Optional[bytes]:
     for i, md_block in enumerate(metadata):
         if md_block["type"] == "Exif":
             _purge.append(i)
-            if md_block["data"][:4] == b"\x00\x00\x00\n":  # Xiaomi EXIF start
-                _data = md_block["data"][8:]  # skip `\0\0\0\n` +  TIFF header -> total 8 bytes
-            else:
-                _data = md_block["data"][4:]  # skip TIFF header, first 4 bytes
+            skip_size = int.from_bytes(md_block["data"][:4], byteorder="big", signed=False)
+            skip_size += 4 + -6  # skip 4 bytes with offset + we want b'Exif\x00\x00` at start
+            _data = md_block["data"][skip_size:]
             if not _result and _data:
                 _result = _data
     for i in reversed(_purge):

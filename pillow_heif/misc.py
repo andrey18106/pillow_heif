@@ -160,6 +160,8 @@ def _retrieve_exif(metadata: List[dict]) -> Optional[bytes]:
             _purge.append(i)
             skip_size = int.from_bytes(md_block["data"][:4], byteorder="big", signed=False)
             skip_size += 4  # skip 4 bytes with offset
+            if len(md_block["data"]) - skip_size <= 4:  # bad EXIF data, skip first 4 bytes
+                skip_size = 4
             _data = md_block["data"][skip_size:]
             if not _result and _data:
                 _result = _data

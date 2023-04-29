@@ -167,14 +167,17 @@ def test_heif_multi_frame_exif_add_remove():
 
 
 @pytest.mark.skipif(not helpers.hevc_enc(), reason="Requires HEVC encoder.")
-def test_corrupted_exif():
-    exif_data = b"This_is_not_valid_EXIF_data"
+def test_data_before_exif():
+    exif = Image.Exif()
+    exif_bytes = exif.tobytes()
+    exif_full_data = b"hidden data " + exif_bytes
     out_im = BytesIO()
-    helpers.gradient_rgb().save(out_im, format="HEIF", exif=exif_data)
+    helpers.gradient_rgb().save(out_im, format="HEIF", exif=exif_full_data)
     im = Image.open(out_im)
-    with pytest.raises(SyntaxError):
-        im.getexif()
-    assert im.info["exif"] == exif_data
+    out_im.seek(0)
+    assert out_im.read().find(b"hidden data ") != -1  # checking that this was saved
+    assert im.getexif() == exif
+    assert im.info["exif"] == exif_bytes[6:]  # skipping b`Exif\x00\x00` that `exif.tobytes()` returns.
 
 
 @pytest.mark.skipif(not helpers.hevc_enc(), reason="Requires HEVC encoder.")

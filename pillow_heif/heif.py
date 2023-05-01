@@ -390,6 +390,23 @@ class HeifFile:
 
         return self._images[self.primary_index].__array_interface__
 
+    def copy(self):
+        """Copies all images from a file. Copies are not linked to the original objects.
+
+        :rtype: :py:class:`~pillow_heif.HeifFile`
+        :returns: An :py:class:`~pillow_heif.HeifFile` object.
+        """
+
+        _im_copy = HeifFile()
+        for im in self:
+            _im_copy.add_from_heif(im)
+        _im_copy.mimetype = self.mimetype
+        _im_copy.primary_index = self.primary_index
+        _im_copy[self.primary_index].info["primary"] = True
+        return _im_copy
+
+    __copy__ = copy
+
 
 def is_supported(fp) -> bool:
     """Checks if the given `fp` object contains a supported file type.

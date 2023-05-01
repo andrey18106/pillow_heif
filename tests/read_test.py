@@ -1,6 +1,6 @@
 import builtins
 import os
-from copy import deepcopy
+from copy import copy, deepcopy
 from gc import collect
 from io import BytesIO
 from pathlib import Path
@@ -31,10 +31,28 @@ def test_read_heif():
         assert im._data
 
 
-def test_native_deepcopy_pillow():
-    im = Image.open(Path("images/heif/zPug_3.heic"))
+@pytest.mark.parametrize("img_path", ("images/heif/zPug_3.heic", "images/heif_other/arrow.heic"))
+def test_native_copy_heif(img_path):
+    im_heif = pillow_heif.open_heif(Path(img_path))
+    im_heif_copy = copy(im_heif)
+    helpers.compare_heif_files_fields(im_heif, im_heif_copy)
+
+
+@pytest.mark.parametrize("img_path", ("images/heif/zPug_3.heic", "images/heif_other/arrow.heic"))
+def test_native_copy_pillow(img_path):
+    im = Image.open(Path(img_path))
+    im_copy = copy(im)
+    im_copy.load()
+    assert im.info == im_copy.info
+    helpers.assert_image_equal(im, im_copy)
+
+
+@pytest.mark.parametrize("img_path", ("images/heif/zPug_3.heic", "images/heif_other/arrow.heic"))
+def test_native_deepcopy_pillow(img_path):
+    im = Image.open(Path(img_path))
     im_deepcopy = deepcopy(im)
     im_deepcopy.load()
+    helpers.assert_image_equal(im, im_deepcopy)
 
 
 def test_bgr_mode_with_disabled_postprocess():
@@ -175,7 +193,7 @@ def test_heif_from_heif(img_path):
         for img in heif_file_from:
             heif_file_from_from.add_from_heif(img)
         collect()
-        helpers.compare_heif_files_fields(heif_file, heif_file_from)
+        helpers.compare_heif_files_fields(heif_file, heif_file_from, ignore=["primary_index", "mimetype"])
         # Closing original Heif must not affect data in others two
         heif_file = None  # noqa
         collect()
@@ -194,7 +212,7 @@ def test_to_from_pillow(image_path):
     heif_from_pillow = pillow_heif.HeifFile()
     for image in images_list:
         heif_from_pillow.add_from_pillow(image)
-    helpers.compare_heif_files_fields(heif_file, heif_from_pillow)
+    helpers.compare_heif_files_fields(heif_file, heif_from_pillow, ignore=["primary_index", "mimetype"])
 
 
 def test_heif_file_to_pillow():

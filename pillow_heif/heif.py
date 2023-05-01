@@ -2,7 +2,7 @@
 Functions and classes for heif images to read and write.
 """
 
-from copy import deepcopy
+from copy import copy, deepcopy
 from io import SEEK_SET
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -390,22 +390,28 @@ class HeifFile:
 
         return self._images[self.primary_index].__array_interface__
 
-    def copy(self):
-        """Copies all images from a file. Copies are not linked to the original objects.
+    def __getstate__(self):
+        im_desc = []
+        for im in self._images:
+            im_desc.append([im.mode, im.size, bytes(im.data), im.info])
+        return [self.primary_index, self.mimetype, im_desc]
 
-        :rtype: :py:class:`~pillow_heif.HeifFile`
-        :returns: An :py:class:`~pillow_heif.HeifFile` object.
-        """
+    def __setstate__(self, state):
+        self.__init__()
+        self.primary_index, self.mimetype, images = state
+        for im_desc in images:
+            im_mode, im_size, im_data, im_info = im_desc
+            added_image = self.add_frombytes(im_mode, im_size, im_data)
+            added_image.info = im_info
 
+    def __copy(self):
         _im_copy = HeifFile()
-        for im in self:
-            _im_copy.add_from_heif(im)
+        _im_copy._images = copy(self._images)  # pylint: disable=protected-access
         _im_copy.mimetype = self.mimetype
         _im_copy.primary_index = self.primary_index
-        _im_copy[self.primary_index].info["primary"] = True
         return _im_copy
 
-    __copy__ = copy
+    __copy__ = __copy
 
 
 def is_supported(fp) -> bool:

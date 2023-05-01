@@ -35,7 +35,26 @@ def test_read_heif():
 def test_native_copy_heif(img_path):
     im_heif = pillow_heif.open_heif(Path(img_path))
     im_heif_copy = copy(im_heif)
+    assert getattr(im_heif[0], "_data") is None
+    assert getattr(im_heif_copy[0], "_data") is None
+    im_heif_copy[0].load()
+    assert getattr(im_heif[0], "_data") is not None
+    assert getattr(im_heif_copy[0], "_data") is not None
     helpers.compare_heif_files_fields(im_heif, im_heif_copy)
+    im_heif[0].info["bit_depth"] = 17
+    assert im_heif_copy[0].info["bit_depth"] == 17
+    del im_heif._images[0]
+    assert im_heif._images != im_heif_copy._images
+
+
+@pytest.mark.parametrize("img_path", ("images/heif/zPug_3.heic", "images/heif_other/arrow.heic"))
+def test_native_deepcopy_heif(img_path):
+    im_heif = pillow_heif.open_heif(Path(img_path))
+    im_heif_deepcopy = deepcopy(im_heif)
+    assert getattr(im_heif[0], "_data") is not None
+    helpers.compare_heif_files_fields(im_heif, im_heif_deepcopy)
+    im_heif[0].info["bit_depth"] = 17
+    assert im_heif_deepcopy[0].info["bit_depth"] != 17
 
 
 @pytest.mark.parametrize("img_path", ("images/heif/zPug_3.heic", "images/heif_other/arrow.heic"))

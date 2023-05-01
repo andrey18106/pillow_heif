@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
-- (Heif) `copy.copy` support for HeifFile.
+- (Heif) `deepcopy` support for HeifFile.
 
 ## [0.11.0 - 2023-04-30]
 

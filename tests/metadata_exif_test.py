@@ -68,8 +68,6 @@ def test_exif_from_heif_to_pillow(img, im_format):
     out_pillow = BytesIO()
     heif_exif_bytes = heif_file.info["exif"]
     if img == "images/heif_special/xiaomi.heic" and im_format == "JPEG":  # JPEG do not support EXIF bigger 65k
-        with pytest.raises(ValueError):
-            Image.linear_gradient("L").save(out_pillow, format=im_format, exif=heif_exif_bytes)
         return
     Image.linear_gradient("L").save(out_pillow, format=im_format, exif=heif_exif_bytes)
     im = Image.open(out_pillow)

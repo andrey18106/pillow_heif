@@ -20,14 +20,14 @@ exclude_lines = [
 
 [tool.black]
 line-length = 120
-target-versions = ["py37"]
+target-versions = ["py38"]
 preview = true
 
 [tool.isort]
 profile = "black"
 
 [tool.pylint]
-master.py-version = "3.7"
+master.py-version = "3.8"
 master.extension-pkg-allow-list = ["_pillow_heif"]
 design.max-attributes = 8
 design.max-branches = 16

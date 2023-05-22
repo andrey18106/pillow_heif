@@ -33,6 +33,28 @@ MODE_INFO = {
     "L;16": (1, 16, HeifColorspace.MONOCHROME, HeifChroma.MONOCHROME),
     "I;16": (1, 16, HeifColorspace.MONOCHROME, HeifChroma.MONOCHROME),
     "I;16L": (1, 16, HeifColorspace.MONOCHROME, HeifChroma.MONOCHROME),
+    "BGRA;12": (4, 12, HeifColorspace.RGB, HeifChroma.INTERLEAVED_RRGGBBAA_LE),
+    "BGRa;12": (4, 12, HeifColorspace.RGB, HeifChroma.INTERLEAVED_RRGGBBAA_LE),
+    "BGR;12": (3, 12, HeifColorspace.RGB, HeifChroma.INTERLEAVED_RRGGBB_LE),
+    "RGBA;12": (4, 12, HeifColorspace.RGB, HeifChroma.INTERLEAVED_RRGGBBAA_LE),
+    "RGBa;12": (4, 12, HeifColorspace.RGB, HeifChroma.INTERLEAVED_RRGGBBAA_LE),
+    "RGB;12": (3, 12, HeifColorspace.RGB, HeifChroma.INTERLEAVED_RRGGBB_LE),
+    "LA;12": (2, 12, HeifColorspace.MONOCHROME, HeifChroma.MONOCHROME),
+    "La;12": (2, 12, HeifColorspace.MONOCHROME, HeifChroma.MONOCHROME),
+    "L;12": (1, 12, HeifColorspace.MONOCHROME, HeifChroma.MONOCHROME),
+    "I;12": (1, 12, HeifColorspace.MONOCHROME, HeifChroma.MONOCHROME),
+    "I;12L": (1, 12, HeifColorspace.MONOCHROME, HeifChroma.MONOCHROME),
+    "BGRA;10": (4, 10, HeifColorspace.RGB, HeifChroma.INTERLEAVED_RRGGBBAA_LE),
+    "BGRa;10": (4, 10, HeifColorspace.RGB, HeifChroma.INTERLEAVED_RRGGBBAA_LE),
+    "BGR;10": (3, 10, HeifColorspace.RGB, HeifChroma.INTERLEAVED_RRGGBB_LE),
+    "RGBA;10": (4, 10, HeifColorspace.RGB, HeifChroma.INTERLEAVED_RRGGBBAA_LE),
+    "RGBa;10": (4, 10, HeifColorspace.RGB, HeifChroma.INTERLEAVED_RRGGBBAA_LE),
+    "RGB;10": (3, 10, HeifColorspace.RGB, HeifChroma.INTERLEAVED_RRGGBB_LE),
+    "LA;10": (2, 10, HeifColorspace.MONOCHROME, HeifChroma.MONOCHROME),
+    "La;10": (2, 10, HeifColorspace.MONOCHROME, HeifChroma.MONOCHROME),
+    "L;10": (1, 10, HeifColorspace.MONOCHROME, HeifChroma.MONOCHROME),
+    "I;10": (1, 10, HeifColorspace.MONOCHROME, HeifChroma.MONOCHROME),
+    "I;10L": (1, 10, HeifColorspace.MONOCHROME, HeifChroma.MONOCHROME),
     "RGBA": (4, 8, HeifColorspace.RGB, HeifChroma.INTERLEAVED_RGBA),
     "RGBa": (4, 8, HeifColorspace.RGB, HeifChroma.INTERLEAVED_RGBA),
     "RGB": (3, 8, HeifColorspace.RGB, HeifChroma.INTERLEAVED_RGB),
@@ -297,11 +319,11 @@ class CtxEncode:
         im_out = self.ctx_write.create_image(size, MODE_INFO[mode][2], MODE_INFO[mode][3], premultiplied_alpha)
         # image data
         if MODE_INFO[mode][0] == 1:
-            im_out.add_plane_l(size, bit_depth_out, bit_depth_in, data)
+            im_out.add_plane_l(size, bit_depth_out, bit_depth_in, data, kwargs.get("stride", 0))
         elif MODE_INFO[mode][0] == 2:
-            im_out.add_plane_la(size, bit_depth_out, bit_depth_in, data)
+            im_out.add_plane_la(size, bit_depth_out, bit_depth_in, data, kwargs.get("stride", 0))
         else:
-            im_out.add_plane(size, bit_depth_out, bit_depth_in, data, mode.find("BGR") != -1)
+            im_out.add_plane(size, bit_depth_out, bit_depth_in, data, mode.find("BGR") != -1, kwargs.get("stride", 0))
         # color profile
         __icc_profile = kwargs.get("icc_profile", None)
         if __icc_profile is not None:

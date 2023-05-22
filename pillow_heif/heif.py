@@ -78,10 +78,15 @@ class HeifImage:
         """Numpy array interface support"""
 
         self.load()
-        shape: Tuple[Any, ...] = (self.size[1], self.size[0])
+        width = int(self.stride / MODE_INFO[self.mode][0])
+        if MODE_INFO[self.mode][1] <= 8:
+            typestr = "|u1"
+        else:
+            width = int(width / 2)
+            typestr = "<u2"
+        shape: Tuple[Any, ...] = (self.size[1], width)
         if MODE_INFO[self.mode][0] > 1:
             shape += (MODE_INFO[self.mode][0],)
-        typestr = "|u1" if self.mode.find(";16") == -1 else "<u2"
         return {"shape": shape, "typestr": typestr, "version": 3, "data": self.data}
 
     @property
@@ -507,7 +512,8 @@ def _encode_images(images: List[HeifImage], fp, **kwargs) -> None:
         if i == primary_index:
             _info.update(**kwargs)
             _info["primary"] = True
-        ctx_write.add_image(img.size, img.mode, img.data, **_info)
+        _info.pop("stride", 0)
+        ctx_write.add_image(img.size, img.mode, img.data, **_info, stride=img.stride)
     ctx_write.save(fp)
 
 

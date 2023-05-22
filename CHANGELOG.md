@@ -1,13 +1,27 @@
 All notable changes to this project will be documented in this file.
 
+## [0.12.0 - 2023-0x-xx]
+
+This release is fully compatible with `0.10.x+` versions, except `read_heif` function.
+
+## Added
+
+- (Heif) restored lost ability after `0.9.x` versions to open HDR images in 10/12 bit. #96
+
+## Fixed
+
+- (Heif) `encode` function with `stride` argument correctly saves image.
+- (Heif) HeifFile class created with `from_bytes` function with `stride` argument respect `stride` value during save.
+- (Heif) HeifFile class created with `from_bytes` function with `stride` argument can correctly translate to numpy array.
+
 ## [0.11.1 - 2023-05-10]
 
 This release is fully compatible with `0.10.x` versions.
 
 ### Fixed
 
-- Revert EXIF changes from `0.11.0` - raw data again can begin with `Exif\x00\x00`. #93
-- (Heif) `deepcopy` support for HeifFile.
+- Revert EXIF changes from `0.11.0` - raw data again can begin with `Exif\x00\x00`. Thanks to @fabbaum #93
+- (Heif) `deepcopy` support for HeifFile class.
 
 ## [0.11.0 - 2023-04-30]
 

@@ -1,22 +1,21 @@
 import sys
 from os import path
 from subprocess import run
-from time import perf_counter
 
 import matplotlib.pyplot as plt
 from cpuinfo import get_cpu_info
 
-VERSIONS = ["0.5.1", "0.6.1", "0.7.2", "0.8.0", "0.9.3", "0.10.1"]
+LAST_VER_IS_DEV = True
+VERSIONS = ["0.6.1", "0.7.2", "0.8.0", "0.9.3", "0.10.1", "0.11.2"]
 N_ITER = 30
 
 
 def measure_encode(image, n_iterations):
     measure_file = path.join(path.dirname(path.abspath(__file__)), "measure_encode.py")
     cmd = f"{sys.executable} {measure_file} {n_iterations} {image}".split()
-    start_time = perf_counter()
-    run(cmd, check=True)
-    total_time = perf_counter() - start_time
-    return total_time / n_iterations
+    result = run(cmd, check=True, capture_output=True)
+    result = float(result.stdout.decode(encoding="utf-8").strip()) / n_iterations
+    return result
 
 
 if __name__ == "__main__":
@@ -26,7 +25,10 @@ if __name__ == "__main__":
     l_image_results = []
     pug_image_results = []
     for i, v in enumerate(VERSIONS):
-        run(f"{sys.executable} -m pip install pillow-heif=={v}".split(), check=True)
+        if LAST_VER_IS_DEV and v == VERSIONS[-1]:
+            run(f"{sys.executable} -m pip install ../.".split(), check=True)
+        else:
+            run(f"{sys.executable} -m pip install pillow-heif=={v}".split(), check=True)
         rgba_image_results.append(measure_encode("RGBA", N_ITER))
         rgb_image_results.append(measure_encode("RGB", N_ITER))
         la_image_results.append(measure_encode("LA", N_ITER))

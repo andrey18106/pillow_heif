@@ -1,8 +1,8 @@
 All notable changes to this project will be documented in this file.
 
-## [0.12.0 - 2023-0x-xx]
+## [0.11.2 - 2023-0x-xx]
 
-This release is fully compatible with `0.10.x+` versions, except `read_heif` function.
+This release is fully compatible with `0.10.x+` versions.
 
 ## Added
 

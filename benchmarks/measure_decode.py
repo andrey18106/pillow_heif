@@ -1,4 +1,5 @@
 import sys
+from time import perf_counter
 
 import numpy as np
 from PIL import Image
@@ -10,8 +11,9 @@ BGR_NUMPY = 1
 
 
 if __name__ == "__main__":
+    pillow_heif.register_heif_opener()
+    start_time = perf_counter()
     if int(sys.argv[3]) == PILLOW_LOAD:
-        pillow_heif.register_heif_opener()
         for i in range(int(sys.argv[1])):
             im = Image.open(sys.argv[2])
             im.load()
@@ -23,4 +25,6 @@ if __name__ == "__main__":
                 im = pillow_heif.open_heif(sys.argv[2], convert_hdr_to_8bit=False)
                 im.convert_to("BGR" if im.bit_depth == 8 else "BGR;16")
             np_array = np.asarray(im)
+    total_time = perf_counter() - start_time
+    print(total_time)
     sys.exit(0)

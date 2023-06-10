@@ -1,6 +1,6 @@
 All notable changes to this project will be documented in this file.
 
-## [0.11.2 - 2023-0x-xx]
+## [0.11.2 - 2023-07-03]
 
 This release is fully compatible with `0.10.x+` versions.
 

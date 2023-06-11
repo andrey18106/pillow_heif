@@ -6,7 +6,6 @@ from itertools import chain
 from typing import Union
 from warnings import warn
 
-from _pillow_heif import lib_info
 from PIL import Image, ImageFile, ImageSequence
 from PIL import __version__ as pil_version
 
@@ -24,6 +23,13 @@ from .misc import (
     set_orientation,
 )
 
+try:
+    from _pillow_heif import lib_info
+except ImportError as ex:
+    from ._deffered_error import DeferredError
+
+    lib_info = DeferredError(ex)
+
 
 class _LibHeifImageFile(ImageFile.ImageFile):
     """Base class with all functionality for ``HeifImageFile`` and ``AvifImageFile`` classes."""
@@ -37,7 +43,8 @@ class _LibHeifImageFile(ImageFile.ImageFile):
 
     def _open(self):
         try:
-            # when Pillow starts supporting 16-bit images, replace `convert_hdr_to_8bit=True` with `hdr_to_16bit=True`
+            # when Pillow starts supporting 16-bit images:
+            # set `convert_hdr_to_8bit` to False and `convert_hdr_to_8bit` to True
             _heif_file = HeifFile(self.fp, convert_hdr_to_8bit=True, remove_stride=False)
         except (OSError, ValueError, SyntaxError, RuntimeError, EOFError) as exception:
             raise SyntaxError(str(exception)) from None

@@ -2,7 +2,12 @@
 Functions to get versions of underlying libraries.
 """
 
-from _pillow_heif import lib_info
+try:
+    from _pillow_heif import lib_info
+except ImportError as ex:
+    from ._deffered_error import DeferredError
+
+    lib_info = DeferredError(ex)
 
 
 def libheif_version() -> str:

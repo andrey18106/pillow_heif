@@ -13,12 +13,19 @@ from pathlib import Path
 from struct import pack, unpack
 from typing import List, Optional
 
-from _pillow_heif import CtxWrite
 from PIL import Image
 from PIL import __version__ as pil_version
 
 from . import options
 from .constants import HeifChroma, HeifColorspace, HeifCompressionFormat
+
+try:
+    from _pillow_heif import CtxWrite
+except ImportError as ex:
+    from ._deffered_error import DeferredError
+
+    CtxWrite = DeferredError(ex)
+
 
 MODE_INFO = {
     # name -> [channels, bits per pixel channel, colorspace, chroma]

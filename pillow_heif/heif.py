@@ -6,7 +6,6 @@ from copy import copy, deepcopy
 from io import SEEK_SET
 from typing import Any, Dict, List, Optional, Tuple
 
-from _pillow_heif import lib_info, load_file
 from PIL import Image
 
 from . import options
@@ -26,6 +25,13 @@ from .misc import (
     get_file_mimetype,
     set_orientation,
 )
+
+try:
+    from _pillow_heif import lib_info, load_file
+except ImportError as ex:
+    from ._deffered_error import DeferredError
+
+    load_file = lib_info = DeferredError(ex)
 
 
 class HeifImage:

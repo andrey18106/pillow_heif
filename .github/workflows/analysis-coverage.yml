@@ -47,6 +47,7 @@ jobs:
         run: |
           sudo apt -y purge libheif1
           sudo apt -y install nasm
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
           brew install libheif
 
       - name: Install from source

@@ -21,85 +21,38 @@ on:
   workflow_dispatch:
 
 jobs:
-  analysis:
-    runs-on: macos-12
-    name: Analysis
+#  analysis:
+#    runs-on: macos-12
+#    name: Analysis
+#
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Install from source
+#        run: python3 -m pip install ".[dev]" wheel
+#
+#      - name: Run Analysis
+#        run: python3 -m pylint "setup.py" "pillow_heif/"
 
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install from source
-        run: python3 -m pip install ".[dev]" wheel
-
-      - name: Run Analysis
-        run: python3 -m pylint "setup.py" "pillow_heif/"
-
-  coverage-linux:
-    runs-on: ubuntu-22.04
-    name: Coverage(Linux)
-
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.8'
-
-      - name: Prepare system
-        run: |
-          sudo apt -y purge libheif1
-          sudo apt -y install nasm
-          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-          brew install libheif
-
-      - name: Install from source
-        run: |
-          python3 -m pip install pillow==8.4.0
-          python3 -m pip -v install ".[dev]"
-
-      - name: LibHeif info
-        run: python3 -c "import pillow_heif; print(pillow_heif.libheif_info())"
-
-      - name: Generate coverage report
-        run: coverage run -m pytest -rs && coverage xml && coverage html
-
-      - name: HTML coverage to artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: coverage_linux
-          path: ./htmlcov
-          if-no-files-found: error
-
-      - name: Upload report to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./coverage.xml
-          fail_ci_if_error: true
-          verbose: true
-
-#  coverage-linux-pillow-dev:
+#  coverage-linux:
 #    runs-on: ubuntu-22.04
-#    name: Coverage(Linux, Pillow-dev)
+#    name: Coverage(Linux)
 #
 #    steps:
 #      - uses: actions/checkout@v3
 #      - uses: actions/setup-python@v4
 #        with:
-#          python-version: '3.11'
+#          python-version: '3.8'
 #
 #      - name: Prepare system
 #        run: |
 #          sudo apt -y purge libheif1
 #          sudo apt -y install nasm
-#          sudo add-apt-repository -y ppa:strukturag/libde265
-#          sudo add-apt-repository -y ppa:strukturag/libheif
-#          sudo apt update
-#          sudo apt -y install libheif-dev
-#          sudo apt -y install zlib1g-dev libjpeg-dev liblcms2-dev libwebp-dev libfribidi-dev libharfbuzz-dev libffi-dev
+#          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+#          brew install libheif
 #
 #      - name: Install from source
 #        run: |
-#          git clone --depth=1 https://github.com/python-pillow/Pillow.git
-#          cd Pillow && python3 -m pip install . && cd ..
+#          python3 -m pip install pillow==8.4.0
 #          python3 -m pip -v install ".[dev]"
 #
 #      - name: LibHeif info
@@ -111,7 +64,7 @@ jobs:
 #      - name: HTML coverage to artifacts
 #        uses: actions/upload-artifact@v3
 #        with:
-#          name: coverage_linux_dev
+#          name: coverage_linux
 #          path: ./htmlcov
 #          if-no-files-found: error
 #
@@ -122,7 +75,55 @@ jobs:
 #          file: ./coverage.xml
 #          fail_ci_if_error: true
 #          verbose: true
-#
+
+  coverage-linux-pillow-dev:
+    runs-on: ubuntu-22.04
+    name: Coverage(Linux, Pillow-dev)
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Prepare system
+        run: |
+          sudo apt -y purge libheif1
+          sudo apt -y install nasm
+          sudo add-apt-repository -y ppa:strukturag/libheif
+          sudo apt update
+          sudo apt -y install libheif-plugin-libde265 libheif-plugin-x265 \
+                  libheif-plugin-aomenc libheif-plugin-aomdec \
+                  libheif-dev
+          sudo apt -y install zlib1g-dev libjpeg-dev liblcms2-dev libwebp-dev libfribidi-dev libharfbuzz-dev libffi-dev
+
+      - name: Install from source
+        run: |
+          git clone --depth=1 https://github.com/python-pillow/Pillow.git
+          cd Pillow && python3 -m pip install . && cd ..
+          python3 -m pip -v install ".[dev]"
+
+      - name: LibHeif info
+        run: python3 -c "import pillow_heif; print(pillow_heif.libheif_info())"
+
+      - name: Generate coverage report
+        run: coverage run -m pytest -rs && coverage xml && coverage html
+
+      - name: HTML coverage to artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage_linux_dev
+          path: ./htmlcov
+          if-no-files-found: error
+
+      - name: Upload report to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.xml
+          fail_ci_if_error: true
+          verbose: true
+
 #  coverage-macos:
 #    runs-on: macos-12
 #    name: Coverage(macOS)

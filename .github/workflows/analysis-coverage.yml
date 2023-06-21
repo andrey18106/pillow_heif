@@ -48,7 +48,7 @@ jobs:
           sudo apt -y purge libheif1
           sudo add-apt-repository ppa:strukturag/libheif
           sudo apt update
-          sudo apt -y install libheif-dev nasm
+          sudo apt -y install libheif-dev
 
       - name: Install from source
         run: |
@@ -91,7 +91,7 @@ jobs:
           sudo apt -y purge libheif1
           sudo add-apt-repository ppa:strukturag/libheif
           sudo apt update
-          sudo apt -y install libheif-dev nasm
+          sudo apt -y install libheif-dev
           sudo apt -y install zlib1g-dev libjpeg-dev liblcms2-dev libwebp-dev libfribidi-dev libharfbuzz-dev libffi-dev
 
       - name: Install from source

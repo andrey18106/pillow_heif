@@ -16,7 +16,7 @@ RUN \
     wget \
     libde265-dev \
     libaom-dev \
-    libx256-dev
+    libx265-dev
 
 RUN \
   python3 -m pip install --upgrade pip

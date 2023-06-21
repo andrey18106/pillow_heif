@@ -15,7 +15,6 @@ RUN \
     nasm \
     wget \
     libde265-dev \
-    libaom-dev \
     libx265-dev
 
 RUN \

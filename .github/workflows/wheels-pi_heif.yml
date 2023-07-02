@@ -150,6 +150,12 @@ jobs:
         env:
           OS_PACKAGES: "fribidi-dev harfbuzz-dev jpeg-dev lcms2-dev openjpeg-dev"
 
+      - name: 32-bit manylinux preparations
+        if: matrix.cibw_buildlinux == 'manylinux' && matrix.cibw_arch == 'i686'
+        run: echo INSTALL_OS_PACKAGES="yum makecache && yum install -y $OS_PACKAGES" >> $GITHUB_ENV
+        env:
+          OS_PACKAGES: "libjpeg-turbo-devel lcms2-devel"
+
       - name: Only minimal testing on aarch64
         if: matrix.cibw_arch == 'aarch64'
         run: echo CIBW_TEST_EXTRAS="tests-min" >> $GITHUB_ENV

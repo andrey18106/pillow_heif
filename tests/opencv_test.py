@@ -4,7 +4,6 @@ import os
 import sys
 from io import BytesIO
 from pathlib import Path
-from platform import machine
 from subprocess import CalledProcessError, run
 
 import pytest
@@ -153,7 +152,7 @@ def test_read_8_10_12_bit(img):
 def test_opencv_crash():
     # https://github.com/bigcat88/pillow_heif/issues/89
     path_to_test_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "opencv_bug.py")
-    if machine().find("x86_64") == -1 and sys.platform.lower() == "darwin":
+    if sys.platform.lower() == "darwin":
         with pytest.raises(CalledProcessError):
             run([sys.executable, path_to_test_file], check=True)
     else:

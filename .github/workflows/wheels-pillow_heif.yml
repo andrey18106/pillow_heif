@@ -71,6 +71,7 @@ jobs:
           CIBW_ARCHS_WINDOWS: "AMD64"
           CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: "delvewheel repair -vv -w {dest_dir} {wheel} --add-path ${{ env.MSYS2_PREFIX }}/bin"
           CIBW_ENVIRONMENT_WINDOWS: PH_FULL_ACTION=1
+          CIBW_BEFORE_BUILD: "pip install --prefer-binary pillow"
 
       - name: Check built wheels
         run: |

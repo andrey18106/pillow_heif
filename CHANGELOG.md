@@ -1,8 +1,9 @@
 All notable changes to this project will be documented in this file.
 
-## [0.11.2 - 2023-07-03]
+## [0.12.0 - 2023-07-08]
 
 This release is fully compatible with `0.10.x+` versions.
+Next version will have major installation changes, if I will be able to split all libheif plugins into separate projects.
 
 ## Added
 
@@ -11,9 +12,11 @@ This release is fully compatible with `0.10.x+` versions.
 ### Changed
 
 - `libde265`(HEIF decoder) updated from 1.0.11 to 1.0.12 version. [changelog](https://github.com/strukturag/libde265/releases/tag/v1.0.12)
+- `libheif` updated to `1.16.2`.
 
 ## Fixed
 
+- Building from source when using `apt-repository ppa:strukturag/libheif`
 - (Heif) `encode` function with `stride` argument correctly saves image.
 - (Heif) HeifFile class created with `from_bytes` function with `stride` argument respect `stride` value during save.
 - (Heif) HeifFile class created with `from_bytes` function with `stride` argument can correctly translate to numpy array.

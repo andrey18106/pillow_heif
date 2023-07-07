@@ -20,6 +20,7 @@ class Libheif < Formula
       -DWITH_SvtEnc=OFF
       -DWITH_AOM=OFF
       -DWITH_X265=OFF
+      -DWITH_LIBSHARPYUV=OFF
       -DENABLE_PLUGIN_LOADING=OFF
       -DCMAKE_INSTALL_RPATH=#{rpath}
     ]

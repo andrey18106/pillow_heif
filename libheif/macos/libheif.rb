@@ -23,6 +23,7 @@ class Libheif < Formula
       -DWITH_RAV1E=OFF
       -DWITH_DAV1D=OFF
       -DWITH_SvtEnc=OFF
+      -DWITH_LIBSHARPYUV=OFF
       -DENABLE_PLUGIN_LOADING=OFF
       -DCMAKE_INSTALL_RPATH=#{rpath}
     ]

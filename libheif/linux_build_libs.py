@@ -191,7 +191,7 @@ def build_lib_linux(url: str, name: str, musl: bool = False):
             if name == "libheif":
                 cmake_args += (
                     "-DWITH_EXAMPLES=OFF -DWITH_RAV1E=OFF -DWITH_DAV1D=OFF -DWITH_SvtEnc=OFF"
-                    " -DENABLE_PLUGIN_LOADING=OFF".split()
+                    " -DWITH_LIBSHARPYUV=OFF -DENABLE_PLUGIN_LOADING=OFF".split()
                 )
                 _hide_build_process = False
                 if musl:

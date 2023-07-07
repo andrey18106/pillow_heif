@@ -1,4 +1,4 @@
-FROM ghcr.io/linuxserver/baseimage-ubuntu:jammy as base
+FROM ubuntu:jammy as base
 
 RUN \
   apt-get -qq update && \
@@ -13,6 +13,7 @@ RUN \
     git \
     cmake \
     nasm \
+    libde265-dev \
     libaom-dev
 
 RUN \

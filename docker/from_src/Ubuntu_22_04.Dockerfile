@@ -3,6 +3,7 @@ FROM ubuntu:jammy as base
 RUN \
   apt-get -qq update && \
   apt-get -y -q install \
+    curl \
     python3-pip \
     libfribidi-dev \
     libharfbuzz-dev \

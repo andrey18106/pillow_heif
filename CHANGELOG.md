@@ -1,9 +1,14 @@
 All notable changes to this project will be documented in this file.
 
+## [0.1x.x - 2023-0x-xx]
+
+### Changed
+
+- The license for the project itself has been changed to "BSD-3-Clause" since "Apache 2.0" is not compatible with the "x265" encoder. #111
+
 ## [0.12.0 - 2023-07-08]
 
-This release is fully compatible with `0.10.x+` versions.
-Next version will have major installation changes, if I will be able to split all libheif plugins into separate projects.
+This release is fully compatible with previous versions.
 
 ## Added
 

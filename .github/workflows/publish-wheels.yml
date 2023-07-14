@@ -20,7 +20,7 @@ jobs:
     needs: [pi_heif_build]
     if: "contains(github.event.head_commit.message, '[publish]')"
     name: Upload to PyPi
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
       - uses: actions/checkout@v3
@@ -49,7 +49,6 @@ jobs:
       - name: Publish Pillow-Heif
         run: |
           python3 -m pip install twine
-          python3 -m pip install urllib3==1.26.15
           ls -la wheelhouse_pillow_heif
           du -h wheelhouse_pillow_heif
           python3 -m twine upload --skip-existing wheelhouse_pillow_heif/*.whl

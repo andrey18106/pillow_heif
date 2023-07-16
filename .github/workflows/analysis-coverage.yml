@@ -35,7 +35,7 @@ jobs:
 
   coverage-linux:
     runs-on: ubuntu-22.04
-    name: Coverage(Linux)
+    name: Coverage(Linux) • 🐍3.12
 
     steps:
       - uses: actions/checkout@v3
@@ -78,7 +78,7 @@ jobs:
 
   coverage-linux-pillow-dev:
     runs-on: ubuntu-22.04
-    name: Coverage(Linux, Pillow-dev)
+    name: Coverage(Linux, Pillow-dev) • 🐍3.11
 
     steps:
       - uses: actions/checkout@v3
@@ -123,7 +123,7 @@ jobs:
 
   coverage-macos:
     runs-on: macos-12
-    name: Coverage(macOS)
+    name: Coverage(macOS) • 🐍3.10
     env:
       TEST_DECODE_THREADS: 0    # This test fails on GitHub on macOS. We have such enabled test on Cirrus.
 
@@ -160,7 +160,7 @@ jobs:
 
   coverage-windows:
     runs-on: windows-2022
-    name: Coverage(Windows)
+    name: Coverage(Windows) • 🐍3.9
     env:
       MSYS2_PREFIX: "C:/temp/msys64/mingw64"
 
@@ -230,7 +230,7 @@ jobs:
 
   coverage-pi-heif:
     runs-on: ubuntu-22.04
-    name: Pi-Heif Coverage(Linux)
+    name: Pi-Heif Coverage(Linux) • 🐍3.8
 
     steps:
       - uses: actions/checkout@v3
@@ -274,7 +274,7 @@ jobs:
 
   test-pi-heif:
     runs-on: ubuntu-22.04
-    name: Pi-Heif Test(Linux)
+    name: Pi-Heif Test(Linux) • 🐍3.8
 
     steps:
       - uses: actions/checkout@v3

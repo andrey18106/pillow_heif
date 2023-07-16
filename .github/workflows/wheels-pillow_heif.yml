@@ -114,7 +114,7 @@ jobs:
           path: wheelhouse/*.whl
           if-no-files-found: error
 
-  wheels_linux_cpython:
+  wheels_linux_python:
     strategy:
       fail-fast: true
       matrix:

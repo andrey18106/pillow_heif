@@ -63,13 +63,13 @@ if pi_heif.is_supported("input.heic"):
 
 | **_Wheels table_** | macOS<br/>Intel | macOS<br/>Silicon | Windows<br/>64bit | musllinux* | manylinux* |
 |--------------------|:---------------:|:-----------------:|:-----------------:|:----------:|:----------:|
-| CPython 3.7        |        ✅        |        N/A        |         ✅         |    N/A     |     ✅      |
 | CPython 3.8        |        ✅        |         ✅         |         ✅         |     ✅      |     ✅      |
 | CPython 3.9        |        ✅        |         ✅         |         ✅         |     ✅      |     ✅      |
 | CPython 3.10       |        ✅        |         ✅         |         ✅         |     ✅      |     ✅      |
 | CPython 3.11       |        ✅        |         ✅         |         ✅         |     ✅      |     ✅      |
-| PyPy 3.8 v7.3      |        ✅        |        N/A        |        N/A        |    N/A     |     ✅      |
-| PyPy 3.9 v7.3      |        ✅        |        N/A        |         ✅         |    N/A     |     ✅      |
+| CPython 3.12       |        ✅        |         ✅         |         ✅         |     ✅      |     ✅      |
+| PyPy 3.9 v7.3      |        ✅        |         ✅         |         ✅         |    N/A     |     ✅      |
+| PyPy 3.10 v7.3     |        ✅        |         ✅         |         ✅         |    N/A     |     ✅      |
 
 &ast; **i686**, **x86_64**, **aarch64** wheels.
 

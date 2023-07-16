@@ -18,10 +18,10 @@ jobs:
           { "os": "oraclelinux", "ver": "9", "arch": "amd64" },
           { "os": "oraclelinux", "ver": "9", "arch": "arm64" },
           { "os": "fedora", "ver": "37", "arch": "amd64" },
-          { "os": "debian", "ver": "10", "arch": "amd64" },
-          { "os": "debian", "ver": "10", "arch": "arm64" },
           { "os": "debian", "ver": "11", "arch": "amd64" },
           { "os": "debian", "ver": "11", "arch": "arm64" },
+          { "os": "debian", "ver": "12", "arch": "amd64" },
+          { "os": "debian", "ver": "12", "arch": "arm64" },
           { "os": "alpine", "ver": "3.16", "arch": "amd64" },
           { "os": "alpine", "ver": "3.16", "arch": "arm64" },
           { "os": "alpine", "ver": "3.17", "arch": "amd64" },
@@ -40,12 +40,7 @@ jobs:
         uses: docker/setup-qemu-action@v2
 
       - name: Test type is Full
-        if: matrix.i['arch'] != 'arm/v7'
         run: echo TEST_TYPE="export PH_FULL_ACTION=1" >> $GITHUB_ENV
-
-      - name: Test type is Light
-        if: matrix.i['arch'] == 'arm/v7'
-        run: echo TEST_TYPE="export PH_LIGHT_ACTION=1" >> $GITHUB_ENV
 
       - name: Preparing debian
         if: matrix.i['os'] == 'debian' || matrix.i['os'] == 'ubuntu'
@@ -81,7 +76,7 @@ jobs:
     runs-on: windows-2019
     strategy:
       matrix:
-        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+        python-version: ["pypy-3.9", "pypy-3.10", "3.8", "3.9", "3.10", "3.11", "3.12"]
     env:
       PH_FULL_ACTION: 1
 
@@ -99,18 +94,18 @@ jobs:
 
       - name: Preparations
         run: |
-          python3 -m pip install pytest pillow numpy pympler defusedxml
+          python3 -m pip install pytest pillow packaging defusedxml
           python3 -m pip install -i https://test.pypi.org/simple/ --only-binary=:all: pillow_heif
 
       - name: Test wheel
-        run: cd .. && python3 -m pytest -rs pillow_heif
+        run: cd .. && python3 -m pytest pillow_heif
 
   macos-wheels:
     name: macOS • 11 • ${{ matrix.python-version }}
     runs-on: macos-11
     strategy:
       matrix:
-        python-version: ["pypy-3.8", "pypy-3.9", "3.7", "3.8", "3.9", "3.10", "3.11"]
+        python-version: ["pypy-3.9", "pypy-3.10", "3.8", "3.9", "3.10", "3.11", "3.12"]
 
     steps:
       - name: Delay, waiting Pypi to update.
@@ -126,21 +121,21 @@ jobs:
       - name: Preparations
         run: |
           brew install libjpeg little-cms2
-          python3 -m pip install pytest pillow numpy pympler defusedxml
+          python3 -m pip install pytest pillow packaging defusedxml
           python3 -m pip install -i https://test.pypi.org/simple/ --only-binary=:all: pillow_heif
 
       - name: Test wheel
         run: |
           export TEST_DECODE_THREADS=0
           export PH_FULL_ACTION=1
-          cd .. && python3 -m pytest -rs pillow_heif
+          cd .. && python3 -m pytest pillow_heif
 
   manylinux-wheels:
     name: Ubuntu-Focal • ${{ matrix.python-version }}
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        python-version: ["pypy-3.8", "pypy-3.9", "3.7", "3.8", "3.9", "3.10", "3.11"]
+        python-version: ["pypy-3.9", "pypy-3.10", "3.8", "3.9", "3.10", "3.11", "3.12"]
 
     steps:
       - name: Delay, waiting Pypi to update.
@@ -156,10 +151,10 @@ jobs:
       - name: Preparations
         run: |
           sudo apt update && sudo apt install libjpeg-dev liblcms2-dev
-          python3 -m pip install pytest pillow numpy pympler defusedxml
+          python3 -m pip install pytest pillow packaging defusedxml
           python3 -m pip install -i https://test.pypi.org/simple/ --only-binary=:all: pillow_heif
 
       - name: Test wheel
         run: |
           export PH_FULL_ACTION=1
-          cd .. && python3 -m pytest -rs pillow_heif
+          cd .. && python3 -m pytest pillow_heif

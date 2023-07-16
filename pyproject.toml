@@ -100,4 +100,3 @@ before-build = [
     "pip install delvewheel",
     "pip install --prefer-binary pillow",
 ]
-repair-wheel-command = ["delvewheel repair -vv -w {dest_dir} {wheel} --add-path ${{ env.MSYS2_PREFIX }}/bin"]

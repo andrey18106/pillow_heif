@@ -53,7 +53,7 @@ jobs:
       - name: Install from source  # when 3.12 get released will return `install ".[dev]"`
         run: |
           python3 -m pip install pillow==9.5.0
-          python3 -m pip -v install ".[tests-min]"
+          python3 -m pip -v install ".[tests-min]" coverage
 
       - name: LibHeif info
         run: python3 -c "import pillow_heif; print(pillow_heif.libheif_info())"

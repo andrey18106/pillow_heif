@@ -41,18 +41,6 @@ jobs:
       - name: Install cibuildwheel & twine
         run: python3 -m pip install twine cibuildwheel==2.14.1
 
-      - name: 32-bit musllinux preparations
-        if: matrix.cibw_buildlinux == 'musllinux' && matrix.cibw_arch == 'i686'
-        run: echo INSTALL_OS_PACKAGES="apk update && apk --no-cache add $OS_PACKAGES" >> $GITHUB_ENV
-        env:
-          OS_PACKAGES: "fribidi-dev harfbuzz-dev jpeg-dev lcms2-dev openjpeg-dev"
-
-      - name: 32-bit manylinux preparations
-        if: matrix.cibw_buildlinux == 'manylinux' && matrix.cibw_arch == 'i686'
-        run: echo INSTALL_OS_PACKAGES="yum makecache && yum install -y $OS_PACKAGES" >> $GITHUB_ENV
-        env:
-          OS_PACKAGES: "libjpeg-turbo-devel lcms2-devel"
-
       - uses: actions/cache@v3
         with:
           path: ${{ env.BUILD_DIR }}
@@ -66,7 +54,6 @@ jobs:
         env:
           CIBW_BUILD: ${{ format('cp38-{0}*', matrix.cibw_buildlinux) }}
           CIBW_ARCHS: ${{ matrix.cibw_arch }}
-          CIBW_BEFORE_ALL_LINUX: ${{ env.INSTALL_OS_PACKAGES }}
           CIBW_ENVIRONMENT_LINUX: BUILD_DIR=/host${{ env.BUILD_DIR }}
           CIBW_TEST_COMMAND: "python3 -c 'import pillow_heif; print(pillow_heif.libheif_info())'"
           CIBW_TEST_EXTRAS: ""

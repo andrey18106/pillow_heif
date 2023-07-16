@@ -89,6 +89,7 @@ before-all = [
 ]
 before-build = [
     "pip install --prefer-binary pillow",
+    "pip install --only-binary=:all: numpy || true",
 ]
 repair-wheel-command = [
   "DYLD_LIBRARY_PATH=$REPAIR_LIBRARY_PATH delocate-listdeps {wheel}",
@@ -100,4 +101,5 @@ test-skip = "cp38-macosx_arm64"
 before-build = [
     "pip install delvewheel",
     "pip install --prefer-binary pillow",
+    "pip install --only-binary=:all: numpy || true",
 ]

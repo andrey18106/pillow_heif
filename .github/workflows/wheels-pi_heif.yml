@@ -38,6 +38,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
       - name: Transform to Pi-Heif
         run: |
           cp -r -v -force ./pi-heif/* .
@@ -169,7 +172,7 @@ jobs:
           python3 -m pip install cibuildwheel==2.14.1
           python3 -m cibuildwheel
         env:
-          CIBW_ARCHS: ${{ matrix.cibw_arch }}
+          CIBW_BUILD: ${{ format('*-{0}_{1}', matrix.cibw_buildlinux, matrix.cibw_arch) }}
           CIBW_BEFORE_ALL_LINUX: ${{ env.INSTALL_OS_PACKAGES }}
           CIBW_ENVIRONMENT_LINUX: BUILD_DIR=/host${{ env.BUILD_DIR }} PH_LIGHT_ACTION=1
           CIBW_PRERELEASE_PYTHONS: True

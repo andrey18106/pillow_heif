@@ -208,6 +208,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - name: Transform to Pi-Heif
+        run: |
+          cp -r -v ./pi-heif/* .
+          python3 .github/transform_to-pi_heif.py
+
       - name: Set up QEMU
         if: matrix.cibw_arch == 'aarch64'
         uses: docker/setup-qemu-action@v2
@@ -230,7 +235,7 @@ jobs:
           CIBW_BUILD: ${{ format('pp3*-{0}_{1}', matrix.cibw_buildlinux, matrix.cibw_arch) }}
           CIBW_ARCHS: ${{ matrix.cibw_arch }}
           CIBW_BEFORE_ALL_LINUX: "yum makecache && yum install -y libjpeg-turbo-devel lcms2-devel"
-          CIBW_ENVIRONMENT_LINUX: BUILD_DIR=/host${{ env.BUILD_DIR }} PH_FULL_ACTION=1
+          CIBW_ENVIRONMENT_LINUX: BUILD_DIR=/host${{ env.BUILD_DIR }} PH_LIGHT_ACTION=1
 
       - name: Checking built wheels
         run: |

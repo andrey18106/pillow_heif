@@ -76,6 +76,7 @@ test-command = "pytest {project}"
 before-test = [
     "pip install --prefer-binary pillow",
     "pip install --only-binary=:all: numpy || true",
+    "pip install pympler || true",
 ]
 
 [tool.cibuildwheel.macos]

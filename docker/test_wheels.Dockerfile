@@ -6,12 +6,15 @@ RUN $PREPARE_CMD
 ARG INSTALL_CMD
 RUN $INSTALL_CMD
 
-RUN python3 -m pip install --upgrade pip || echo "pip upgrade failed"
-RUN python3 -m pip install --prefer-binary pillow
-RUN python3 -m pip install pytest numpy pympler defusedxml
+RUN python3 -m pip install --upgrade --break-system-packages \
+    pip || echo "pip upgrade failed"
+RUN python3 -m pip install --prefer-binary --break-system-packages \
+    pillow
+RUN python3 -m pip install --break-system-packages \
+    pytest numpy pympler defusedxml
 
 ARG EX_ARG
-RUN python3 -m pip install $EX_ARG --no-deps --only-binary=:all: pillow_heif
+RUN python3 -m pip install $EX_ARG --break-system-packages --no-deps --only-binary=:all: pillow_heif
 
 COPY . /pillow_heif
 

@@ -154,9 +154,13 @@ jobs:
           KEY_LINUX_LIBS: ${{ hashFiles('libheif/linux/**') }}
           KEY_C_BUILD: ${{ hashFiles('libheif/linux_*.py') }}-${{ hashFiles('libheif/setup.py') }}
 
-      - name: Only minimal testing on aarch64
+      - name: Full testing on x86_64
+        if: matrix.cibw_arch == 'x86_64'
+        run: echo PH_TESTS_NO_HEVC_ENC=0 >> $GITHUB_ENV
+
+      - name: Minimal testing on aarch64
         if: matrix.cibw_arch == 'aarch64'
-        run: echo PH_TESTS_NO_HEVC_ENC="PH_ADDITIONAL_ENV_FLAGS=1" >> $GITHUB_ENV
+        run: echo PH_TESTS_NO_HEVC_ENC=1 >> $GITHUB_ENV
 
       - name: Run cibuildwheel
         run: |
@@ -166,7 +170,8 @@ jobs:
           CIBW_BUILD: ${{ format('cp3*-{0}_{1}', matrix.cibw_buildlinux, matrix.cibw_arch) }}
           CIBW_ARCHS: ${{ matrix.cibw_arch }}
           CIBW_BEFORE_ALL_LINUX: ${{ env.INSTALL_OS_PACKAGES }}
-          CIBW_ENVIRONMENT_LINUX: BUILD_DIR=/host${{ env.BUILD_DIR }} PH_FULL_ACTION=1 {{ env.PH_ADDITIONAL_ENV_FLAGS }}
+          CIBW_ENVIRONMENT_LINUX: BUILD_DIR=/host${{ env.BUILD_DIR }} PH_FULL_ACTION=1
+          CIBW_ENVIRONMENT_PASS_LINUX: PH_TESTS_NO_HEVC_ENC
           CIBW_PRERELEASE_PYTHONS: True
 
       - name: Checking built wheels
@@ -212,9 +217,13 @@ jobs:
           KEY_LINUX_LIBS: ${{ hashFiles('libheif/linux/**') }}
           KEY_C_BUILD: ${{ hashFiles('libheif/linux_*.py') }}-${{ hashFiles('libheif/setup.py') }}
 
-      - name: Only minimal testing on aarch64
+      - name: Full testing on x86_64
+        if: matrix.cibw_arch == 'x86_64'
+        run: echo PH_TESTS_NO_HEVC_ENC=0 >> $GITHUB_ENV
+
+      - name: Minimal testing on aarch64
         if: matrix.cibw_arch == 'aarch64'
-        run: echo PH_TESTS_NO_HEVC_ENC="PH_ADDITIONAL_ENV_FLAGS=1" >> $GITHUB_ENV
+        run: echo PH_TESTS_NO_HEVC_ENC=1 >> $GITHUB_ENV
 
       - name: Run cibuildwheel
         run: |
@@ -224,7 +233,8 @@ jobs:
           CIBW_BUILD: ${{ format('pp3*-{0}_{1}', matrix.cibw_buildlinux, matrix.cibw_arch) }}
           CIBW_ARCHS: ${{ matrix.cibw_arch }}
           CIBW_BEFORE_ALL_LINUX: "yum makecache && yum install -y libjpeg-turbo-devel lcms2-devel"
-          CIBW_ENVIRONMENT_LINUX: BUILD_DIR=/host${{ env.BUILD_DIR }} PH_FULL_ACTION=1 {{ env.PH_ADDITIONAL_ENV_FLAGS }}
+          CIBW_ENVIRONMENT_LINUX: BUILD_DIR=/host${{ env.BUILD_DIR }} PH_FULL_ACTION=1
+          CIBW_ENVIRONMENT_PASS_LINUX: PH_TESTS_NO_HEVC_ENC
 
       - name: Checking built wheels
         run: |

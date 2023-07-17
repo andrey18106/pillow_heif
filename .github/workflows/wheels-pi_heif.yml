@@ -204,7 +204,7 @@ jobs:
     runs-on: ubuntu-20.04
     env:
       BUILD_DIR: "/tmp/ph_build_stuff"
-      KEY_HEAD: ${{ matrix.cibw_arch }}-${{ matrix.cibw_buildlinux }}
+      KEY_HEAD: Pi-Heif-${{ matrix.cibw_arch }}-${{ matrix.cibw_buildlinux }}
 
     steps:
       - uses: actions/checkout@v3

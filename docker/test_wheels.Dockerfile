@@ -16,7 +16,7 @@ RUN python3 -m venv venv
 RUN \
     venv/bin/python3 -m pip install --upgrade pip || echo "pip upgrade failed" && \
     venv/bin/python3 -m pip install --prefer-binary pillow && \
-    venv/bin/python3 -m pip install pytest numpy pympler defusedxml && \
+    venv/bin/python3 -m pip install pytest pympler defusedxml && \
     venv/bin/python3 -m pip install --only-binary=:all: numpy || true && \
     venv/bin/python3 -m pip install $EX_ARG --no-deps --only-binary=:all: pillow_heif && \
     $TEST_TYPE && \

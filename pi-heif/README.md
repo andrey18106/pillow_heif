@@ -73,4 +73,4 @@ if pi_heif.is_supported("input.heic"):
 
 &ast; **i686**, **x86_64**, **aarch64** wheels.
 
-For `ARMv7`(`armv7l`) wheels are present for Debian 10+(Ubuntu 20.04+) and Alpine 14+.
+`i686`, `ARMv7l`, `PyPy` 32-bit wheels are published only for [pi-heif](https://pypi.org/project/pi-heif/) from `0.13.0` version.

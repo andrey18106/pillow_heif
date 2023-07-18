@@ -79,10 +79,10 @@ import pillow_heif
 
 if pillow_heif.is_supported("image.heic"):
     heif_file = pillow_heif.open_heif("image.heic", convert_hdr_to_8bit=False)
+    print("image size:", heif_file.size)
     print("image mode:", heif_file.mode)
     print("image data length:", len(heif_file.data))
     print("image data stride:", heif_file.stride)
-    print("image mode:", heif_file.mode)
 ```
 
 ### Get decoded image data as a Numpy array

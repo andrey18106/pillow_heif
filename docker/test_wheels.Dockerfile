@@ -6,6 +6,7 @@ RUN $PREPARE_CMD
 ARG INSTALL_CMD
 RUN $INSTALL_CMD
 
+RUN python3 -m venv venv && source venv/bin/activate
 RUN python3 -m pip install --upgrade pip || echo "pip upgrade failed"
 RUN python3 -m pip install --prefer-binary pillow
 RUN python3 -m pip install pytest numpy pympler defusedxml

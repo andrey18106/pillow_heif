@@ -12,10 +12,9 @@ ARG EX_ARG
 ARG TEST_TYPE
 
 RUN \
-    /bin/bash && \
     $TEST_TYPE && \
     python3 -m venv venv && \
-    source venv/bin/activate && \
+    . venv/bin/activate && \
     python3 -m pip install --upgrade pip || echo "pip upgrade failed" && \
     python3 -m pip install --prefer-binary pillow && \
     python3 -m pip install pytest pympler defusedxml && \

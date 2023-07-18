@@ -71,90 +71,90 @@ jobs:
             --build-arg EX_ARG="-i https://test.pypi.org/simple/" \
             -f docker/test_wheels.Dockerfile .
 
-#  windows-wheels:
-#    name: Windows • 2019 • ${{ matrix.python-version }}
-#    runs-on: windows-2019
-#    strategy:
-#      matrix:
-#        python-version: ["pypy-3.9", "pypy-3.10", "3.8", "3.9", "3.10", "3.11", "3.12-dev"]
-#    env:
-#      PH_FULL_ACTION: 1
-#
-#    steps:
-#      - name: Delay, waiting Pypi to update.
-#        if: ${{ github.event_name != 'workflow_dispatch' }}
-#        run: Start-Sleep -s 480
-#        shell: powershell
-#
-#      - uses: actions/checkout@v3
-#      - name: Set up Python
-#        uses: actions/setup-python@v4
-#        with:
-#          python-version: ${{ matrix.python-version }}
-#
-#      - name: Preparations
-#        run: |
-#          python3 -m pip install pytest pillow packaging defusedxml
-#          python3 -m pip install -i https://test.pypi.org/simple/ --only-binary=:all: pillow_heif
-#
-#      - name: Test wheel
-#        run: cd .. && python3 -m pytest pillow_heif
-#
-#  macos-wheels:
-#    name: macOS • 11 • ${{ matrix.python-version }}
-#    runs-on: macos-11
-#    strategy:
-#      matrix:
-#        python-version: ["pypy-3.9", "pypy-3.10", "3.8", "3.9", "3.10", "3.11", "3.12-dev"]
-#
-#    steps:
-#      - name: Delay, waiting Pypi to update.
-#        if: ${{ github.event_name != 'workflow_dispatch' }}
-#        run: sleep 480
-#
-#      - uses: actions/checkout@v3
-#      - name: Set up Python
-#        uses: actions/setup-python@v4
-#        with:
-#          python-version: ${{ matrix.python-version }}
-#
-#      - name: Preparations
-#        run: |
-#          brew install libjpeg little-cms2
-#          python3 -m pip install pytest pillow packaging defusedxml
-#          python3 -m pip install -i https://test.pypi.org/simple/ --only-binary=:all: pillow_heif
-#
-#      - name: Test wheel
-#        run: |
-#          export TEST_DECODE_THREADS=0
-#          export PH_FULL_ACTION=1
-#          cd .. && python3 -m pytest pillow_heif
-#
-#  manylinux-wheels:
-#    name: Ubuntu-Focal • ${{ matrix.python-version }}
-#    runs-on: ubuntu-20.04
-#    strategy:
-#      matrix:
-#        python-version: ["pypy-3.9", "pypy-3.10", "3.8", "3.9", "3.10", "3.11", "3.12-dev"]
-#
-#    steps:
-#      - name: Delay, waiting Pypi to update.
-#        if: ${{ github.event_name != 'workflow_dispatch' }}
-#        run: sleep 480
-#
-#      - uses: actions/checkout@v3
-#      - name: Set up Python
-#        uses: actions/setup-python@v4
-#        with:
-#          python-version: ${{ matrix.python-version }}
-#
-#      - name: Preparations
-#        run: |
-#          sudo apt update && sudo apt install libjpeg-dev liblcms2-dev
-#          python3 -m pip install pytest pillow packaging defusedxml
-#          python3 -m pip install -i https://test.pypi.org/simple/ --only-binary=:all: pillow_heif
-#
-#      - name: Test wheel
-#        run: |
-#          export PH_FULL_ACTION=1
-#          cd .. && python3 -m pytest pillow_heif
+  windows-wheels:
+    name: Windows • 2019 • ${{ matrix.python-version }}
+    runs-on: windows-2019
+    strategy:
+      matrix:
+        python-version: ["pypy-3.9", "pypy-3.10", "3.8", "3.9", "3.10", "3.11", "3.12-dev"]
+    env:
+      PH_FULL_ACTION: 1
+
+    steps:
+      - name: Delay, waiting Pypi to update.
+        if: ${{ github.event_name != 'workflow_dispatch' }}
+        run: Start-Sleep -s 480
+        shell: powershell
+
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Preparations
+        run: |
+          python3 -m pip install pytest pillow packaging defusedxml
+          python3 -m pip install -i https://test.pypi.org/simple/ --only-binary=:all: pillow_heif
+
+      - name: Test wheel
+        run: cd .. && python3 -m pytest pillow_heif
+
+  macos-wheels:
+    name: macOS • 11 • ${{ matrix.python-version }}
+    runs-on: macos-11
+    strategy:
+      matrix:
+        python-version: ["pypy-3.9", "pypy-3.10", "3.8", "3.9", "3.10", "3.11", "3.12-dev"]
+
+    steps:
+      - name: Delay, waiting Pypi to update.
+        if: ${{ github.event_name != 'workflow_dispatch' }}
+        run: sleep 480
+
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Preparations
+        run: |
+          brew install libjpeg little-cms2
+          python3 -m pip install pytest pillow packaging defusedxml
+          python3 -m pip install -i https://test.pypi.org/simple/ --only-binary=:all: pillow_heif
+
+      - name: Test wheel
+        run: |
+          export TEST_DECODE_THREADS=0
+          export PH_FULL_ACTION=1
+          cd .. && python3 -m pytest pillow_heif
+
+  manylinux-wheels:
+    name: Ubuntu-Focal • ${{ matrix.python-version }}
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        python-version: ["pypy-3.9", "pypy-3.10", "3.8", "3.9", "3.10", "3.11", "3.12-dev"]
+
+    steps:
+      - name: Delay, waiting Pypi to update.
+        if: ${{ github.event_name != 'workflow_dispatch' }}
+        run: sleep 480
+
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Preparations
+        run: |
+          sudo apt update && sudo apt install libjpeg-dev liblcms2-dev
+          python3 -m pip install pytest pillow packaging defusedxml
+          python3 -m pip install -i https://test.pypi.org/simple/ --only-binary=:all: pillow_heif
+
+      - name: Test wheel
+        run: |
+          export PH_FULL_ACTION=1
+          cd .. && python3 -m pytest pillow_heif

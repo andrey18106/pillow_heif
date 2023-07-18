@@ -12,12 +12,13 @@ ARG EX_ARG
 ARG TEST_TYPE
 
 RUN python3 -m venv venv
-RUN source venv/bin/activate && \
-    pip install --upgrade pip || echo "pip upgrade failed" && \
-    pip install --prefer-binary pillow && \
-    pip install pytest numpy pympler defusedxml && \
-    pip install $EX_ARG --no-deps --only-binary=:all: pillow_heif && \
+
+RUN \
+    venv/bin/python3 -m pip install --upgrade pip || echo "pip upgrade failed" && \
+    venv/bin/python3 -m pip install --prefer-binary pillow && \
+    venv/bin/python3 -m pip install pytest numpy pympler defusedxml && \
+    venv/bin/python3 -m pip install $EX_ARG --no-deps --only-binary=:all: pillow_heif && \
     $TEST_TYPE && \
-    pytest -v pillow_heif/. && \
+    venv/bin/python3 -m pytest -v pillow_heif/. && \
     echo "**** Test Done ****" && \
-    pip show pillow_heif
+    venv/bin/python3 -m pip show pillow_heif

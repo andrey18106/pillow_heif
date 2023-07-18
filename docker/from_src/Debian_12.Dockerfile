@@ -4,10 +4,7 @@ RUN \
   apt-get -qq update && \
   apt-get -y -q install \
     python3-pip \
-    libfribidi-dev \
-    libharfbuzz-dev \
-    libjpeg-dev \
-    liblcms2-dev \
+    python3-pillow \
     libffi-dev \
     libtool \
     git \
@@ -16,12 +13,6 @@ RUN \
     wget \
     libde265-dev \
     libx265-dev
-
-RUN \
-  python3 -m pip install --break-system-packages --upgrade pip
-
-RUN \
-  python3 -m pip install --break-system-packages Pillow==10.0.0
 
 FROM base as build_test
 

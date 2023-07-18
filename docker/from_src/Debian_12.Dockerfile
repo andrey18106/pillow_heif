@@ -1,4 +1,4 @@
-FROM debian:bullseye-slim as base
+FROM debian:bookworm-slim as base
 
 RUN \
   apt-get -qq update && \

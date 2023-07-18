@@ -13,7 +13,7 @@ ARG TEST_TYPE
 
 RUN \
     $TEST_TYPE && \
-    python3 -m venv venv && \
+    python3 -m venv --system-site-packages venv && \
     . venv/bin/activate && \
     python3 -m pip install --upgrade pip || echo "pip upgrade failed" && \
     python3 -m pip install --prefer-binary pillow && \

@@ -1005,23 +1005,17 @@ int decode_image(CtxImageObject* self) {
         channel = heif_channel_interleaved;
         colorspace = heif_colorspace_RGB;
         if ((self->bits == 8) || (self->hdr_to_8bit)) {
-            bytes_in_cc = 1;
-            if (self->alpha) {
-                chroma = heif_chroma_interleaved_RGBA;
-            }
-            else {
-                chroma = heif_chroma_interleaved_RGB;
-            }
+            chroma = self->alpha ? heif_chroma_interleaved_RGBA : heif_chroma_interleaved_RGB;
         }
         else {
-            bytes_in_cc = 2;
-            if (self->alpha) {
-                chroma = heif_chroma_interleaved_RRGGBBAA_LE;
-            }
-            else {
-                chroma = heif_chroma_interleaved_RRGGBB_LE;
-            }
+            chroma = self->alpha ? heif_chroma_interleaved_RRGGBBAA_LE : heif_chroma_interleaved_RRGGBB_LE;
         }
+    }
+    if ((self->bits == 8) || (self->hdr_to_8bit)) {
+        bytes_in_cc = 1;
+    }
+    else {
+        bytes_in_cc = 2;
     }
 
     error = heif_decode_image(self->handle, &self->heif_image, colorspace, chroma, decode_options);

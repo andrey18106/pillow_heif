@@ -235,6 +235,8 @@ def __options_update(**kwargs):
     for k, v in kwargs.items():
         if k == "thumbnails":
             options.THUMBNAILS = v
+        elif k == "depth_images":
+            options.DEPTH_IMAGES = v
         elif k == "quality":
             options.QUALITY = v
         elif k == "save_to_12bit":
@@ -243,6 +245,8 @@ def __options_update(**kwargs):
             options.DECODE_THREADS = v
         elif k == "allow_incorrect_headers":
             options.ALLOW_INCORRECT_HEADERS = v
+        elif k == "save_nclx_profile":
+            options.SAVE_NCLX_PROFILE = v
         else:
             warn(f"Unknown option: {k}")
 

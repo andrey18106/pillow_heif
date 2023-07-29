@@ -13,7 +13,7 @@ class OperationType(IntEnum):
     NUMPY_RGB = 2
 
 
-VERSIONS = ["0.7.2", "0.8.0", "0.9.3", "0.11.1", "0.12.0"]
+VERSIONS = ["0.11.1", "0.12.0", "0.13.0"]
 N_ITER_SMALL = 100
 N_ITER_LARGE = 50
 
@@ -36,7 +36,10 @@ if __name__ == "__main__":  # argv: OperationType
     pug_image_results = []
     large_image_results = []
     for i, v in enumerate(VERSIONS):
-        run(f"{sys.executable} -m pip install pillow-heif=={v}".split(), check=True)
+        if v == "0.13.0":
+            run(f"{sys.executable} -m pip install ../.".split(), check=True)
+        else:
+            run(f"{sys.executable} -m pip install --no-cache-dir pillow-heif=={v}".split(), check=True)
         cat_image_results.append(measure_decode(cat_image_path, N_ITER_SMALL, operation_type))
         pug_image_results.append(measure_decode(pug_image_path, N_ITER_SMALL, operation_type))
         large_image_results.append(measure_decode(large_image_path, N_ITER_LARGE, operation_type))

@@ -128,7 +128,7 @@ class _LibHeifImageFile(ImageFile.ImageFile):
     def _init_from_heif_file(self, img_index: int) -> None:
         if self._heif_file:
             self._size = self._heif_file[img_index].size
-            if pil_version[:4] not in ("9.1.", "9.2.", "9.3.", "9.4.", "9.5.", "0.0."):
+            if pil_version[:4] not in ("9.1.", "9.2.", "9.3.", "9.4.", "9.5.", "10.0"):
                 # starting from Pillow 10.1, `mode` is a readonly property.
                 self._mode = self._heif_file[img_index].mode
             else:

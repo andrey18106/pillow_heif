@@ -58,7 +58,7 @@ def _pkg_config(name):
             return libs, cflags
         except Exception:  # noqa  # pylint: disable=broad-exception-caught
             pass
-    return None, None
+    return None
 
 
 class PillowHeifBuildExt(build_ext):
@@ -82,6 +82,7 @@ class PillowHeifBuildExt(build_ext):
                 print(f"Looking for `{lib_name}` using pkg-config.")
                 root = pkg_config(lib_name)
                 if root:
+                    print(f"Found `{lib_name}` using pkg-config: {root}")
                     libheif_found = True
                     break
 

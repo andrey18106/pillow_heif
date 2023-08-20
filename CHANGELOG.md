@@ -1,5 +1,11 @@
 All notable changes to this project will be documented in this file.
 
+## [0.1x.x - 2023-0x-xx]
+
+### Fixed
+
+- When building from source, the installer additionally searches for `libheif` using `pkg-config`. #128
+
 ## [0.13.0 - 2023-08-05]
 
 ### Added
@@ -89,7 +95,7 @@ Reworked version with the native C extension.
 
 - Fixed Access Violation(all versions were affected) when image size after decoding differs. #79
 
-## [0.9.11 - 2023-01-22]
+## [0.9.12 - 2023-01-22]
 
 ### Fixed
 

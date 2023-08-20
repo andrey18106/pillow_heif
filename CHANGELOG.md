@@ -2,6 +2,10 @@ All notable changes to this project will be documented in this file.
 
 ## [0.1x.x - 2023-0x-xx]
 
+### Changed
+
+- Linux: `libaom` updated to `3.6.1`, `musllinux` builds switched to `musllinux_1_2` tag.
+
 ### Fixed
 
 - When building from source, the installer additionally searches for `libheif` using `pkg-config`. #128
@@ -95,7 +99,7 @@ Reworked version with the native C extension.
 
 - Fixed Access Violation(all versions were affected) when image size after decoding differs. #79
 
-## [0.9.12 - 2023-01-22]
+## [0.9.13 - 2023-01-22]
 
 ### Fixed
 

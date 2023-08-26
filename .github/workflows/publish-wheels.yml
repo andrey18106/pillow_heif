@@ -70,7 +70,7 @@ jobs:
           TWINE_REPOSITORY: testpypi
 
 #      - name: Create release draft
-#        uses: ncipollo/release-action@v1.12.0
+#        uses: ncipollo/release-action@v1.13.0
 #        with:
 #          name: ${{ env.RELEASE_TAG }}
 #          tag: ${{ env.RELEASE_TAG }}

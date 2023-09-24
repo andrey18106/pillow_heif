@@ -1,6 +1,6 @@
 All notable changes to this project will be documented in this file.
 
-## [0.1x.x - 2023-0x-xx]
+## [0.13.1 - 2023-10-0x]
 
 ### Changed
 
@@ -10,18 +10,18 @@ All notable changes to this project will be documented in this file.
 
 - When building from source, the installer additionally searches for `libheif` using `pkg-config`. #128
 
-## [0.13.0 - 2023-08-05]
+## [0.13.0 - 2023-08-09]
 
 ### Added
 
-- `Python 3.12`, `PyPy 3.10` wheels
+- `Python 3.12`, `PyPy 3.10` wheels.
 - `Depth Image` read support, they are available as a list in `im.info["depth_images"]` #116
-- `options.SAVE_NCLX_PROFILE` - `nclx` profile from now are saved by default. #118 Thanks to @wiggin15
+- `options.SAVE_NCLX_PROFILE` - default `False` to be full compatible with previous versions, but in next versions may be changed to `True`. #118 Thanks to @wiggin15
 - Support for `Pillow 10.1.0`
 
 ### Changed
 
-- The license for the project itself has been changed to "BSD-3-Clause" since "Apache 2.0" is not compatible with the "x265" encoder. #111
+- The license for the project itself has been changed to "BSD-3-Clause" since "Apache 2.0" is not compatible with the "x265" encoder. #111 Thanks to @mattip
 - Minimum required `Pillow` version increased from `8.4.0` to `9.1.1`
 - Dropped `Python 3.7` support, `PyPy 3.8` wheels.
 - Dropped 32-bit wheels for `Pillow-Heif`. `Pi-Heif` still have 32-bit wheels.

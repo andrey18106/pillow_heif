@@ -1,6 +1,4 @@
-"""
-Options to change pillow_heif's runtime behaviour.
-"""
+"""Options to change pillow_heif's runtime behavior."""
 
 
 DECODE_THREADS = 4
@@ -51,7 +49,7 @@ When use pillow_heif as a plugin you can set it with: `register_*_opener(allow_i
 
 
 SAVE_NCLX_PROFILE = False
-"""Should be `nclx` profile saved or not.
+"""Should be ``nclx`` profile saved or not.
 
 Default for all previous versions was NOT TO save `nclx` profile,
 due to an old bug in Apple software refusing to open images with `nclx` profiles.

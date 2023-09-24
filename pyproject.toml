@@ -12,18 +12,19 @@ preview = true
 [tool.ruff]
 line-length = 120
 target-version = "py38"
-select = ["A", "B", "C", "D", "E", "F", "G", "I", "UP", "SIM", "Q", "W"]
-extend-ignore = ["D107", "D105", "D203", "D213", "D401", "I001"]
+select = ["A", "B", "C", "D", "E", "F", "G", "I", "S", "SIM", "Q", "RET", "RUF", "UP" , "W"]
+extend-ignore = ["D107", "D105", "D203", "D213", "D401", "I001", "RUF100"]
 
 [tool.ruff.per-file-ignores]
 "pillow_heif/__init__.py" = ["F401"]
+"setup.py" = ["S"]
 
 [tool.ruff.extend-per-file-ignores]
-"benchmarks/**/*.py" = ["D"]
+"benchmarks/**/*.py" = ["D", "S603"]
 "docs/**/*.py" = ["D"]
 "examples/**/*.py" = ["D"]
-"libheif/**/*.py" = ["D"]
-"tests/**/*.py" = ["B009", "D", "E402", "UP"]
+"libheif/**/*.py" = ["D", "S"]
+"tests/**/*.py" = ["B009", "D", "E402", "S", "UP"]
 
 [tool.ruff.mccabe]
 max-complexity = 16

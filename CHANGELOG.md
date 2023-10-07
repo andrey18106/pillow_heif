@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-- `libaom` updated to `3.7.0`, `musllinux` builds switched to `musllinux_1_2` tag.
+- Linux: `libaom` updated from `3.5.0` to `3.6.1`, `musllinux` builds switched to `musllinux_1_2` tag.
 
 ### Fixed
 

@@ -35,7 +35,7 @@ if __name__ == "__main__":  # argv: OperationType
     cat_image_results = []
     pug_image_results = []
     large_image_results = []
-    for _, v in enumerate(VERSIONS):
+    for v in VERSIONS:
         if v == "0.13.0":
             run(f"{sys.executable} -m pip install ../.".split(), check=True)
         else:

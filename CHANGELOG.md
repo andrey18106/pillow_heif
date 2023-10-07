@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 
 - Linux: `libaom` updated from `3.5.0` to `3.6.1`, `musllinux` builds switched to `musllinux_1_2` tag.
+- Returned `PyPy 3.8` wheels.
 
 ### Fixed
 
@@ -99,7 +100,7 @@ Reworked version with the native C extension.
 
 - Fixed Access Violation(all versions were affected) when image size after decoding differs. #79
 
-## [0.9.13 - 2023-01-22]
+## [0.9.14 - 2023-01-22]
 
 ### Fixed
 

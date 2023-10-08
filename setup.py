@@ -15,6 +15,8 @@ from setuptools.command.build_ext import build_ext
 
 from libheif import linux_build_libs
 
+# pylint: disable=too-many-branches disable=too-many-statements disable=too-many-locals
+
 
 def get_version():
     """Returns version of the project."""
@@ -66,7 +68,7 @@ def _pkg_config(name):
 class PillowHeifBuildExt(build_ext):
     """Class based on the Pillow setup method."""
 
-    def build_extensions(self):  # noqa pylint: disable=too-many-branches disable=too-many-statements
+    def build_extensions(self):  # noqa
         """Builds all required python binary extensions of the project."""
         if os.getenv("PRE_COMMIT"):
             return
@@ -175,6 +177,11 @@ class PillowHeifBuildExt(build_ext):
             self._add_directory(library_dirs, "/opt/local/lib")
             self._add_directory(include_dirs, "/opt/local/include")
 
+            sdk_path = self._get_macos_sdk_path()
+            if sdk_path:
+                self._add_directory(library_dirs, os.path.join(sdk_path, "usr", "lib"))
+                self._add_directory(include_dirs, os.path.join(sdk_path, "usr", "include"))
+
             self._update_extension("_pillow_heif", ["heif"], extra_compile_args=["-Ofast", "-Werror"])
         else:  # let's assume it's some kind of linux
             # this old code waiting for refactoring, when time comes.
@@ -212,6 +219,22 @@ class PillowHeifBuildExt(build_ext):
             subdir = os.path.realpath(subdir)
             if os.path.isdir(subdir) and subdir not in paths:
                 paths.append(subdir)
+
+    @staticmethod
+    def _get_macos_sdk_path():
+        try:
+            sdk_path = subprocess.check_output(["xcrun", "--show-sdk-path"]).strip().decode("latin1")
+        except Exception:  # noqa  # pylint: disable=broad-exception-caught
+            sdk_path = None
+        if (
+            not sdk_path
+            or sdk_path
+            == "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
+        ):
+            commandlinetools_sdk_path = "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk"
+            if os.path.exists(commandlinetools_sdk_path):
+                sdk_path = commandlinetools_sdk_path
+        return sdk_path
 
 
 if os.getenv("READTHEDOCS", "False") == "True":

@@ -84,10 +84,10 @@ class PillowHeifBuildExt(build_ext):
         libheif_found = False
         if pkg_config:
             for lib_name in ("heif", "libheif"):
-                print(f"Looking for `{lib_name}` using pkg-config.")
+                print(f"Looking for '{lib_name}' using pkg-config.")
                 root = pkg_config(lib_name)
                 if root:
-                    print(f"Found `{lib_name}` using pkg-config: {root}")
+                    print(f"Found '{lib_name}' using pkg-config: {root}")
                     libheif_found = True
                     break
 
@@ -135,7 +135,7 @@ class PillowHeifBuildExt(build_ext):
             if include_path_prefix is None:
                 include_path_prefix = "C:\\msys64\\mingw64"
                 warn(
-                    f"MSYS2_PREFIX environment variable is not set. Assuming `MSYS2_PREFIX={include_path_prefix}`",
+                    f"MSYS2_PREFIX environment variable is not set. Assuming MSYS2_PREFIX={include_path_prefix}",
                     stacklevel=1,
                 )
 

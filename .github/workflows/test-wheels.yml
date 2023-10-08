@@ -76,7 +76,7 @@ jobs:
     runs-on: windows-2019
     strategy:
       matrix:
-        python-version: ["pypy-3.8", "pypy-3.9", "pypy-3.10", "3.8", "3.9", "3.10", "3.11", "3.12-dev"]
+        python-version: ["pypy-3.8", "pypy-3.9", "pypy-3.10", "3.8", "3.9", "3.10", "3.11", "3.12"]
     env:
       PH_FULL_ACTION: 1
 
@@ -94,7 +94,8 @@ jobs:
 
       - name: Preparations
         run: |
-          python3 -m pip install pytest pillow packaging defusedxml
+          python3 -m pip install --prefer-binary pillow
+          python3 -m pip install pytest packaging defusedxml
           python3 -m pip install -i https://test.pypi.org/simple/ --only-binary=:all: pillow_heif
 
       - name: Test wheel
@@ -121,7 +122,8 @@ jobs:
       - name: Preparations
         run: |
           brew install libjpeg little-cms2
-          python3 -m pip install pytest pillow packaging defusedxml
+          python3 -m pip install --prefer-binary pillow
+          python3 -m pip install pytest packaging defusedxml
           python3 -m pip install -i https://test.pypi.org/simple/ --only-binary=:all: pillow_heif
 
       - name: Test wheel
@@ -151,7 +153,8 @@ jobs:
       - name: Preparations
         run: |
           sudo apt update && sudo apt install libjpeg-dev liblcms2-dev
-          python3 -m pip install pytest pillow packaging defusedxml
+          python3 -m pip install --prefer-binary pillow
+          python3 -m pip install pytest packaging defusedxml
           python3 -m pip install -i https://test.pypi.org/simple/ --only-binary=:all: pillow_heif
 
       - name: Test wheel

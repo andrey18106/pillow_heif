@@ -2,10 +2,13 @@ All notable changes to this project will be documented in this file.
 
 ## [0.13.1 - 2023-10-16]
 
+### Added
+
+- Returned `PyPy 3.8` wheels.
+
 ### Changed
 
 - Linux: `libaom` updated from `3.5.0` to `3.6.1`, `musllinux` builds switched to `musllinux_1_2` tag.
-- Returned `PyPy 3.8` wheels.
 
 ### Fixed
 

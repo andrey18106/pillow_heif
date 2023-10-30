@@ -2,7 +2,8 @@ FROM fedora:38 as base
 
 RUN \
   yum makecache && \
-  yum install -y python3 python3-devel python3-pip libheif-devel
+  yum install -y python3 python3-devel python3-pip libheif-devel && \
+  dnf groupinstall -y 'Development Tools'
 
 RUN \
   python3 -m pip install --upgrade pip

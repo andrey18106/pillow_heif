@@ -4,7 +4,8 @@ RUN \
   yum makecache && \
   dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm && \
   yum makecache && \
-  yum install -y python3 python3-pip python3-devel libheif-devel
+  yum install -y python3 python3-pip python3-devel libheif-devel && \
+  dnf groupinstall -y 'Development Tools'
 
 RUN \
   python3 -m pip install --upgrade pip

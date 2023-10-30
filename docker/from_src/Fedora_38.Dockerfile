@@ -1,27 +1,11 @@
-FROM ubuntu:jammy as base
+FROM fedora:38 as base
 
 RUN \
-  apt-get -qq update && \
-  apt-get -y -q install \
-    curl \
-    python3-pip \
-    libfribidi-dev \
-    libharfbuzz-dev \
-    libjpeg-dev \
-    liblcms2-dev \
-    libffi-dev \
-    libtool \
-    git \
-    cmake \
-    nasm \
-    libde265-dev \
-    libaom-dev
+  yum makecache && \
+  yum install -y python3 python3-pip libheif-devel
 
 RUN \
   python3 -m pip install --upgrade pip
-
-RUN \
-  python3 -m pip install Pillow==9.3.0
 
 FROM base as build_test
 

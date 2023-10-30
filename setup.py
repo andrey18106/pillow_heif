@@ -13,9 +13,11 @@ from warnings import warn
 from setuptools import Extension, setup
 from setuptools.command.build_ext import build_ext
 
-from libheif import linux_build_libs
-
 # pylint: disable=too-many-branches disable=too-many-statements disable=too-many-locals
+
+
+class RequiredDependencyException(Exception):
+    """Raised when no ``libheif`` is found."""
 
 
 def get_version():
@@ -44,9 +46,6 @@ def _pkg_config(name):
                 command_libs.append("--keep-system-libs")
                 command_cflags.append("--keep-system-cflags")
                 stderr = subprocess.DEVNULL
-            # if not DEBUG:
-            #     command_libs.append("--silence-errors")
-            #     command_cflags.append("--silence-errors")
             libs = re.split(
                 r"(^|\s+)-L",
                 subprocess.check_output(command_libs, stderr=stderr).decode("utf8").strip(),
@@ -80,32 +79,41 @@ class PillowHeifBuildExt(build_ext):
         if _cmd_exists(os.environ.get("PKG_CONFIG", "pkg-config")):
             pkg_config = _pkg_config
 
-        root = None
-        libheif_found = False
-        if pkg_config:
-            for lib_name in ("heif", "libheif"):
-                print(f"Looking for '{lib_name}' using pkg-config.")
-                root = pkg_config(lib_name)
-                if root:
-                    print(f"Found '{lib_name}' using pkg-config: {root}")
-                    libheif_found = True
-                    break
+        for root_name, lib_name in {
+            "LIBHEIF_ROOT": ("libheif", "heif"),
+        }.items():
+            root = globals()[root_name]
 
-        if isinstance(root, tuple):
-            lib_root, include_root = root
-        else:
-            lib_root = include_root = root
+            if root is None and root_name in os.environ:
+                prefix = os.environ[root_name]
+                root = (os.path.join(prefix, "lib"), os.path.join(prefix, "include"))
 
-        if lib_root is not None:
-            if not isinstance(lib_root, (tuple, list)):
-                lib_root = (lib_root,)
-            for lib_dir in lib_root:
-                self._add_directory(library_dirs, lib_dir)
-        if include_root is not None:
-            if not isinstance(include_root, (tuple, list)):
-                include_root = (include_root,)
-            for include_dir in include_root:
-                self._add_directory(include_dirs, include_dir)
+            if root is None and pkg_config:
+                if isinstance(lib_name, tuple):
+                    for lib_name2 in lib_name:
+                        print(f"Looking for `{lib_name2}` using pkg-config.")
+                        root = pkg_config(lib_name2)
+                        if root:
+                            break
+                else:
+                    print(f"Looking for `{lib_name}` using pkg-config.")
+                    root = pkg_config(lib_name)
+
+            if isinstance(root, tuple):
+                lib_root, include_root = root
+            else:
+                lib_root = include_root = root
+
+            if lib_root is not None:
+                if not isinstance(lib_root, (tuple, list)):
+                    lib_root = (lib_root,)
+                for lib_dir in lib_root:
+                    self._add_directory(library_dirs, lib_dir)
+            if include_root is not None:
+                if not isinstance(include_root, (tuple, list)):
+                    include_root = (include_root,)
+                for include_dir in include_root:
+                    self._add_directory(include_dirs, include_dir)
 
         # respect CFLAGS/CPPFLAGS/LDFLAGS
         for k in ("CFLAGS", "CPPFLAGS", "LDFLAGS"):
@@ -192,15 +200,14 @@ class PillowHeifBuildExt(build_ext):
             self._add_directory(library_dirs, "/usr/lib")
             self._add_directory(library_dirs, "/lib")
 
-            if not libheif_found:
-                include_path_prefix = linux_build_libs.build_libs()  # this needs a rework in the future
-                self._add_directory(library_dirs, os.path.join(include_path_prefix, "lib"))
-                self._add_directory(include_dirs, os.path.join(include_path_prefix, "include"))
-
             self._update_extension("_pillow_heif", ["heif"], extra_compile_args=["-Ofast", "-Werror"])
 
         self.compiler.library_dirs = library_dirs + self.compiler.library_dirs
         self.compiler.include_dirs = include_dirs + self.compiler.include_dirs
+
+        heif_include = self._find_include_file("heif.h")
+        if not heif_include:
+            raise RequiredDependencyException("libheif")
 
         build_ext.build_extensions(self)
 
@@ -212,6 +219,14 @@ class PillowHeifBuildExt(build_ext):
                     extension.extra_compile_args += extra_compile_args
                 if extra_link_args is not None:
                     extension.extra_link_args += extra_link_args
+
+    def _find_include_file(self, include) -> str:
+        for directory in self.compiler.include_dirs:
+            print("Checking for include file %s in %s", (include, directory))
+            if os.path.isfile(os.path.join(directory, include)):
+                print("Found %s", include)
+                return include
+        return ""
 
     @staticmethod
     def _add_directory(paths: List, subdir):
@@ -237,11 +252,24 @@ class PillowHeifBuildExt(build_ext):
         return sdk_path
 
 
-if os.getenv("READTHEDOCS", "False") == "True":
-    setup(version=get_version())
-else:
-    setup(
-        version=get_version(),
-        cmdclass={"build_ext": PillowHeifBuildExt},
-        ext_modules=[Extension("_pillow_heif", ["pillow_heif/_pillow_heif.c"])],
-    )
+try:
+    if os.getenv("READTHEDOCS", "False") == "True":
+        setup(version=get_version())
+    else:
+        setup(
+            version=get_version(),
+            cmdclass={"build_ext": PillowHeifBuildExt},
+            ext_modules=[Extension("_pillow_heif", ["pillow_heif/_pillow_heif.c"])],
+        )
+except RequiredDependencyException as err:
+    msg = f"""
+
+The headers or library files could not be found for {err},
+a required dependency when compiling Pillow-Heif from source.
+
+Please see the install instructions at:
+   https://pillow-heif.readthedocs.io/en/latest/installation.html
+
+"""
+    sys.stderr.write(msg)
+    raise RequiredDependencyException(msg) from None

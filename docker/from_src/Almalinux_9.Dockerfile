@@ -1,17 +1,8 @@
-FROM alpine:3.17 as base
+FROM almalinux:9 as base
 
 RUN \
-  apk add --no-cache \
-    python3-dev \
-    py3-pip \
-    perl \
-    alpine-sdk \
-    libffi-dev \
-    cmake \
-    nasm \
-    aom-dev \
-    py3-numpy \
-    py3-pillow
+  yum makecache && \
+  yum install -y python3 python3-pip libheif-devel
 
 RUN \
   python3 -m pip install --upgrade pip

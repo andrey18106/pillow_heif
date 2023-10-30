@@ -2,7 +2,9 @@ FROM almalinux:9 as base
 
 RUN \
   yum makecache && \
-  yum install -y python3 python3-pip libheif-devel
+  dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm && \
+  yum makecache && \
+  yum install -y python3 python3-pip python3-devel libheif-devel
 
 RUN \
   python3 -m pip install --upgrade pip

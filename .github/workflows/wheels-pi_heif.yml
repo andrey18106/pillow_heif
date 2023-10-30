@@ -148,15 +148,18 @@ jobs:
 
       - name: musllinux preparations
         if: matrix.cibw_buildlinux == 'musllinux'
-        run: echo INSTALL_OS_PACKAGES="apk update && apk --no-cache add $OS_PACKAGES && python3 {package}/libheif/linux_build_libs.py" >> $GITHUB_ENV
+        run: echo INSTALL_OS_PACKAGES="apk update && apk --no-cache add $OS_PACKAGES" >> $GITHUB_ENV
         env:
           OS_PACKAGES: "fribidi-dev harfbuzz-dev jpeg-dev lcms2-dev openjpeg-dev"
 
       - name: 32-bit manylinux preparations
         if: matrix.cibw_buildlinux == 'manylinux'
-        run: echo INSTALL_OS_PACKAGES="yum makecache && yum install -y $OS_PACKAGES && python3 {package}/libheif/linux_build_libs.py" >> $GITHUB_ENV
+        run: echo INSTALL_OS_PACKAGES="yum makecache && yum install -y $OS_PACKAGES" >> $GITHUB_ENV
         env:
           OS_PACKAGES: "libjpeg-turbo-devel lcms2-devel"
+
+      - name: Prepare libheif build
+        run: echo INSTALL_OS_PACKAGES="$INSTALL_OS_PACKAGES && python3 {package}/libheif/linux_build_libs.py" >> $GITHUB_ENV
 
       - uses: actions/cache@v3
         with:

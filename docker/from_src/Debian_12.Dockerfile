@@ -10,6 +10,7 @@ RUN \
     git \
     cmake \
     wget \
+    pkg-config \
     libheif-dev
 
 FROM base as build_test

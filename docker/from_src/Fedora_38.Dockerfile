@@ -1,7 +1,7 @@
 FROM fedora:38 as base
 
 RUN \
-  dnf install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm && \
+  dnf install -y https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm && \
   dnf makecache && \
   dnf install -y python3 python3-devel python3-pip libheif-freeworld && \
   dnf groupinstall -y 'Development Tools'

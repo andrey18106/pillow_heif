@@ -175,7 +175,7 @@ jobs:
           CIBW_ARCHS: ${{ matrix.cibw_arch }}
           CIBW_BEFORE_ALL_LINUX: >
             ${{ env.INSTALL_OS_PACKAGES }}
-            "python3 {package}/libheif/linux_build_libs.py"
+            python3 {package}/libheif/linux_build_libs.py
           CIBW_ENVIRONMENT_LINUX: BUILD_DIR=/host${{ env.BUILD_DIR }} PH_LIGHT_ACTION=1
 
       - name: Checking built wheels

@@ -243,11 +243,12 @@ jobs:
 
       - name: Prepare system
         run: |
-          sudo apt -y purge libheif1 libaom-dev libx265-dev
-          sudo apt -y install libde265-dev nasm
+          sudo apt -y purge libheif1 libaom-dev libx265-dev libde265-dev
+          sudo apt -y install nasm
 
       - name: Install from source
         run: |
+          sudo -H python3 libheif/linux_build_libs.py
           sudo -H python3 -m pip install pillow==9.3.0 pytest defusedxml packaging numpy coverage
           sudo -H PH_LIGHT_ACTION=1 python3 -m pip -v install --no-build-isolation .
 
@@ -289,11 +290,12 @@ jobs:
 
       - name: Prepare system
         run: |
-          sudo apt -y purge libheif1 libaom-dev libx265-dev
-          sudo apt -y install libde265-dev nasm
+          sudo apt -y purge libheif1 libaom-dev libx265-dev libde265-dev
+          sudo apt -y install  nasm
 
       - name: Install from source
         run: |
+          sudo -H python3 libheif/linux_build_libs.py
           sudo -H python3 -m pip install pillow==9.1.1 pytest defusedxml packaging numpy
           sudo -H PH_LIGHT_ACTION=1 python3 -m pip -v install --no-build-isolation .
 

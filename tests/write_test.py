@@ -21,7 +21,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 pillow_heif.register_avif_opener()
 pillow_heif.register_heif_opener()
 
-BROKEN_AVIF = str(pillow_heif.libheif_info()["AVIF"]).find("3.7.0") != -1
+BROKEN_AVIF = str(pillow_heif.libheif_info()["AVIF"]).find("3.6.0") != -1
 """libaom 3.6.0 is a broken version, and it is present in default Debian 12 repo. Skip AVIF tests on it."""
 
 

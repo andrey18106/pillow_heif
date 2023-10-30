@@ -27,6 +27,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - name: Prepare system
+        run: |
+          sudo apt -y purge libheif1
+          sudo add-apt-repository ppa:strukturag/libheif
+          sudo apt update
+          sudo apt -y install libheif-dev
+
       - name: Install from source
         run: python3 -m pip install ".[dev]" wheel
 
@@ -311,6 +318,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - name: Prepare system
+        run: |
+          sudo apt -y purge libheif1
+          sudo add-apt-repository ppa:strukturag/libheif
+          sudo apt update
+          sudo apt -y install libheif-dev
+
       - name: Install from source
         run: |
           python3 -m pip -v install .

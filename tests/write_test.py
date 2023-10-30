@@ -21,9 +21,6 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 pillow_heif.register_avif_opener()
 pillow_heif.register_heif_opener()
 
-BROKEN_AVIF = str(pillow_heif.libheif_info()["AVIF"]).find("3.6.0") != -1
-"""libaom 3.6.0 is a broken version, and it is present in default Debian 12 repo. Skip AVIF tests on it."""
-
 
 @pytest.mark.parametrize("save_format", ("HEIF", "AVIF"))
 def test_save_format(save_format):
@@ -170,8 +167,6 @@ def test_hif_file():
 )
 @pytest.mark.parametrize("save_format", ("HEIF", "AVIF"))
 def test_hdr_save(im_path, save_format):
-    if BROKEN_AVIF and save_format == "AVIF":
-        pytest.skip()
     im_path = im_path + (".heif" if save_format == "HEIF" else ".avif")
     heif_file = pillow_heif.open_heif(im_path, convert_hdr_to_8bit=False)
     out_buf = BytesIO()
@@ -286,8 +281,6 @@ def test_YCbCr_color_mode():  # noqa
 @pytest.mark.parametrize("enc_bits", (10, 12))
 @pytest.mark.parametrize("save_format", ("HEIF", "AVIF"))
 def test_I_color_modes_to_10_12_bit(enc_bits, save_format):  # noqa
-    if BROKEN_AVIF and save_format == "AVIF":
-        pytest.skip()
     try:
         pillow_heif.options.SAVE_HDR_TO_12_BIT = bool(enc_bits == 12)
         src_pillow = Image.open(Path("images/non_heif/L_16__29x100.png"))

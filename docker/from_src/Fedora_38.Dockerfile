@@ -4,6 +4,7 @@ RUN \
   dnf install -y https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm && \
   dnf makecache && \
   dnf install -y python3 python3-devel python3-pip libheif-freeworld && \
+  dnf install -y libheif-devel && \
   dnf groupinstall -y 'Development Tools'
 
 RUN \

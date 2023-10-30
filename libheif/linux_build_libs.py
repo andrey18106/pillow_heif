@@ -214,3 +214,7 @@ def build_libs() -> None:
         build_lib_linux(LIBHEIF_URL, "libheif")
     finally:
         chdir(_original_dir)
+
+
+if __name__ == "__main__":
+    build_libs()

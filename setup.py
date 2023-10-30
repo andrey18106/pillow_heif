@@ -14,6 +14,7 @@ from setuptools import Extension, setup
 from setuptools.command.build_ext import build_ext
 
 # pylint: disable=too-many-branches disable=too-many-statements disable=too-many-locals
+LIBHEIF_ROOT = None
 
 
 class RequiredDependencyException(Exception):
@@ -151,7 +152,7 @@ class PillowHeifBuildExt(build_ext):
                 raise ValueError("MSYS2 not found and `MSYS2_PREFIX` is not set or is invalid.")
 
             library_dir = os.path.join(include_path_prefix, "lib")
-            # See comment a few lines below. We can't include MSYS2 directory before compiler directories :(
+            # See comment a few lines below. We can't include MSYS2 directory before compiler directories.
             # self._add_directory(include_dirs, path.join(include_path_prefix, "include"))
             self._add_directory(library_dirs, library_dir)
             lib_export_file = Path(os.path.join(library_dir, "libheif.dll.a"))
@@ -205,7 +206,7 @@ class PillowHeifBuildExt(build_ext):
         self.compiler.library_dirs = library_dirs + self.compiler.library_dirs
         self.compiler.include_dirs = include_dirs + self.compiler.include_dirs
 
-        heif_include = self._find_include_file("heif.h")
+        heif_include = self._find_include_dir("libheif", "heif.h")
         if not heif_include:
             raise RequiredDependencyException("libheif")
 
@@ -220,12 +221,19 @@ class PillowHeifBuildExt(build_ext):
                 if extra_link_args is not None:
                     extension.extra_link_args += extra_link_args
 
-    def _find_include_file(self, include) -> str:
+    def _find_include_dir(self, dirname, include):
         for directory in self.compiler.include_dirs:
             print("Checking for include file %s in %s", (include, directory))
-            if os.path.isfile(os.path.join(directory, include)):
-                print("Found %s", include)
-                return include
+            result_path = os.path.join(directory, include)
+            if os.path.isfile(result_path):
+                print("Found %s in %s", (include, directory))
+                return result_path
+            subdir = os.path.join(directory, dirname)
+            print("Checking for include file %s in %s", (include, subdir))
+            result_path = os.path.join(subdir, include)
+            if os.path.isfile(result_path):
+                print("Found %s in %s", (include, subdir))
+                return result_path
         return ""
 
     @staticmethod

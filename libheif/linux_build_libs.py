@@ -6,7 +6,7 @@ from platform import machine
 from re import IGNORECASE, MULTILINE, match, search
 from subprocess import DEVNULL, PIPE, STDOUT, CalledProcessError, TimeoutExpired, run
 
-# 1
+# 0
 BUILD_DIR = environ.get("BUILD_DIR", "/tmp/ph_build_stuff")
 INSTALL_DIR_LIBS = environ.get("INSTALL_DIR_LIBS", "/usr")
 PH_LIGHT_VERSION = sys.maxsize <= 2**32 or getenv("PH_LIGHT_ACTION", "0") != "0"
@@ -95,6 +95,13 @@ def check_install_nasm(version: str):
     run("nasm --version".split(), check=True)
     run(f"chmod -R 774 {_tool_path}".split(), check=True)
     return True
+
+
+def is_musllinux() -> bool:
+    _ = run("ldd --version".split(), stdout=PIPE, stderr=STDOUT, check=False)
+    if _.stdout and _.stdout.decode("utf-8").find("musl") != -1:
+        return True
+    return False
 
 
 def run_print_if_error(args) -> None:
@@ -189,13 +196,6 @@ def build_lib_linux(url: str, name: str):
         run(f"ldconfig {INSTALL_DIR_LIBS}/lib".split(), check=True)
     else:
         run("ldconfig", check=True)
-
-
-def is_musllinux() -> bool:
-    _ = run("ldd --version".split(), stdout=PIPE, stderr=STDOUT, check=False)
-    if _.stdout and _.stdout.decode("utf-8").find("musl") != -1:
-        return True
-    return False
 
 
 def build_libs() -> None:

@@ -75,7 +75,7 @@ test_src_build_full_freebsd_task:
     - pkg install -y py39-pip
     - pkg install -y py39-pillow
   install_pillow_heif_script:
-    - python3 -m pip -v install ".[tests-min]"
+    - python3 -m pip -v install ".[tests]"
   libheif_info_script:
     - python3 -c "import pillow_heif; print(pillow_heif.libheif_info())"
   perform_tests_script:

@@ -26,7 +26,7 @@ jobs:
     name: Analysis
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install from source
         run: python3 -m pip install ".[dev]" wheel
 
@@ -35,13 +35,13 @@ jobs:
 
   coverage-linux:
     runs-on: ubuntu-22.04
-    name: Coverage(Linux) • 🐍3.12
+    name: Coverage(Linux) • 🐍3.11
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.12-dev'
+          python-version: '3.11'
 
       - name: Prepare system
         run: |
@@ -50,10 +50,10 @@ jobs:
           sudo apt update
           sudo apt -y install libheif-dev
 
-      - name: Install from source  # when 3.12 get released will return `install ".[dev]"`
+      - name: Install from source
         run: |
           python3 -m pip install pillow==9.5.0
-          python3 -m pip -v install ".[tests-min]" coverage
+          python3 -m pip -v install ".[dev]"
 
       - name: LibHeif info
         run: python3 -c "import pillow_heif; print(pillow_heif.libheif_info())"
@@ -78,13 +78,13 @@ jobs:
 
   coverage-linux-pillow-dev:
     runs-on: ubuntu-22.04
-    name: Coverage(Linux, Pillow-dev) • 🐍3.11
+    name: Coverage(Linux, Pillow-dev) • 🐍3.12
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: '3.12'
 
       - name: Prepare system
         run: |
@@ -128,7 +128,7 @@ jobs:
       TEST_DECODE_THREADS: 0    # This test fails on GitHub on macOS. We have such enabled test on Cirrus.
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
         with:
           python-version: '3.10'
@@ -165,7 +165,7 @@ jobs:
       MSYS2_PREFIX: "C:/temp/msys64/mingw64"
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
         with:
           python-version: '3.9'
@@ -233,7 +233,7 @@ jobs:
     name: Pi-Heif Coverage(Linux) • 🐍3.8
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Transform to Pi-Heif
         run: cp -r -v ./pi-heif/* .
 
@@ -278,7 +278,7 @@ jobs:
     name: Pi-Heif Test(Linux) • 🐍3.8
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Transform to Pi-Heif
         run: |
           cp -r -v ./pi-heif/* .
@@ -310,7 +310,7 @@ jobs:
     name: Coverage(ImportError)
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install from source
         run: |
           python3 -m pip -v install .

@@ -31,10 +31,10 @@ jobs:
       BUILD_DIR: "/tmp/ph_build_stuff"
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up QEMU
         if: matrix.cibw_arch == 'aarch64'
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@v3
         with:
           platforms: arm64
 
@@ -85,7 +85,7 @@ jobs:
       BUILD_DIR: "/tmp/ph_build_stuff"
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Transform to Pi-Heif
         run: |
           cp -r -v ./pi-heif/* .
@@ -93,7 +93,7 @@ jobs:
 
       - name: Set up QEMU
         if: matrix.cibw_arch == 'aarch64'
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@v3
         with:
           platforms: arm64
 
@@ -160,14 +160,14 @@ jobs:
       BUILD_DIR: "./build_cache"
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Transform to Pi-Heif
         run: |
           cp -r -v ./pi-heif/* .
           python3 .github/transform_to-pi_heif.py
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@v3
 
       - uses: actions/cache@v3
         with:
@@ -178,7 +178,7 @@ jobs:
           KEY_C_BUILD: ${{ hashFiles('libheif/linux_*.py') }}-${{ hashFiles('libheif/setup.py') }}
 
       - name: Build Pi-Heif
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
           context: .
           file: docker/${{ matrix.i['docker_file'] }}.Dockerfile

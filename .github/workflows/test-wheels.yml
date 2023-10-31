@@ -35,9 +35,9 @@ jobs:
         if: ${{ github.event_name != 'workflow_dispatch' }}
         run: sleep 480
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@v3
 
       - name: Test type is Full
         run: echo TEST_TYPE="export PH_FULL_ACTION=1" >> $GITHUB_ENV
@@ -86,7 +86,7 @@ jobs:
         run: Start-Sleep -s 480
         shell: powershell
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -113,7 +113,7 @@ jobs:
         if: ${{ github.event_name != 'workflow_dispatch' }}
         run: sleep 480
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -144,7 +144,7 @@ jobs:
         if: ${{ github.event_name != 'workflow_dispatch' }}
         run: sleep 480
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python
         uses: actions/setup-python@v4
         with:

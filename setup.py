@@ -24,8 +24,7 @@ class RequiredDependencyException(Exception):
 def get_version():
     """Returns version of the project."""
     version_file = "pillow_heif/_version.py"
-    with open(version_file, encoding="utf-8") as f:
-        exec(compile(f.read(), version_file, "exec"))  # pylint: disable=exec-used
+    exec(compile(Path(version_file).read_text(encoding="utf-8"), version_file, "exec"))  # pylint: disable=exec-used
     return locals()["__version__"]
 
 

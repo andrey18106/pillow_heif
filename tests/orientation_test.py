@@ -94,7 +94,10 @@ def test_heif_exif_orientation(orientation):
     # Image will be automatically rotated by EXIF value before saving.
     im.save(out_im_heif, format="HEIF", exif=exif_data.tobytes(), quality=-1)
     im_heif = Image.open(out_im_heif)
-    assert im_heif.info.get("original_orientation", None) is None
+    if orientation == 1:
+        assert im_heif.info["original_orientation"] is None
+    else:
+        assert im_heif.info["original_orientation"] == orientation
     im_heif_exif = im_heif.getexif()
     assert 0x0112 not in im_heif_exif or im_heif_exif[0x0112] == 1
     _im = pillow_heif.misc._rotate_pil(im, orientation)
@@ -112,12 +115,15 @@ def test_heif_xmp_orientation(orientation):
     im.save(out_im_heif, format="HEIF", xmp=xmp.encode("utf-8"), quality=-1)
     im_heif = Image.open(out_im_heif)
     _im = pillow_heif.misc._rotate_pil(im, orientation)
-    assert im_heif.info.get("original_orientation", None) is None
+    if orientation == 1:
+        assert im_heif.info["original_orientation"] is None
+    else:
+        assert im_heif.info["original_orientation"] == orientation
     assert_image_similar(_im, im_heif)
 
 
 @pytest.mark.skipif(not hevc_enc(), reason="Requires HEVC encoder.")
-@pytest.mark.parametrize("orientation", (1, 2, 8))
+@pytest.mark.parametrize("orientation", (1, 2, 3, 4, 5, 6, 7, 8))
 def test_heif_xmp_orientation_exiftool(orientation):
     im = Image.effect_mandelbrot((256, 128), (-3, -2.5, 2, 2.5), 100).crop((0, 0, 256, 96))
     im = im.convert(mode="RGB")
@@ -127,12 +133,15 @@ def test_heif_xmp_orientation_exiftool(orientation):
     im.save(out_im_heif, format="HEIF", xmp=xmp.encode("utf-8"), quality=-1)
     im_heif = Image.open(out_im_heif)
     _im = pillow_heif.misc._rotate_pil(im, orientation)
-    assert im_heif.info.get("original_orientation", None) is None
+    if orientation != 1:
+        assert im_heif.info["original_orientation"] == orientation
+    else:
+        assert im_heif.info["original_orientation"] is None
     assert_image_similar(_im, im_heif)
 
 
 @pytest.mark.skipif(not hevc_enc(), reason="Requires HEVC encoder.")
-@pytest.mark.parametrize("orientation", (1, 2, 8))
+@pytest.mark.parametrize("orientation", (1, 2, 3, 4, 5, 6, 7, 8))
 def test_heif_xmp_orientation_with_exif_eq_1(orientation):
     im = Image.effect_mandelbrot((256, 128), (-3, -2.5, 2, 2.5), 100).crop((0, 0, 256, 96))
     im = im.convert(mode="RGB")
@@ -144,12 +153,15 @@ def test_heif_xmp_orientation_with_exif_eq_1(orientation):
     im.save(out_im_heif, format="HEIF", exif=exif_data.tobytes(), xmp=xmp.encode("utf-8"), quality=-1)
     im_heif = Image.open(out_im_heif)
     _im = pillow_heif.misc._rotate_pil(im, orientation)
-    assert im_heif.info.get("original_orientation", None) is None
+    if orientation != 1:
+        assert im_heif.info["original_orientation"] == orientation
+    else:
+        assert im_heif.info["original_orientation"] is None
     assert_image_similar(_im, im_heif)
 
 
 @pytest.mark.skipif(not hevc_enc(), reason="Requires HEVC encoder.")
-@pytest.mark.parametrize("orientation", (1, 2, 8))
+@pytest.mark.parametrize("orientation", (1, 2, 3, 4, 5, 6, 7, 8))
 @pytest.mark.parametrize("im_format", ("JPEG", "PNG"))
 def test_exif_heif_exif_orientation(orientation, im_format):
     out_im = BytesIO()

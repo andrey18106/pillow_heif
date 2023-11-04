@@ -2,7 +2,6 @@
 
 #include "Python.h"
 #include "libheif/heif.h"
-#include "libheif/heif_properties.h"
 #include "_ph_postprocess.h"
 
 /* =========== Common stuff ======== */

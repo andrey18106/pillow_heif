@@ -178,13 +178,6 @@ jobs:
             mingw-w64-x86_64-binutils
             mingw-w64-x86_64-libheif
 
-      - name: Build libheif and dependencies
-        shell: msys2 {0}
-        run: |
-          cd libheif/windows/mingw-w64-libheif
-          makepkg-mingw --syncdeps --noconfirm -f
-          pacman -U mingw-w64-x86_64-libheif-*-any.pkg.tar.zst --noconfirm
-
 #     In release or building from source we do not build `dav1d`,`rav1e` and `libSvtAv1Enc` libraries.
 #     Here we just test working with original package from MSYS.
       - name: Copy DLLs from MSYS2

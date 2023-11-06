@@ -72,7 +72,7 @@ test_src_build_full_freebsd_task:
 
   install_libheif_script:
     - mkdir -p /usr/local/etc/pkg/repos
-    - command: "echo 'FreeBSD: { url: \"pkg+http://pkg.FreeBSD.org/${ABI}/latest\" }' > /usr/local/etc/pkg/repos/FreeBSD.conf"
+    - echo "FreeBSD: { url: \"pkg+http://pkg.FreeBSD.org/\${ABI}/latest\" }" > /usr/local/etc/pkg/repos/FreeBSD.conf
     - pkg update -f
     - pkg install -y gcc libheif
     - pkg install -y py39-pip

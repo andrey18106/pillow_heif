@@ -4,11 +4,14 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- Synonym for `chroma` encoder parameter: `subsampling`(usage is the same as in Pillow JPEG). #161
+- Synonym for `chroma` encoder parameter: `subsampling`(usage is the same as in Pillow JPEG). #161 #165
+- Passing `image_orientation` value to libheif, instead of manually rotating image according to EXIF before encoding. #168
+- Pillow plugin: support for images in `YCbCr` mode for saving without converting to `RGB`. #169
 - Pi-Heif: Python3.12 32-bit `armv7` wheels. #160
 
 ### Changed
 
+- Libheif updated from `1.16.2` to `1.17.3` version. #166
 - Minimum supported Pillow version raised to `9.2.0`.
 - Linux: When building from source, `libheif` and other libraries are no longer try built automatically. #158
 - Pi-Heif: As last libheif version `1.17.3` requires minimum `cmake>=3.16.3` dropped Debian `10 armv7` wheels. #160
@@ -120,7 +123,7 @@ Reworked version with the native C extension.
 
 - Fixed Access Violation(all versions were affected) when image size after decoding differs. #79
 
-## [0.9.18 - 2023-01-22]
+## [0.9.20 - 2023-01-22]
 
 ### Fixed
 

@@ -76,7 +76,6 @@ typedef struct {
     enum ph_image_type image_type;              // 0 - standard, 2 - depth image
     int width;                                  // size[0];
     int height;                                 // size[1];
-    int exif_rotation;
     int bits;                                   // one of: 8, 10, 12.
     int alpha;                                  // one of: 0, 1.
     char mode[8];                               // one of: RGB, RGBA, RGBa, BGR, BGRA, BGRa + Optional[;10/12/16]

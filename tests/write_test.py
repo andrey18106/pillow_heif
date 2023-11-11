@@ -274,7 +274,7 @@ def test_YCbCr_color_mode(
     save_format,
     subsampling,
     expected_max_difference,
-):  # noqa
+):
     im_original = helpers.gradient_rgb()
     buf_jpeg = BytesIO()
     im_original.save(buf_jpeg, format="JPEG", subsampling=subsampling, quality=-1)

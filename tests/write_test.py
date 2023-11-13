@@ -289,10 +289,13 @@ def test_YCbCr_color_mode(
     helpers.assert_image_similar(Image.open(buf_jpeg), im_heif, expected_max_difference)
 
 
-def test_heif_YCbCr_color_mode():
+def test_heif_YCbCr_color_mode():  # noqa
+    # we support YCbCr for PIL only.
+    # in this test case, the image will be converted to "RGB" during "from_pillow".
     im = helpers.gradient_rgb().convert("YCbCr")
     assert im.mode == "YCbCr"
     im_heif = pillow_heif.from_pillow(im)
+    assert im_heif.mode == "RGB"
     out_heif = BytesIO()
     im_heif.save(out_heif, format="HEIF", quality=-1)
     im_out = Image.open(out_heif)
@@ -513,6 +516,9 @@ def test_invalid_ispe_stride_pillow(image_path):
     assert im.size == (29, 100)
 
 
+@pytest.mark.skipif(
+    parse_version(pillow_heif.libheif_version()) < parse_version("1.17.3"), reason="Requires libheif 1.17.3+"
+)
 def test_nclx_profile_write():
     im_rgb = helpers.gradient_rgb()
     buf = BytesIO()
@@ -526,17 +532,37 @@ def test_nclx_profile_write():
         assert "nclx_profile" not in Image.open(buf).info
         im_rgb.save(buf, format="HEIF")
         assert "nclx_profile" in Image.open(buf).info
-        im_rgb.info["nclx_profile"] = {
+        nclx_info = {
             "color_primaries": 1,
             "transfer_characteristics": 1,
             "matrix_coefficients": 10,
             "full_range_flag": 0,
         }
-        im_rgb.save(buf, format="HEIF")
+        im_rgb.save(buf, format="HEIF", **nclx_info)
         nclx_out = Image.open(buf).info["nclx_profile"]
-        if parse_version(pillow_heif.libheif_version()) >= parse_version("1.17.0"):
-            # in libheif 1.17.0 logic of this was corrected: https://github.com/strukturag/libheif/issues/995
-            for k in im_rgb.info["nclx_profile"]:
-                assert im_rgb.info["nclx_profile"][k] == nclx_out[k]
+        for k in nclx_info:
+            assert nclx_info[k] == nclx_out[k]
     finally:
         pillow_heif.options.SAVE_NCLX_PROFILE = False
+
+
+@pytest.mark.skipif(
+    parse_version(pillow_heif.libheif_version()) < parse_version("1.17.3"), reason="Requires libheif 1.17.3+"
+)
+@pytest.mark.parametrize("save_format", ("HEIF", "AVIF"))
+def test_lossless_encoding_rgb(save_format):
+    im_rgb = helpers.gradient_rgb()
+    buf = BytesIO()
+    im_rgb.save(buf, format=save_format, quality=-1, chroma=444, matrix_coefficients=0)
+    helpers.assert_image_equal(im_rgb, Image.open(buf))
+
+
+@pytest.mark.skipif(
+    parse_version(pillow_heif.libheif_version()) < parse_version("1.17.3"), reason="Requires libheif 1.17.3+"
+)
+@pytest.mark.parametrize("save_format", ("HEIF", "AVIF"))
+def test_lossless_encoding_rgba(save_format):
+    im_rgb = helpers.gradient_rgba()
+    buf = BytesIO()
+    im_rgb.save(buf, format=save_format, quality=-1, chroma=444, matrix_coefficients=0)
+    helpers.assert_image_equal(im_rgb, Image.open(buf))

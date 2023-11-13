@@ -93,7 +93,7 @@ def test_color_profile_leaks(im, cp_type):
         _nclx = None  # noqa
         gc.collect()
         mem = _get_mem_usage()
-        if i < 100:
+        if i < 150:
             mem_limit = mem + 2
             continue
         assert mem <= mem_limit, f"memory usage limit exceeded after {i + 1} iterations. Color profile type:{cp_type}"

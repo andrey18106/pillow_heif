@@ -136,6 +136,9 @@ def test_save_empty_with_append():
     assert len(heif_file) == 1
 
 
+@pytest.mark.skipif(
+    parse_version(pillow_heif.libheif_version()) < parse_version("1.17.3"), reason="Requires libheif 1.17.3+"
+)
 def test_hif_file():
     hif_path = Path("images/heif_other/cat.hif")
     heif_file1 = pillow_heif.open_heif(hif_path)
@@ -144,6 +147,7 @@ def test_hif_file():
     heif_file1.save(out_buf, quality=80)
     heif_file2 = pillow_heif.open_heif(out_buf)
     assert heif_file2.info["bit_depth"] == 8
+    assert heif_file1.info["nclx_profile"] == heif_file2.info["nclx_profile"]
     helpers.compare_heif_files_fields(heif_file1, heif_file2, ignore=["bit_depth"])
     helpers.compare_hashes([hif_path, out_buf], hash_size=16)
 

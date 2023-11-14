@@ -1,7 +1,7 @@
 FROM archlinux:base as base
 
 RUN \
-  pacman -Syu && \
+  pacman -Syu --noconfirm && \
   pacman -S --noconfirm python python-pip gcc libheif
 
 FROM base as build_test

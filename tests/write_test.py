@@ -17,6 +17,10 @@ pytest.importorskip("numpy", reason="NumPy not installed")
 if not helpers.hevc_enc() or not helpers.aom():
     pytest.skip("No HEIF or AVIF support.", allow_module_level=True)
 
+if parse_version(pillow_heif.libheif_version()) < parse_version("1.17.3"):
+    pytest.skip("Requires libheif 1.17.3+", allow_module_level=True)
+
+
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 pillow_heif.register_avif_opener()
 pillow_heif.register_heif_opener()
@@ -136,9 +140,6 @@ def test_save_empty_with_append():
     assert len(heif_file) == 1
 
 
-@pytest.mark.skipif(
-    parse_version(pillow_heif.libheif_version()) < parse_version("1.17.3"), reason="Requires libheif 1.17.3+"
-)
 def test_hif_file():
     hif_path = Path("images/heif_other/cat.hif")
     heif_file1 = pillow_heif.open_heif(hif_path)
@@ -520,9 +521,6 @@ def test_invalid_ispe_stride_pillow(image_path):
     assert im.size == (29, 100)
 
 
-@pytest.mark.skipif(
-    parse_version(pillow_heif.libheif_version()) < parse_version("1.17.3"), reason="Requires libheif 1.17.3+"
-)
 def test_nclx_profile_write():
     im_rgb = helpers.gradient_rgb()
     buf = BytesIO()
@@ -567,9 +565,6 @@ def test_nclx_profile_write():
         pillow_heif.options.SAVE_NCLX_PROFILE = True
 
 
-@pytest.mark.skipif(
-    parse_version(pillow_heif.libheif_version()) < parse_version("1.17.3"), reason="Requires libheif 1.17.3+"
-)
 @pytest.mark.parametrize("save_format", ("HEIF", "AVIF"))
 def test_lossless_encoding_rgb(save_format):
     im_rgb = helpers.gradient_rgb()
@@ -578,9 +573,6 @@ def test_lossless_encoding_rgb(save_format):
     helpers.assert_image_equal(im_rgb, Image.open(buf))
 
 
-@pytest.mark.skipif(
-    parse_version(pillow_heif.libheif_version()) < parse_version("1.17.3"), reason="Requires libheif 1.17.3+"
-)
 @pytest.mark.parametrize("save_format", ("HEIF", "AVIF"))
 def test_lossless_encoding_rgba(save_format):
     im_rgb = helpers.gradient_rgba()

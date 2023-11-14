@@ -545,10 +545,10 @@ def test_nclx_profile_write():
     for k in nclx_profile:
         assert nclx_profile[k] == nclx_out[k]
     try:
-        pillow_heif.options.SAVE_NCLX_PROFILE = True
-        im_rgb.save(buf, format="HEIF", save_nclx_profile=False)
-        assert "nclx_profile" not in Image.open(buf).info
+        pillow_heif.options.SAVE_NCLX_PROFILE = False
         im_rgb.save(buf, format="HEIF")
+        assert "nclx_profile" not in Image.open(buf).info
+        im_rgb.save(buf, format="HEIF", save_nclx_profile=True)
         nclx_out = Image.open(buf).info["nclx_profile"]
         for k in nclx_profile:
             assert nclx_profile[k] == nclx_out[k]
@@ -559,12 +559,12 @@ def test_nclx_profile_write():
             "matrix_coefficients": 10,
             "full_range_flag": 0,
         }
-        im_rgb.save(buf, format="HEIF", **nclx_profile)
+        im_rgb.save(buf, format="HEIF", **nclx_profile, save_nclx_profile=True)
         nclx_out = Image.open(buf).info["nclx_profile"]
         for k in nclx_profile:
             assert nclx_profile[k] == nclx_out[k]
     finally:
-        pillow_heif.options.SAVE_NCLX_PROFILE = False
+        pillow_heif.options.SAVE_NCLX_PROFILE = True
 
 
 @pytest.mark.skipif(

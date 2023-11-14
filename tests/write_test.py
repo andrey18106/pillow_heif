@@ -20,7 +20,6 @@ if not helpers.hevc_enc() or not helpers.aom():
 if parse_version(pillow_heif.libheif_version()) < parse_version("1.17.3"):
     pytest.skip("Requires libheif 1.17.3+", allow_module_level=True)
 
-
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 pillow_heif.register_avif_opener()
 pillow_heif.register_heif_opener()

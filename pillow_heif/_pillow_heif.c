@@ -1276,9 +1276,20 @@ static PyObject* _get_lib_info(PyObject* self) {
         PyErr_SetString(PyExc_OSError, "Out of Memory");
         return NULL;
     }
+    __PyDict_SetItemString(lib_info_dict, "libheif", PyUnicode_FromString(heif_get_version()));
+
+    const struct heif_encoder_descriptor* encoder_descriptor;
+    const char* x265_version = "";
+    if (heif_get_encoder_descriptors(heif_compression_HEVC, NULL, &encoder_descriptor, 1))
+        x265_version = heif_encoder_descriptor_get_name(encoder_descriptor);
+    __PyDict_SetItemString(lib_info_dict, "HEIF", PyUnicode_FromString(x265_version));
+    const char* aom_version = "";
+    if (heif_get_encoder_descriptors(heif_compression_AV1, NULL, &encoder_descriptor, 1))
+        aom_version = heif_encoder_descriptor_get_name(encoder_descriptor);
+    __PyDict_SetItemString(lib_info_dict, "AVIF", PyUnicode_FromString(aom_version));
+
     __PyDict_SetItemString(lib_info_dict, "encoders", encoders_dict);
     __PyDict_SetItemString(lib_info_dict, "decoders", decoders_dict);
-    __PyDict_SetItemString(lib_info_dict, "libheif", PyUnicode_FromString(heif_get_version()));
 
     int encoders_count = heif_get_encoder_descriptors(heif_compression_undefined, NULL, NULL, 0);
     const struct heif_encoder_descriptor** encoders = (const struct heif_encoder_descriptor**)malloc(encoders_count * sizeof(struct heif_encoder_descriptor*));
@@ -1305,17 +1316,6 @@ static PyObject* _get_lib_info(PyObject* self) {
         __PyDict_SetItemString(decoders_dict, heif_decoder_descriptor_get_id_name(decoders[i]), PyUnicode_FromString(heif_decoder_descriptor_get_name(decoders[i])));
     }
     free(decoders);
-
-    const struct heif_encoder_descriptor* encoder_descriptor;
-    const char* x265_version = "";
-    if (heif_get_encoder_descriptors(heif_compression_HEVC, NULL, &encoder_descriptor, 1))
-        x265_version = heif_encoder_descriptor_get_name(encoder_descriptor);
-    const char* aom_version = "";
-    if (heif_get_encoder_descriptors(heif_compression_AV1, NULL, &encoder_descriptor, 1))
-        aom_version = heif_encoder_descriptor_get_name(encoder_descriptor);
-
-    __PyDict_SetItemString(lib_info_dict, "HEIF", PyUnicode_FromString(x265_version));
-    __PyDict_SetItemString(lib_info_dict, "AVIF", PyUnicode_FromString(aom_version));
 
     return lib_info_dict;
 }

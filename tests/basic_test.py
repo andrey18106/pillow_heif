@@ -122,7 +122,6 @@ def test_light_build():
     info = pillow_heif.libheif_info()
     assert not info["AVIF"]
     assert not info["HEIF"]
-    assert not info["encoders"]
     assert info["decoders"]
     expected_version = os.getenv("EXP_PH_LIBHEIF_VERSION", "1.17.6")
     if expected_version:

@@ -6,6 +6,9 @@
 
 /* =========== Common stuff ======== */
 
+#define MAX_ENCODERS 20
+#define MAX_DECODERS 20
+
 #define RETURN_NONE Py_INCREF(Py_None); return Py_None;
 
 static struct heif_error heif_error_no = { .code = 0, .subcode = 0, .message = "" };
@@ -1291,31 +1294,17 @@ static PyObject* _get_lib_info(PyObject* self) {
     __PyDict_SetItemString(lib_info_dict, "encoders", encoders_dict);
     __PyDict_SetItemString(lib_info_dict, "decoders", decoders_dict);
 
-    int encoders_count = heif_get_encoder_descriptors(heif_compression_undefined, NULL, NULL, 0);
-    const struct heif_encoder_descriptor** encoders = (const struct heif_encoder_descriptor**)malloc(encoders_count * sizeof(struct heif_encoder_descriptor*));
-    if (!encoders) {
-        Py_DECREF(lib_info_dict);
-        PyErr_SetString(PyExc_OSError, "Out of Memory");
-        return NULL;
-    }
-    encoders_count = heif_get_encoder_descriptors(heif_compression_undefined, NULL, encoders, encoders_count);
+    const struct heif_encoder_descriptor* encoders[MAX_ENCODERS];
+    int encoders_count = heif_get_encoder_descriptors(heif_compression_undefined, NULL, encoders, MAX_ENCODERS);
     for (int i = 0; i < encoders_count; i++) {
         __PyDict_SetItemString(encoders_dict, heif_encoder_descriptor_get_id_name(encoders[i]), PyUnicode_FromString(heif_encoder_descriptor_get_name(encoders[i])));
     }
-    free(encoders);
 
-    int decoders_count = heif_get_decoder_descriptors(heif_compression_undefined, NULL, 0);
-    const struct heif_decoder_descriptor** decoders = (const struct heif_decoder_descriptor**)malloc(decoders_count * sizeof(struct heif_decoder_descriptor*));
-    if (!decoders) {
-        Py_DECREF(lib_info_dict);
-        PyErr_SetString(PyExc_OSError, "Out of Memory");
-        return NULL;
-    }
-    decoders_count = heif_get_decoder_descriptors(heif_compression_undefined, decoders, decoders_count);
+    const struct heif_decoder_descriptor* decoders[MAX_DECODERS];
+    int decoders_count = heif_get_decoder_descriptors(heif_compression_undefined, decoders, MAX_DECODERS);
     for (int i = 0; i < decoders_count; i++) {
         __PyDict_SetItemString(decoders_dict, heif_decoder_descriptor_get_id_name(decoders[i]), PyUnicode_FromString(heif_decoder_descriptor_get_name(decoders[i])));
     }
-    free(decoders);
 
     return lib_info_dict;
 }

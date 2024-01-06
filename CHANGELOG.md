@@ -4,7 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- `encoders` and `decoders` keys to the result of `libheif_info` function, for future libheif plugins support. #
+- `libheif_info` function: added `encoders` and `decoders` keys to the result, for future libheif plugins support. #189
+- `options.PREFERRED_ENCODER` - to use `encoder` different from the default one. #192
 
 ### Changed
 

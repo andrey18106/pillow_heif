@@ -47,7 +47,7 @@ On `Ubuntu`:
 | :bash:`sudo apt update`
 | :bash:`sudo apt -y install libheif-dev`
 
-On `Alpine 18+`:
+On `Alpine 19`:
 
 | :bash:`sudo apk add --no-cache libheif-dev`
 

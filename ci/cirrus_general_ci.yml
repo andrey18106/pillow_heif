@@ -69,6 +69,7 @@ test_src_build_full_freebsd_task:
   env:
     PH_FULL_ACTION: 1
     EXP_PH_LIBHEIF_VERSION: ""
+    ZPL: ""
 
   install_libheif_script:
     - pkg install -y libheif gcc

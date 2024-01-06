@@ -52,6 +52,8 @@ def test_options_change_from_plugin_registering(register_opener):
         options.DECODE_THREADS = 4
         options.DEPTH_IMAGES = True
         options.SAVE_NCLX_PROFILE = True
+        options.PREFERRED_ENCODER = {"HEIF": "", "AVIF": ""}
+        options.PREFERRED_DECODER = {"HEIF": "", "AVIF": ""}
 
 
 @pytest.mark.skipif(not hevc_enc(), reason="No HEVC encoder.")

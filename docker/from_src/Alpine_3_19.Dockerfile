@@ -1,14 +1,11 @@
-FROM alpine:3.17 as base
+FROM alpine:3.19 as base
 
 RUN \
   apk add --no-cache \
     python3-dev \
     py3-pip \
     alpine-sdk \
-    cmake \
-    nasm \
-    aom-dev \
-    x265-dev \
+    libheif-dev \
     py3-numpy \
     py3-pillow
 

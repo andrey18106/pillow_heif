@@ -9,15 +9,14 @@ RUN \
     py3-numpy \
     py3-pillow
 
-RUN \
-  python3 -m pip install --upgrade pip
-
 FROM base as build_test
 
 COPY . /pillow_heif
 
 RUN \
   python3 pillow_heif/libheif/linux_build_libs.py && \
+  python3 -m venv myenv && \
+  source myenv/bin/activate && \
   if [ `getconf LONG_BIT` = 64 ]; then \
     python3 -m pip install -v "pillow_heif/.[tests]"; \
   else \

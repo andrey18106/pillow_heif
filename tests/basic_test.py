@@ -126,3 +126,11 @@ def test_light_build():
     expected_version = os.getenv("EXP_PH_LIBHEIF_VERSION", "1.17.6")
     if expected_version:
         assert info["libheif"] == expected_version
+
+
+@pytest.mark.skipif(not os.getenv("TEST_PLUGIN_LOAD", ""), reason="Only when plugins present")
+def test_load_plugin():
+    plugins_path = os.getenv("TEST_PLUGIN_LOAD")
+    pillow_heif.load_plugin(os.path.join(plugins_path, "libheif-x265.so"))
+    with pytest.raises(RuntimeError):
+        pillow_heif.load_plugin(os.path.join(plugins_path, "libheif-x265-invalid.so"))

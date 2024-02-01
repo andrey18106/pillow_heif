@@ -39,7 +39,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
       - name: Transform to Pi-Heif
@@ -109,6 +109,7 @@ jobs:
         env:
           CIBW_ARCHS: "x86_64"
           CIBW_ENVIRONMENT_MACOS: PH_LIGHT_ACTION=1 TEST_DECODE_THREADS=0
+          MACOSX_DEPLOYMENT_TARGET: "10.10"
 
       - name: Checking built wheels
         run: |

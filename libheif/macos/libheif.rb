@@ -21,13 +21,9 @@ class Libheif < Formula
   def install
     args = %W[
       -DWITH_LIBDE265=ON
-      -DWITH_LIBDE265_PLUGIN=OFF
       -DWITH_X265=ON
-      -DWITH_X265_PLUGIN=OFF
       -DWITH_AOM_DECODER=ON
-      -DWITH_AOM_DECODER_PLUGIN=OFF
       -DWITH_AOM_ENCODER=ON
-      -DWITH_AOM_ENCODER_PLUGIN=OFF
       -DWITH_RAV1E=OFF
       -DWITH_DAV1D=OFF
       -DWITH_SvtEnc=OFF
@@ -37,9 +33,8 @@ class Libheif < Formula
       -DWITH_JPEG_ENCODER=OFF
       -DWITH_OpenJPEG_DECODER=OFF
       -DWITH_OpenJPEG_ENCODER=OFF
-      -DENABLE_PLUGIN_LOADING=ON
+      -DENABLE_PLUGIN_LOADING=OFF
       -DWITH_LIBSHARPYUV=OFF
-      -DWITH_EXAMPLES=OFF
       -DCMAKE_INSTALL_RPATH=#{rpath}
     ]
     system "cmake", "-S", ".", "-B", "build", *args, *std_cmake_args

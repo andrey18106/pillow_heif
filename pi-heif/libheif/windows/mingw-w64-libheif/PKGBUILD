@@ -32,17 +32,22 @@ build() {
       -DCMAKE_INSTALL_PREFIX=${MINGW_PREFIX} \
       "${extra_config[@]}" \
       -DBUILD_SHARED_LIBS=ON \
+      -DWITH_LIBDE265=ON \
+      -DWITH_X265=OFF \
+      -DWITH_AOM_DECODER=OFF \
+      -DWITH_AOM_ENCODER=OFF \
       -DWITH_RAV1E=OFF \
       -DWITH_DAV1D=OFF \
-      -DWITH_AOM=OFF \
-      -DWITH_X265=OFF \
       -DWITH_SvtEnc=OFF \
-      -DWITH_LIBSHARPYUV=OFF \
-      -DENABLE_PLUGIN_LOADING=OFF \
+      -DWITH_KVAZAAR=OFF \
+      -DWITH_FFMPEG_DECODER=OFF \
       -DWITH_JPEG_DECODER=OFF \
       -DWITH_JPEG_ENCODER=OFF \
       -DWITH_OpenJPEG_DECODER=OFF \
       -DWITH_OpenJPEG_ENCODER=OFF \
+      -DENABLE_PLUGIN_LOADING=OFF \
+      -DWITH_LIBSHARPYUV=OFF \
+      -DWITH_EXAMPLES=OFF \
       ../${_realname}-${pkgver}
 
   ${MINGW_PREFIX}/bin/cmake --build .

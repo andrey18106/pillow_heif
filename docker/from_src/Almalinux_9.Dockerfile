@@ -3,7 +3,8 @@ FROM almalinux:9 as base
 RUN \
   dnf install --nogpgcheck https://mirrors.rpmfusion.org/free/el/rpmfusion-free-release-$(rpm -E %rhel).noarch.rpm -y && \
   dnf makecache && \
-  dnf install -y python3 python3-devel python3-pip x265-devel libaom-devel && \
+  dnf install -y python3 python3-devel python3-pip cmake && \
+  dnf install -y x265-devel libaom-devel && \
   dnf groupinstall -y 'Development Tools'
 
 RUN \

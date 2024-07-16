@@ -1210,7 +1210,7 @@ static PyObject* _CtxImage_camera_intrinsic_matrix(CtxImageObject* self, void* c
 }
 
 //static PyObject* _CtxImage_camera_extrinsic_matrix(CtxImageObject* self, void* closure) {
-//    
+//
 //}
 
 /* =========== CtxImage properties available to Python Part ======== */

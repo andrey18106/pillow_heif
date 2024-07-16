@@ -41,9 +41,7 @@ before-build = [
 
 [tool.black]
 line-length = 120
-target-versions = [
-  "py38",
-]
+target-version = [ "py38" ]
 preview = true
 
 [tool.ruff]

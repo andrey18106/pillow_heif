@@ -336,6 +336,16 @@ def _get_primary_index(some_iterator, primary_index: Optional[int]) -> int:
     return primary_index
 
 
+def _get_camera_intrinsic_matrix(values: Optional[tuple]):
+    return {
+        "focal_length_x": values[0],
+        "focal_length_y": values[1],
+        "principal_point_x": values[2],
+        "principal_point_y": values[3],
+        "skew": values[4],
+    } if values else None
+
+
 class CtxEncode:
     """Encoder bindings from python to python C module."""
 

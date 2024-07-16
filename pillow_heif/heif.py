@@ -19,6 +19,7 @@ from .misc import (
     _pil_to_supported_mode,
     _retrieve_exif,
     _retrieve_xmp,
+    _get_camera_intrinsic_matrix,
     _rotate_pil,
     _xmp_from_pillow,
     get_file_mimetype,
@@ -151,6 +152,7 @@ class HeifImage(BaseImage):
         _depth_images: List[Optional[HeifDepthImage]] = (
             [HeifDepthImage(i) for i in c_image.depth_image_list if i is not None] if options.DEPTH_IMAGES else []
         )
+        _camera_intrinsic_matrix = _get_camera_intrinsic_matrix(c_image.camera_intrinsic_matrix)
         self.info = {
             "primary": bool(c_image.primary),
             "bit_depth": int(c_image.bit_depth),
@@ -161,6 +163,8 @@ class HeifImage(BaseImage):
         }
         if _xmp:
             self.info["xmp"] = _xmp
+        if _camera_intrinsic_matrix:
+            self.info["camera_intrinsic_matrix"] = _camera_intrinsic_matrix
         save_colorspace_chroma(c_image, self.info)
         _color_profile: Dict[str, Any] = c_image.color_profile
         if _color_profile:

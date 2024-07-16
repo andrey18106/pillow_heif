@@ -1183,6 +1183,38 @@ static PyObject* _CtxImage_depth_image_list(CtxImageObject* self, void* closure)
     return images_list;
 }
 
+/* =========== CtxImage Experimental Part ======== */
+
+static PyObject* _CtxImage_camera_intrinsic_matrix(CtxImageObject* self, void* closure) {
+    #if LIBHEIF_HAVE_VERSION(1,18,0)
+        struct heif_camera_intrinsic_matrix camera_intrinsic_matrix;
+
+        if (!heif_image_handle_has_camera_intrinsic_matrix(self->handle)) {
+            Py_RETURN_NONE;
+        }
+
+        if (check_error(heif_image_handle_get_camera_intrinsic_matrix(self->handle, &camera_intrinsic_matrix))) {
+            Py_RETURN_NONE;
+        }
+        return Py_BuildValue(
+            "(ddddd)",
+            camera_intrinsic_matrix.focal_length_x,
+            camera_intrinsic_matrix.focal_length_y,
+            camera_intrinsic_matrix.principal_point_x,
+            camera_intrinsic_matrix.principal_point_y,
+            camera_intrinsic_matrix.skew
+            );
+    #else
+        Py_RETURN_NONE;
+    #endif
+}
+
+//static PyObject* _CtxImage_camera_extrinsic_matrix(CtxImageObject* self, void* closure) {
+//    
+//}
+
+/* =========== CtxImage properties available to Python Part ======== */
+
 static struct PyGetSetDef _CtxImage_getseters[] = {
     {"size_mode", (getter)_CtxImage_size_mode, NULL, NULL, NULL},
     {"primary", (getter)_CtxImage_primary, NULL, NULL, NULL},
@@ -1195,6 +1227,7 @@ static struct PyGetSetDef _CtxImage_getseters[] = {
     {"stride", (getter)_CtxImage_stride, NULL, NULL, NULL},
     {"data", (getter)_CtxImage_data, NULL, NULL, NULL},
     {"depth_image_list", (getter)_CtxImage_depth_image_list, NULL, NULL, NULL},
+    {"camera_intrinsic_matrix", (getter)_CtxImage_camera_intrinsic_matrix, NULL, NULL, NULL},
     {NULL, NULL, NULL, NULL, NULL}
 };
 

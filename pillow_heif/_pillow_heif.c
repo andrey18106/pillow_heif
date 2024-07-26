@@ -1192,7 +1192,6 @@ static PyObject* _CtxImage_camera_intrinsic_matrix(CtxImageObject* self, void* c
         if (!heif_image_handle_has_camera_intrinsic_matrix(self->handle)) {
             Py_RETURN_NONE;
         }
-
         if (check_error(heif_image_handle_get_camera_intrinsic_matrix(self->handle, &camera_intrinsic_matrix))) {
             Py_RETURN_NONE;
         }
@@ -1209,9 +1208,28 @@ static PyObject* _CtxImage_camera_intrinsic_matrix(CtxImageObject* self, void* c
     #endif
 }
 
-//static PyObject* _CtxImage_camera_extrinsic_matrix(CtxImageObject* self, void* closure) {
-//
-//}
+static PyObject* _CtxImage_camera_extrinsic_matrix_rot(CtxImageObject* self, void* closure) {
+    #if LIBHEIF_HAVE_VERSION(1,18,0)
+        struct heif_camera_extrinsic_matrix* camera_extrinsic_matrix;
+        double rot[9];
+        struct heif_error error;
+
+        if (!heif_image_handle_has_camera_extrinsic_matrix(self->handle)) {
+            Py_RETURN_NONE;
+        }
+        if (check_error(heif_image_handle_get_camera_extrinsic_matrix(self->handle, &camera_extrinsic_matrix))) {
+            Py_RETURN_NONE;
+        }
+        error = heif_camera_extrinsic_matrix_get_rotation_matrix(camera_extrinsic_matrix, rot);
+        heif_camera_extrinsic_matrix_release(camera_extrinsic_matrix);
+        if (check_error(error)) {
+            Py_RETURN_NONE;
+        }
+        return Py_BuildValue("(ddddddddd)", rot[0], rot[1], rot[2], rot[3], rot[4], rot[5], rot[6], rot[7], rot[8]);
+    #else
+        Py_RETURN_NONE;
+    #endif
+}
 
 /* =========== CtxImage properties available to Python Part ======== */
 
@@ -1228,6 +1246,7 @@ static struct PyGetSetDef _CtxImage_getseters[] = {
     {"data", (getter)_CtxImage_data, NULL, NULL, NULL},
     {"depth_image_list", (getter)_CtxImage_depth_image_list, NULL, NULL, NULL},
     {"camera_intrinsic_matrix", (getter)_CtxImage_camera_intrinsic_matrix, NULL, NULL, NULL},
+    {"camera_extrinsic_matrix_rot", (getter)_CtxImage_camera_extrinsic_matrix_rot, NULL, NULL, NULL},
     {NULL, NULL, NULL, NULL, NULL}
 };
 

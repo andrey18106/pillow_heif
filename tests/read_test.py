@@ -272,6 +272,8 @@ def test_heif_read_images(image_path):
             assert image.info["bit_depth"] >= 8
             assert image.stride >= minimal_stride
             assert len(image.data) == image.stride * image.size[1]
+            if str(image_path).find("spatial_photo.HEIC") == -1:
+                assert "heif" not in image.info
         return heif_file.info["bit_depth"] > 8
 
     if str(image_path).find("zPug_3.heic") == -1:
@@ -295,6 +297,8 @@ def test_pillow_read_images(image_path):
         collect()
         assert len(ImageSequence.Iterator(pillow_image)[i].tobytes())
         assert isinstance(image.getxmp(), dict)
+        if str(image_path).find("spatial_photo.HEIC") == -1:
+            assert "heif" not in image.info
     assert getattr(pillow_image, "fp") is None
     if images_count > 1:
         assert getattr(pillow_image, "_heif_file") is not None
@@ -489,6 +493,32 @@ def test_depth_image():
     assert depth_image.info["metadata"]["disparity_reference_view"] == 0
     assert depth_image.info["metadata"]["nonlinear_representation_model_size"] == 0
     assert im_pil.info == depth_image.info
+
+
+def test_read_heif_metadata():
+    im = pillow_heif.open_heif("images/heif_other/spatial_photo.HEIC")
+    assert im.info["heif"]
+    assert im.info["heif"]["camera_intrinsic_matrix"] == {
+        "focal_length_x": 1525.444598197937,
+        "focal_length_y": 1525.444598197937,
+        "principal_point_x": 1280.0,
+        "principal_point_y": 1280.0,
+        "skew": 0.0,
+    }
+    assert im.info["heif"]["camera_extrinsic_matrix_rot"] == (1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0)
+
+
+def test_pillow_read_heif_metadata():
+    im = Image.open("images/heif_other/spatial_photo.HEIC")
+    assert im.info["heif"]
+    assert im.info["heif"]["camera_intrinsic_matrix"] == {
+        "focal_length_x": 1525.444598197937,
+        "focal_length_y": 1525.444598197937,
+        "principal_point_x": 1280.0,
+        "principal_point_y": 1280.0,
+        "skew": 0.0,
+    }
+    assert im.info["heif"]["camera_extrinsic_matrix_rot"] == (1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0)
 
 
 def test_invalid_decoder():

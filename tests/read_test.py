@@ -9,6 +9,7 @@ from unittest import mock
 import dataset
 import helpers
 import pytest
+from packaging.version import parse as parse_version
 from PIL import Image, ImageCms, ImageSequence, UnidentifiedImageError
 
 import pillow_heif
@@ -495,9 +496,12 @@ def test_depth_image():
     assert im_pil.info == depth_image.info
 
 
+@pytest.mark.skipif(
+    parse_version(pillow_heif.libheif_version()) < parse_version("1.18.0"), reason="requires LibHeif 1.18+"
+)
 def test_read_heif_metadata():
     im = pillow_heif.open_heif("images/heif_other/spatial_photo.HEIC")
-    assert im.info["heif"]
+    assert "heif" in im.info
     assert im.info["heif"]["camera_intrinsic_matrix"] == {
         "focal_length_x": 1525.444598197937,
         "focal_length_y": 1525.444598197937,
@@ -508,9 +512,12 @@ def test_read_heif_metadata():
     assert im.info["heif"]["camera_extrinsic_matrix_rot"] == (1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0)
 
 
+@pytest.mark.skipif(
+    parse_version(pillow_heif.libheif_version()) < parse_version("1.18.0"), reason="requires LibHeif 1.18+"
+)
 def test_pillow_read_heif_metadata():
     im = Image.open("images/heif_other/spatial_photo.HEIC")
-    assert im.info["heif"]
+    assert "heif" in im.info
     assert im.info["heif"]["camera_intrinsic_matrix"] == {
         "focal_length_x": 1525.444598197937,
         "focal_length_y": 1525.444598197937,

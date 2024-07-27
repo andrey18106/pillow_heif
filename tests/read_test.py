@@ -273,7 +273,7 @@ def test_heif_read_images(image_path):
             assert image.info["bit_depth"] >= 8
             assert image.stride >= minimal_stride
             assert len(image.data) == image.stride * image.size[1]
-            if str(image_path).find("spatial_photo.HEIC") == -1:
+            if str(image_path).find("spatial_photo.heic") == -1:
                 assert "heif" not in image.info
         return heif_file.info["bit_depth"] > 8
 
@@ -298,7 +298,7 @@ def test_pillow_read_images(image_path):
         collect()
         assert len(ImageSequence.Iterator(pillow_image)[i].tobytes())
         assert isinstance(image.getxmp(), dict)
-        if str(image_path).find("spatial_photo.HEIC") == -1:
+        if str(image_path).find("spatial_photo.heic") == -1:
             assert "heif" not in image.info
     assert getattr(pillow_image, "fp") is None
     if images_count > 1:

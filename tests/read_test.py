@@ -500,7 +500,7 @@ def test_depth_image():
     parse_version(pillow_heif.libheif_version()) < parse_version("1.18.0"), reason="requires LibHeif 1.18+"
 )
 def test_read_heif_metadata():
-    im = pillow_heif.open_heif("images/heif_other/spatial_photo.HEIC")
+    im = pillow_heif.open_heif("images/heif_other/spatial_photo.heic")
     assert "heif" in im.info
     assert im.info["heif"]["camera_intrinsic_matrix"] == {
         "focal_length_x": 1525.444598197937,
@@ -516,7 +516,7 @@ def test_read_heif_metadata():
     parse_version(pillow_heif.libheif_version()) < parse_version("1.18.0"), reason="requires LibHeif 1.18+"
 )
 def test_pillow_read_heif_metadata():
-    im = Image.open("images/heif_other/spatial_photo.HEIC")
+    im = Image.open("images/heif_other/spatial_photo.heic")
     assert "heif" in im.info
     assert im.info["heif"]["camera_intrinsic_matrix"] == {
         "focal_length_x": 1525.444598197937,
